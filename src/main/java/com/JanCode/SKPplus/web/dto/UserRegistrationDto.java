@@ -6,8 +6,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 @FieldMatch.List({
-        @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match"),
-        @FieldMatch(first = "email", second = "confirmEmail", message = "The email fields must match")
+        @FieldMatch(first = "password", second = "confirmPassword", message = "Hasła się nie zgadzają!"),
+        //@FieldMatch(first = "email", second = "confirmEmail", message = "Adres email się nie zgadza!")
 })
 public class UserRegistrationDto {
     @NotEmpty
@@ -29,9 +29,9 @@ public class UserRegistrationDto {
     @NotEmpty
     private String email;
 
-    @Email
-    @NotEmpty
-    private String confirmEmail;
+    //@Email
+    //@NotEmpty
+    //private String confirmEmail;
 
     @AssertTrue
     private Boolean terms;
@@ -84,7 +84,7 @@ public class UserRegistrationDto {
         this.email = email;
     }
 
-    public String getConfirmEmail() {
+   /* public String getConfirmEmail() {
         return confirmEmail;
     }
 
@@ -92,6 +92,8 @@ public class UserRegistrationDto {
         this.confirmEmail = confirmEmail;
     }
 
+
+    */
     public Boolean getTerms() {
         return terms;
     }

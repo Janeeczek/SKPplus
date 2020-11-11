@@ -40,73 +40,79 @@
                             <form  th:action="@{/register}" th:object="${user}" th:method="POST">
                                 <p class="error-message" th:if="${#fields.hasGlobalErrors()}"
                                    th:each="error : ${#fields.errors('global')}"
-                                   th:text="${error}">Validation error</p>
-                                <div class="form-group row" >
-                                    <div class="col-sm-6 mb-3 mb-sm-0" th:classappend="${#fields.hasErrors('username')}? 'has-error':''">
-                                        <input th:field="*{username}" class="form-control form-control-user" id="username"
-                                               placeholder="username">
-                                        <p class="error-message"
-                                           th:each="error: ${#fields.errors('username')}"
-                                           th:text="${error}">Validation error</p>
-                                    </div>
+                                   th:text="${error}">Błąd rejestracji!</p>
+
+
+                                <div class="form-group " >
+                                    <div class="row" >
+                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-6 "th:classappend="${#fields.hasErrors('username')}? 'has-error':''">
+                                            <div class="input-group">
+                                                <input th:field="*{username}" class="form-control text-center form-control-user" id="username"
+                                                       placeholder="Nazwa użytkownika">
+                                                <p class="error-message"
+                                                   th:each="error: ${#fields.errors('username')}"
+                                                   th:text="${error}">Niedozwolona nazwa użytkownika!</p>
+                                            </div><!-- /input-group -->
+                                        </div><!-- /.col-lg-4 -->
+                                        <div class="col-lg-3"></div>
+                                    </div><!-- /.row -->
                                 </div>
                                 <div class="form-group row" >
                                     <div class="col-sm-6 mb-3 mb-sm-0" th:classappend="${#fields.hasErrors('firstName')}? 'has-error':''">
                                         <input th:field="*{firstName}" class="form-control form-control-user" id="firstName"
-                                            placeholder="First Name">
+                                            placeholder="Imię">
                                         <p class="error-message"
                                            th:each="error: ${#fields.errors('firstName')}"
-                                           th:text="${error}">Validation error</p>
+                                           th:text="${error}">Niedozowolne imię!</p>
                                     </div>
                                     <div class="col-sm-6" th:classappend="${#fields.hasErrors('lastName')}? 'has-error':''">
                                         <input th:field="*{lastName}" class="form-control form-control-user" id="lastName"
-                                            placeholder="Last Name">
+                                            placeholder="Nazwisko">
                                         <p class="error-message"
                                            th:each="error: ${#fields.errors('lastName')}"
-                                           th:text="${error}">Validation error</p>
+                                           th:text="${error}">Niedozowolne nazwisko!</p>
                                     </div>
                                 </div>
-                                <div class="form-group row" >
-                                    <div class="col-sm-6 mb-3 mb-sm-0" th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
-                                        <input th:field="*{email}"  class="form-control form-control-user" id="email"
-                                               placeholder="Email Address">
-                                        <p class="error-message"
-                                           th:each="error : ${#fields.errors('email')}"
-                                           th:text="${error}">Validation error</p>
-                                    </div>
-
-                                    <div class="col-sm-6" th:classappend="${#fields.hasErrors('confirmEmail')}? 'has-error':''">
-                                        <input th:field="*{confirmEmail}"  class="form-control form-control-user" id="confirmEmail"
-                                               placeholder="Repeat Email Address">
-                                        <p class="error-message"
-                                           th:each="error : ${#fields.errors('confirmEmail')}"
-                                           th:text="${error}">Validation error</p>
-                                    </div>
-
+                                <div class="form-group " >
+                                    <div class="row" >
+                                        <div class="col-lg-1"></div>
+                                        <div class="col-lg-10 "th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
+                                            <div class="input-group">
+                                                <input th:field="*{email}"  class="form-control text-center form-control-user" id="email"
+                                                       placeholder="Adres E-mail">
+                                                <p class="error-message"
+                                                   th:each="error : ${#fields.errors('email')}"
+                                                   th:text="${error}">Niedozowolny E-mail!</p>
+                                            </div><!-- /input-group -->
+                                        </div><!-- /.col-lg-4 -->
+                                        <div class="col-lg-1"></div>
+                                    </div><!-- /.row -->
                                 </div>
+
+
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0" th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
-                                        <input th:field="*{password}"  class="form-control form-control-user"
-                                            id="password" placeholder="Password">
+                                        <input type="password" th:field="*{password}"  class="form-control form-control-user"
+                                            id="Hasło" placeholder="Hasło">
                                         <p class="error-message"
                                            th:each="error : ${#fields.errors('password')}"
-                                           th:text="${error}">Validation error</p>
+                                           th:text="${error}">Nieprawidłowe hasło!</p>
                                     </div>
                                     <div class="col-sm-6" th:classappend="${#fields.hasErrors('confirmPassword')}? 'has-error':''">
-                                        <input th:field="*{confirmPassword}"  class="form-control form-control-user"
-                                            id="confirmPassword" placeholder="Repeat Password">
+                                        <input type="password" th:field="*{confirmPassword}"  class="form-control form-control-user"
+                                            id="confirmPassword" placeholder="Powtórz hasło">
                                         <p class="error-message"
                                            th:each="error : ${#fields.errors('confirmPassword')}"
-                                           th:text="${error}">Validation error</p>
+                                           th:text="${error}">Hasła różnią się!</p>
                                     </div>
                                 </div>
                                 <div class="form-group"
                                      th:classappend="${#fields.hasErrors('terms')}? 'has-error':''">
                                     <input id="terms" type="checkbox" th:field="*{terms}" />
-                                    <label class="control-label" for="terms"> I agree with the <a href="#">terms and conditions</a> for Registration. </label>
+                                    <label class="control-label" for="terms"> Zgadzam sie z <a href="#">warunkami serwisu</a> aby się zarejestrować. </label>
                                     <p class="error-message"
-                                       th:each="error : ${#fields.errors('terms')}" th:text="${error}">Validation
-                                        error</p>
+                                       th:each="error : ${#fields.errors('terms')}" th:text="${error}">Zgoda wymagana.</p>
                                 </div>
                                 <input type="submit" class="btn btn-primary btn-user btn-block" value="Zarejestruj się">
                                 <!--<button type="submit" class="btn btn-success">Zarejestruj</button>-->
@@ -115,10 +121,11 @@
                             </form>
                             <hr>
                             <div class="text-center">
-                                <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                <a class="small" href="/" th:href="@{/forgotPassword}">Zapomniałeś hasła?</a>
                             </div>
+                            <hr>
                             <div class="text-center">
-                                <a class="small" href="/" th:href="@{/login}">Already have an account? Login!</a>
+                                <a class="small" href="/" th:href="@{/login}">Jeśli posiadasz konto, kliknij tutaj!</a>
                             </div>
                         </div>
                     </div>
