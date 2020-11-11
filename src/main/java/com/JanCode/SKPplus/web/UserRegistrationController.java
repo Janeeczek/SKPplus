@@ -37,7 +37,7 @@ public class UserRegistrationController {
         userService.save(userDto);
 
 
-        return "redirect:/register?success";
+        return "redirect:/login?registersucces";
     }
 }
 
