@@ -16,6 +16,14 @@ public class UserLoginController {
 
         return "login";
     }
+    /*
+    @GetMapping("/login")
+    public String loginSucces() {
+
+        return "login?reg";
+    }
+
+     */
 
 
 }

@@ -1,39 +1,43 @@
 package com.JanCode.SKPplus.web.dto;
 import com.JanCode.SKPplus.constraint.FieldMatch;
+import com.JanCode.SKPplus.constraint.MyNotNull;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @FieldMatch.List({
-        @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match"),
-        @FieldMatch(first = "email", second = "confirmEmail", message = "The email fields must match")
+        @FieldMatch(first = "password", second = "confirmPassword", message = "Hasła się nie zgadzają!"),
+        //@FieldMatch(first = "email", second = "confirmEmail", message = "Adres email się nie zgadza!")
 })
+
 public class UserRegistrationDto {
-    @NotEmpty
+    @NotNull
+    @NotEmpty(message = "Nazwa użytkownika jest wymagana!")
     private String username;
 
-    @NotEmpty
+    @NotEmpty(message = "Imię jest wymagane!")
     private String firstName;
 
-    @NotEmpty
+    @NotEmpty(message = "Nazwisko jest wymagane!")
     private String lastName;
 
-    @NotEmpty
+    @NotEmpty(message = "Hasło jest wymagane!")
     private String password;
 
-    @NotEmpty
+    @NotEmpty(message = "Wpisz ponownie hasło!")
     private String confirmPassword;
 
     @Email
-    @NotEmpty
+    @NotEmpty(message = "Email jest wymagany!")
     private String email;
 
-    @Email
-    @NotEmpty
-    private String confirmEmail;
+    //@Email
+    //@NotEmpty
+    //private String confirmEmail;
 
-    @AssertTrue
+    @AssertTrue(message = "Zaakceptuj warunki użytkownika!")
     private Boolean terms;
 
     public String getUsername() {
@@ -84,7 +88,7 @@ public class UserRegistrationDto {
         this.email = email;
     }
 
-    public String getConfirmEmail() {
+   /* public String getConfirmEmail() {
         return confirmEmail;
     }
 
@@ -92,6 +96,8 @@ public class UserRegistrationDto {
         this.confirmEmail = confirmEmail;
     }
 
+
+    */
     public Boolean getTerms() {
         return terms;
     }
