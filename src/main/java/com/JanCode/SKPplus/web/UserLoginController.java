@@ -11,11 +11,19 @@ public class UserLoginController {
     @Autowired
     private UserDetailsService userService;
 
-    @GetMapping("/login*")
+    @GetMapping("/login")
     public String login() {
 
         return "login";
     }
+    /*
+    @GetMapping("/login")
+    public String loginSucces() {
+
+        return "login?reg";
+    }
+
+     */
 
 
 }
