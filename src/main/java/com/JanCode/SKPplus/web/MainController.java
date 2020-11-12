@@ -20,48 +20,59 @@ public class MainController  {
         return (authentication == null) ? null : (UserDetails) authentication.getPrincipal();
     }
     @GetMapping("/")
-    public String root() {
+    public String showRoot() {
 
         return "/user/user";
     }
 
-    @GetMapping("/index.html")
-    public String rootsecond() {
+    @GetMapping("/index")
+    public String showIndex() {
 
         return "/user/user";
     }
 
     @GetMapping("/user/user")
-    public String user() {
-        return "/user/user";
-    }
-    @GetMapping("/user")
-    public String users() {
+    public String showUser() {
 
         return "/user/user";
     }
+    @GetMapping("/blank")
+    public String showBlank() {
+
+        return "/blank";
+    }
+    @GetMapping("/charts")
+    public String showCharts() {
+
+        return "/user/charts";
+    }
+    @GetMapping("/tables")
+    public String showTables() {
+
+        return "/user/tables";
+    }
     @GetMapping("/utilities-color")
-    public String utilities_color() {
+    public String showUtilities_color() {
         return "/user/utilities-color";
     }
     @GetMapping("/utilities-border")
-    public String utilities_border() {
+    public String showUtilities_border() {
         return "/user/utilities-border";
     }
     @GetMapping("/utilities-animation")
-    public String utilities_animation() {
+    public String showUtilities_animation() {
         return "/user/utilities-animation";
     }
     @GetMapping("/utilities-other")
-    public String utilities_other() {
+    public String showUtilities_other() {
         return "/user/utilities-other";
     }
     @GetMapping("/buttons")
-    public String buttons() {
+    public String showButtons() {
         return "/user/buttons";
     }
     @GetMapping("/cards")
-    public String cards() {
+    public String showCards() {
         return "/user/cards";
     }
 }
