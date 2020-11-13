@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 })
 
 public class UserRegistrationDto {
+    @MyNotNull(message = "Nazwa użytkownika musi mieć conajmniej 4 znaki!")
     @NotNull
     @NotEmpty(message = "Nazwa użytkownika jest wymagana!")
     private String username;
@@ -33,9 +34,7 @@ public class UserRegistrationDto {
     @NotEmpty(message = "Email jest wymagany!")
     private String email;
 
-    //@Email
-    //@NotEmpty
-    //private String confirmEmail;
+
 
     @AssertTrue(message = "Zaakceptuj warunki użytkownika!")
     private Boolean terms;

@@ -39,13 +39,13 @@
                             </div>
                             <div class="form-group " >
                                     <div class="row" >
-                                        <div class="col-lg-3"></div>
-                                        <div class="col-lg-6 ">
+                                        <div class="col-lg-2"></div>
+                                        <div class="col-lg-8">
                                             <div class="input-group">
-                                                <input th:field="*{username}" class="form-control text-center form-control-user" id="username" placeholder="Nazwa użytkownika">
+                                                <input th:field="*{username}" class="form-control text-center form-control-user" id="username" placeholder="Nazwa użytkownika"required>
                                             </div><!-- /input-group -->
                                         </div><!-- /.col-lg-4 -->
-                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-2"></div>
                                     </div><!-- /.row -->
                                 </div>
                             <div class="form-group " >
@@ -53,7 +53,7 @@
                                         <div class="col-lg-1"></div>
                                         <div class="col-lg-10">
                                             <div class="input-group">
-                                                <input th:field="*{email}"  class="form-control text-center form-control-user" id="email" placeholder="Adres E-mail">
+                                                <input th:field="*{email}"  class="form-control text-center form-control-user" id="email" placeholder="Adres E-mail"required>
                                             </div><!-- /input-group -->
                                         </div><!-- /.col-lg-4 -->
                                         <div class="col-lg-1"></div>
@@ -61,30 +61,27 @@
                                 </div>
                             <div class="form-group row" >
                                     <div class="col-sm-6 mb-3 mb-sm-0" >
-                                        <input th:field="*{firstName}" class="form-control form-control-user" id="firstName" placeholder="Imię">
+                                        <input th:field="*{firstName}" class="form-control form-control-user" id="firstName" placeholder="Imię" required>
 
                                     </div>
                                     <div class="col-sm-6">
-                                        <input th:field="*{lastName}" class="form-control form-control-user" id="lastName"
-                                            placeholder="Nazwisko">
+                                        <input th:field="*{lastName}" class="form-control form-control-user" id="lastName" placeholder="Nazwisko"required>
 
                                     </div>
                                 </div>
                             <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" th:field="*{password}"  class="form-control form-control-user"
-                                            id="Hasło" placeholder="Hasło">
+                                        <input type="password" th:field="*{password}"  class="form-control form-control-user" id="Hasło" placeholder="Hasło"required>
 
                                     </div>
                                     <div class="col-sm-6" >
-                                        <input type="password" th:field="*{confirmPassword}"  class="form-control form-control-user"
-                                            id="confirmPassword" placeholder="Powtórz hasło">
+                                        <input type="password" th:field="*{confirmPassword}"  class="form-control form-control-user" id="confirmPassword" placeholder="Powtórz hasło" required>
 
                                     </div>
                                 </div>
                             <div class="form-group">
-                                    <input id="terms" type="checkbox" th:field="*{terms}" />
-                                    <label class="control-label" for="terms"> Zgadzam sie z <a href="#">warunkami serwisu</a> aby się zarejestrować. </label>
+                                    <input id="terms" type="checkbox" th:field="*{terms}" required/>
+                                    <label class="control-label" for="terms"> Zgadzam sie z <a href="#">warunkami serwisu</a>.</label>
                                 </div>
                             <input type="submit" class="btn btn-primary btn-user btn-block" value="Zarejestruj się">
                             <!--<button type="submit" class="btn btn-success">Zarejestruj</button>-->
@@ -151,6 +148,15 @@
                 </div>
             </div>
         </form>
+        <!-- Footer -->
+        <footer class="sticky-footer">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; PTHW 2020</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
     </div>
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>

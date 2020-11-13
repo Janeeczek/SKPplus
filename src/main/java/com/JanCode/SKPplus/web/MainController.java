@@ -33,7 +33,7 @@ public class MainController  {
     @GetMapping("/index")
     public String showIndex() {
 
-        return "/user/user";
+        return "/";
     }
 
     @GetMapping("/user/user")
