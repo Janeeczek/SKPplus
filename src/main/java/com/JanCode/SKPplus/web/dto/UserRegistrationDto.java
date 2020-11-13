@@ -30,7 +30,7 @@ public class UserRegistrationDto {
     @NotEmpty(message = "Wpisz ponownie hasło!")
     private String confirmPassword;
 
-    @Email
+    @Email(message = "Nieprawidłowy e-mail!")
     @NotEmpty(message = "Email jest wymagany!")
     private String email;
 
