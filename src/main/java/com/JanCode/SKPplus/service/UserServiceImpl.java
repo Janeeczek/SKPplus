@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
+    @Override
     public User findByEmail(String email){
         return userRepository.findByEmail(email);
     }
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-
+    @Override
     public User save(UserRegistrationDto registration){
         User user = new User();
         user.setUsername(registration.getUsername());

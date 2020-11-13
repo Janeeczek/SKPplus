@@ -24,6 +24,11 @@ public class MainController  {
 
         return "/user/user";
     }
+    @GetMapping("/test")
+    public String showTest() {
+
+        return "/test";
+    }
 
     @GetMapping("/index")
     public String showIndex() {
