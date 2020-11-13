@@ -46,6 +46,9 @@ public class MyUserPrincipal implements UserDetails {
     public String getLastname() {
         return user.getLastName();
     }
+    public Collection<Role> getRoles() {
+        return user.getRoles();
+    }
 
     @Override
     public boolean isAccountNonExpired() {

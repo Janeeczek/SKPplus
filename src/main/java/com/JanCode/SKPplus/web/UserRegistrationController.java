@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 @Controller
-@RequestMapping("/register")
+@RequestMapping("/register*")
 public class UserRegistrationController {
 
     @Autowired
@@ -37,12 +37,20 @@ public class UserRegistrationController {
             return "register";
         }
 
+        if (userService.findByUsername(userDto.getUsername())!=null) {
+            return "redirect:/register?usernameDuplicate";
+        }
+        if (userService.findByEmail(userDto.getEmail())!=null) {
+            return "redirect:/register?emailDuplicate";
+        }
 
-
-        userService.save(userDto);
-
-
+            userService.save(userDto);
         return "redirect:/login?reg";
+
+        //return "login";
+
+
+
     }
 }
 
