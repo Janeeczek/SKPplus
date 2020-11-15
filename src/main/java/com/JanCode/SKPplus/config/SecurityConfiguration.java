@@ -73,8 +73,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout")
                 .logoutSuccessHandler(logoutSuccessHandler());
 
-        http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
-
+        http.sessionManagement().maximumSessions(1).expiredUrl("/login?sessionExpired");
+        http.sessionManagement()
+                .invalidSessionUrl("/invalidSession.html");
         //http.authorizeRequests().antMatchers("/webjars/**").permitAll();
 
         http.exceptionHandling().accessDeniedPage("/error");
