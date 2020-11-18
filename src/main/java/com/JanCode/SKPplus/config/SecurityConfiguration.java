@@ -1,10 +1,11 @@
 package com.JanCode.SKPplus.config;
 
 import com.JanCode.SKPplus.Authentication.MyDaoAuthenticationProvider;
-import com.JanCode.SKPplus.Handlers.MyLogoutSuccessHandler;
-import com.JanCode.SKPplus.service.UserService;
+import com.JanCode.SKPplus.Listeners.LogoutListener;
+import com.JanCode.SKPplus.service.MyHttpSessionEventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,6 +13,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionDestroyedEvent;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,19 +38,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new MyHttpSessionEventPublisher();
     }
     @Bean
-    public LogoutSuccessHandler logoutSuccessHandler() {
-        return new MyLogoutSuccessHandler();
+    public ApplicationListener<SessionDestroyedEvent> logoutListener() {
+        return new LogoutListener();
     }
 
-
-    @Bean
-    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
-        return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher());
-    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
@@ -62,7 +60,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and().formLogin()
                 .failureUrl("/login?error")
                 .loginPage("/login*")
-                //.successHandler()
                 .defaultSuccessUrl("/",true);
 
         http.logout()
@@ -70,20 +67,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 //.clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout")
-                .logoutSuccessHandler(logoutSuccessHandler());
-
-        http.sessionManagement().maximumSessions(1).expiredUrl("/login?sessionExpired");
+                .logoutSuccessUrl("/login?logout");
+      //  http.sessionManagement()
+               // .sessionCreationPolicy(SessionCreationPolicy.NEVER);
+        http.sessionManagement().maximumSessions(1).expiredUrl("/login?sessionExpired").maxSessionsPreventsLogin(true);
         http.sessionManagement()
-                .invalidSessionUrl("/invalidSession.html");
+                .sessionFixation().migrateSession();
         //http.authorizeRequests().antMatchers("/webjars/**").permitAll();
 
-        http.exceptionHandling().accessDeniedPage("/error");
+        http.exceptionHandling().accessDeniedPage("/error?accesdenied");
     }
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
     @Bean
     public MyDaoAuthenticationProvider myAuthProvider() throws Exception {
