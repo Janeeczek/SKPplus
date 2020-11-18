@@ -41,11 +41,15 @@ public class MainController  {
 
         return "/user/user";
     }
+    /*
     @GetMapping("/blank")
     public String showBlank() {
 
         return "/blank";
     }
+
+
+     */
     @GetMapping("/charts")
     public String showCharts() {
 

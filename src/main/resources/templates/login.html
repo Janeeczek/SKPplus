@@ -55,6 +55,12 @@
                                         <div th:if="${param.reset}">
                                             <div class="alert alert-info">Wysłano email z kodem przywracania hasła!</div>
                                         </div>
+                                        <div th:if="${param.alreadylogged}">
+                                            <div class="alert alert-info">Użytkownik jest już zalogowany!</div>
+                                        </div>
+                                        <div th:if="${param.sessionExpired}">
+                                            <div class="alert alert-info">Zostałeś wylogowany z powodu braku aktywności!</div>
+                                        </div>
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user"
                                                 id="username" name="username"
