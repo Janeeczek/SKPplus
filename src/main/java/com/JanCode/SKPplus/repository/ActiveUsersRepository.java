@@ -19,7 +19,7 @@ public interface ActiveUsersRepository extends JpaRepository<ActiveUsers, Long> 
     @Query(value= "SELECT * FROM active_users WHERE email = ?1",nativeQuery = true)
     ActiveUsers findByEmail(String email);
 
-    @Query(value= "SELECT email FROM active_users",nativeQuery = true)
+    @Query(value= "SELECT * FROM active_users",nativeQuery = true)
     List<ActiveUsers> getAllActiveUsers();
     @Modifying
     @Query(value= "DELETE FROM active_users WHERE email =:em",nativeQuery = true)
