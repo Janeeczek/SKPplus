@@ -8,12 +8,12 @@
 <body>
 <div layout:fragment="content">
     <div th:if="${param.main}">
-        <h1 class="h3 mb-2 text-gray-800">Wywietl main:</h1>
+        <h1 class="h3 mb-2 text-gray-800">Strona głowna Admina:</h1>
         <div th:insert="fragments/adminFragments :: wyswietlDomyslne"></div>
 
     </div>
     <div th:if="${param.active}">
-        <h1 class="h3 mb-2 text-gray-800">Wywietl active:</h1>
+        <h1 class="h3 mb-2 text-gray-800">Aktywni użytkownicy:</h1>
         <div th:insert="fragments/adminFragments :: wyswietlZalogowanych"></div>
     </div>
 

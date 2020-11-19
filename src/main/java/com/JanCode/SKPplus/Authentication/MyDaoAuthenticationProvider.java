@@ -24,7 +24,9 @@ public class MyDaoAuthenticationProvider extends DaoAuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         System.out.println("ZALOGOWANO!");
         User user = new User (userRepository.findByUsername(authentication.getPrincipal().toString()));
-        ActiveUsers active = new ActiveUsers(user.getEmail());
+
+        MyUserPrincipal principal = new MyUserPrincipal(user);
+        ActiveUsers active = new ActiveUsers(principal);
         if(activeUsersRepository.findByEmail(active.getEmail())==null) {
             System.out.println("Dodano email: " + active.getEmail() + " do bazy danych aktywnych użytkowników!");
             activeUsersRepository.save(active);

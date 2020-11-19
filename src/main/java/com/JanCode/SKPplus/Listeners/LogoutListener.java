@@ -23,12 +23,11 @@ public class LogoutListener implements ApplicationListener<SessionDestroyedEvent
     public void onApplicationEvent(SessionDestroyedEvent event)
     {
         List<SecurityContext> lstSecurityContext = event.getSecurityContexts();
-        MyUserPrincipal principal;
         for (SecurityContext securityContext : lstSecurityContext)
         {
-            principal = (MyUserPrincipal) securityContext.getAuthentication().getPrincipal();
+            MyUserPrincipal principal = (MyUserPrincipal) securityContext.getAuthentication().getPrincipal();
             System.out.println("WYLOGOWANO! email: " + principal.getEmail());
-            ActiveUsers active = new ActiveUsers(principal.getEmail());
+            ActiveUsers active = new ActiveUsers(principal);
             if(activeUsersRepository.findByEmail(active.getEmail())!=null) {
                 System.out.println("Usunięto email: " + active.getEmail() + " z bazy danych aktywnych użytkowników!");
                 activeUsersRepository.myremoveByEmail(active.getEmail());
