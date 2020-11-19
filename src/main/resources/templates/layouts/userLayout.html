@@ -116,8 +116,8 @@
                     <h6 class="collapse-header">Inne strony:</h6>
                     <a class="collapse-item" href="/" th:href="@{/blank}">Pusta strona</a>
                     <a class="collapse-item" href="/" th:href="@{/}">Strona Usera</a>
-                    <a class="collapse-item" href="/" th:href="@{/admin}">Strona Admina</a>
-                    <a class="collapse-item" href="/" th:href="@{/active}">Strona Active</a>
+                    <a class="collapse-item" href="/" th:href="@{/admin?main}">Strona Admina</a>
+                    <a class="collapse-item" href="/" th:href="@{/admin?active}">Strona Active</a>
 
                 </div>
             </div>
@@ -341,7 +341,7 @@
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                              aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="/" th:href="@{/profile}">
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profil
                             </a>

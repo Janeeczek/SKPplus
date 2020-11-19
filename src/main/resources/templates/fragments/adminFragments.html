@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+    <div th:fragment="wyswietlZalogowanych">
+        <div class="row">
+            <div class="col-lg-6">
+                <!-- Brand Buttons -->
+                <div class="card shadow " th:each="user, iterStat: ${activeUsers}">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary" th:text="${user.getEmail()}">User</h6>
+                        <div class="dropdown mb-4">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                Akcje
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Wyloguj</a>
+                                <a class="dropdown-item" href="#">Pokaż profil</a>
+                                <a class="dropdown-item" href="#">Wyślij wiadomość</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+            </div>
+        </div>
+    </div>
+    <div th:fragment="wyswietlDomyslne">
+        <h1 class="h3 mb-2 text-gray-800">Admin Page</h1>
+    </div>
+
+</body>
+</html>
