@@ -18,28 +18,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
-
-    @Autowired
-    private ActiveUsersRepository activeUsersRepository;
-
-    @ModelAttribute("currentUser")
-    public UserDetails getCurrentUser(Authentication authentication) {
-        return (authentication == null) ? null : (UserDetails) authentication.getPrincipal();
-    }
-    @ModelAttribute("activeUsers")
-    public List<ActiveUsers> getActiveUsers() {
-        List<ActiveUsers> a = activeUsersRepository.getAllActiveUsers();
-        return (a == null) ? null : a;
-    }
+public class AdminController extends MainController{
 
     @GetMapping
     public String showAdmin() {
         return "/admin/admin";
     }
-
-
-
-
-
 }

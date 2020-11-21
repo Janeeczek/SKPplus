@@ -20,16 +20,6 @@ import java.util.Map;
 @Controller
 @RequestMapping("/blank")
 public class BlankController {
-    /*
-    @Autowired
-    private SessionRegistry sessionRegistry;
-
-     */
-    @ModelAttribute("currentUser")
-    public UserDetails getCurrentUser(Authentication authentication) {
-        return (authentication == null) ? null : (UserDetails) authentication.getPrincipal();
-    }
-
 
     @GetMapping
     public String showBlank(Locale locale, Model model) {

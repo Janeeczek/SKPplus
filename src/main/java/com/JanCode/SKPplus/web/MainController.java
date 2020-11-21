@@ -15,10 +15,6 @@ import java.security.Principal;
 @Controller
 public class MainController  {
 
-    @ModelAttribute("currentUser")
-    public UserDetails getCurrentUser(Authentication authentication) {
-        return (authentication == null) ? null : (UserDetails) authentication.getPrincipal();
-    }
     @GetMapping("/")
     public String showRoot() {
 
@@ -28,18 +24,6 @@ public class MainController  {
     public String showTest() {
 
         return "/test";
-    }
-
-    @GetMapping("/index")
-    public String showIndex() {
-
-        return "/";
-    }
-
-    @GetMapping("/user/user")
-    public String showUser() {
-
-        return "/user/user";
     }
     @GetMapping("/charts")
     public String showCharts() {

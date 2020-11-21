@@ -16,9 +16,9 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/reset")
 public class ResetController {
+
     @Autowired
     private UserService userService;
-
 
     @GetMapping
     public String showResetForm() {

@@ -25,6 +25,17 @@ public class ActiveUsers implements Serializable {
     public String roles;
     public ActiveUsers() {
     }
+    public ActiveUsers(User user) {
+        this.email = user.getEmail();
+        this.username = user.getUsername();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.roles = user.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toList()).stream()
+                .map(n -> String.valueOf(n))
+                .collect(Collectors.joining("-", "{", "}"));
+    }
 
     public ActiveUsers(String email, String username, String firstName, String lastName, Collection<Role> roles ) {
         this.email = email;

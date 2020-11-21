@@ -23,6 +23,6 @@ public interface ActiveUsersRepository extends JpaRepository<ActiveUsers, Long> 
     List<ActiveUsers> getAllActiveUsers();
     @Modifying
     @Query(value= "DELETE FROM active_users WHERE email =:em",nativeQuery = true)
-    void myremoveByEmail(@Param("em")String email);
+    void deleteeByEmail(@Param("em")String email);
 
 }

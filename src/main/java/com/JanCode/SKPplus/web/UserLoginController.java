@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class UserLoginController {
-    @Autowired
-    private UserDetailsService userService;
 
     @GetMapping("/login*")
     public String login() {

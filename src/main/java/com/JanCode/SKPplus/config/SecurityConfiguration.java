@@ -2,6 +2,8 @@ package com.JanCode.SKPplus.config;
 
 import com.JanCode.SKPplus.Authentication.MyDaoAuthenticationProvider;
 import com.JanCode.SKPplus.Listeners.LogoutListener;
+import com.JanCode.SKPplus.service.ActiveUserService;
+import com.JanCode.SKPplus.service.ActiveUserServiceImpl;
 import com.JanCode.SKPplus.service.MyHttpSessionEventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
@@ -53,7 +55,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
         http.authorizeRequests()
-                .antMatchers("/user/**").hasRole("USER")
+                .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
