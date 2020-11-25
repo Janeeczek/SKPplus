@@ -1,4 +1,4 @@
-package com.JanCode.SKPplus.web;
+package com.JanCode.SKPplus.controller;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.security.core.Authentication;

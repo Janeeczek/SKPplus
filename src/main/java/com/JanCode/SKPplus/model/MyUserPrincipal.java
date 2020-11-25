@@ -1,14 +1,14 @@
 package com.JanCode.SKPplus.model;
 
 import com.JanCode.SKPplus.service.ActiveUserService;
-import com.JanCode.SKPplus.service.ActiveUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,10 +46,27 @@ public class MyUserPrincipal implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
-
-
-
-
+    public LocalDateTime getLastActiveDate() {
+        return user.getLastActiveDate();
+    }
+    public LocalDateTime getRegistrationDate() {
+        return user.getRegistrationDate();
+    }
+    public String getBirthDate() { return user.getBirthDate();}
+    public String getTelNumber() { return user.getTelNumber();}
+    public byte[] getImage() { return user.getImage();}
+    public MultipartFile getMultiPartImage() {
+        return (MultipartFile) new MockMultipartFile("Zdjecie", user.getImage());
+    }
+    public String getByte64Image() {
+        if (user == null) {
+            System.out.println("Error: USER == null");
+            return null;
+        }
+        else {
+            return new String(Base64.getEncoder().encodeToString(user.getImage()));
+        }
+    }
     public String getEmail() {
         return user.getEmail();
     }

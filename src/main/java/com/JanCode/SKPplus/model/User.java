@@ -1,8 +1,12 @@
 package com.JanCode.SKPplus.model;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -24,6 +28,14 @@ public class User {
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
+    @Lob
+    private byte[] image;
+    private String telNumber;
+
+    private LocalDateTime registrationDate;
+    private LocalDateTime lastActiveDate;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private String birthDate;
     public User() {
 
     }
@@ -45,13 +57,14 @@ public class User {
         this.email = email;
         this.password = password;
     }
-    public User(String username, String firstName, String lastName, String email, String password, Collection<Role> roles) {
+    public User(String username, String firstName, String lastName, String email, String password, Collection<Role> roles, byte[] image) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.image = image;
     }
 
     public long getId() {
@@ -109,6 +122,47 @@ public class User {
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getTelNumber() {
+        return telNumber;
+    }
+
+    public void setTelNumber(String telNumber) {
+        this.telNumber = telNumber;
+    }
+
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDateTime registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public LocalDateTime getLastActiveDate() {
+        return lastActiveDate;
+    }
+
+    public void setLastActiveDate(LocalDateTime lastActiveDate) {
+        this.lastActiveDate = lastActiveDate;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
     @Override
     public String toString() {
         return "User{" +

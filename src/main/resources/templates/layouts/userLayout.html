@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 
     <meta charset="utf-8">
@@ -147,7 +147,7 @@
 
         <!-- Sidebar Message -->
         <div class="sidebar-card">
-            <img class="sidebar-card-illustration mb-2" src="img/files_picture.svg" alt="">
+            <img class="sidebar-card-illustration mb-2" src="" alt=""> <!--DODAJ TUTAJ ZDJECIE PLIKU-->
             <p class="text-center mb-2"><strong>Dodawanie pliku</strong> szybkie narzędzie do wgrywania pliku</p>
             <a class="btn btn-success btn-sm" href="/" th:href="@{/dodajPlik}">Dodaj plik!</a>
         </div>
@@ -277,7 +277,7 @@
                             </h6>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="img/undraw_profile_1.svg"
+                                    <img class="rounded-circle" src=""
                                          alt="">
                                     <div class="status-indicator bg-success"></div>
                                 </div>
@@ -289,7 +289,7 @@
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="img/undraw_profile_2.svg"
+                                    <img class="rounded-circle" src=""
                                          alt="">
                                     <div class="status-indicator"></div>
                                 </div>
@@ -301,7 +301,7 @@
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="img/undraw_profile_3.svg"
+                                    <img class="rounded-circle" src=""
                                          alt="">
                                     <div class="status-indicator bg-warning"></div>
                                 </div>
@@ -336,7 +336,7 @@
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${currentUser.getFirstname()}" > </span>
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${currentUser.getLastname()}" > </span>
                             <img class="img-profile rounded-circle"
-                                 src="img/undraw_profile.svg">
+                                 th:src="*{'data:image/png;base64,'+currentUser.getByte64Image()}">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -345,7 +345,7 @@
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profil
                             </a>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="/" th:href="@{/profile{u}/edit (u=${currentUser.getUsername()})}">
                                 <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Ustawienia
                             </a>

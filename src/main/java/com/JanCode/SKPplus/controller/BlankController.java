@@ -1,4 +1,4 @@
-package com.JanCode.SKPplus.web;
+package com.JanCode.SKPplus.controller;
 
 import com.JanCode.SKPplus.model.MyUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;

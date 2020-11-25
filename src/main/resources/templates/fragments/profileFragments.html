@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+
 </head>
 <body>
 <div th:fragment="wyswietlInfo">
     <div class="container  flex-grow-1 container-p-y">
 
         <div class="media align-items-center py-3 mb-3">
-            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="d-block ui-w-100 rounded-circle">
+            <img th:src="*{'data:image/png;base64,'+currentUser.getByte64Image()}" alt="" class="d-block ui-w-100 rounded-circle" style="width: 30%" >
             <div class="media-body ml-4">
                 <h4 class="font-weight-bold mb-0"th:text="${user.getFirstname() + ' ' + user.getLastname()}">aaa<span class="text-muted font-weight-normal">@nick</span></h4>
                 <div class="text-muted mb-2"th:text="${currentUser.getUsername()}">ID: 3425433</div>
-                <a th:if="${currentUser.getUsername() == user.getUsername() or currentUser.isAdmin()}" href="/" th:href="@{/profile{param.u}/edit" class="btn btn-primary btn-sm">Edytuj</a>&nbsp;
+                <a th:if="${currentUser.getUsername() == user.getUsername() or currentUser.isAdmin()}" href="/" th:href="@{/profile{u}/edit (u=${user.getUsername()})}" class="btn btn-primary btn-sm">Edytuj</a>&nbsp;
                 <a  class="btn btn-default btn-sm icon-btn"><i class="fa fa-mail"></i></a>
             </div>
         </div>
@@ -22,11 +23,11 @@
                     <tbody>
                     <tr>
                         <td>Data rejestracji:</td>
-                        <td>01/23/2017</td>
+                        <td th:text="${#temporals.format(user.getRegistrationDate(), 'HH:mm dd-MM-yyyy')}">>01/23/2017</td>
                     </tr>
                     <tr>
                         <td>Ostatnia aktywność:</td>
-                        <td>01/23/2018 (14 dni temu)</td>
+                        <td th:text="${#temporals.format(user.getLastActiveDate(), 'HH:mm dd-MM-yyyy')}">01/23/2018 (14 dni temu)</td>
                     </tr>
                     <tr>
                         <td>Zweryfikowany:</td>
@@ -126,7 +127,7 @@
                     <tbody>
                     <tr>
                         <td>Data urodzin:</td>
-                        <td>May 3, 1995</td>
+                        <td th:text="${user.getBirthDate()}">May 3, 1995</td>
                     </tr>
                     </tbody>
                 </table>
@@ -137,7 +138,7 @@
                     <tbody>
                     <tr>
                         <td>Numer telefonu:</td>
-                        <td>+48 555 555 555</td>
+                        <td th:text="${user.getTelNumber()}">+48 555 555 555</td>
                     </tr>
                     </tbody>
                 </table>
@@ -285,12 +286,12 @@
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Rodzaje samochodów</h6>
                     <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink1"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                             aria-labelledby="dropdownMenuLink">
+                             aria-labelledby="dropdownMenuLink1">
                             <div class="dropdown-header">Dropdown Header:</div>
                             <a class="dropdown-item" href="#">Action</a>
                             <a class="dropdown-item" href="#">Another action</a>
@@ -369,5 +370,218 @@
         </div>
     </div>
 </div>
+<div th:fragment="edytuj">
+    <div class="container light-style flex-grow-1 container-p-y">
+        <form  th:action="@{/save-profile/{u} (u=${user.getUsername()})}" th:object="${userDto}" th:method="POST" enctype="multipart/form-data" multiple="multiple" >
+        <h4 class="font-weight-bold py-3 mb-4">
+            Ustawienia użytkownika
+        </h4>
+
+        <div class="card overflow-hidden">
+            <div class="row no-gutters row-bordered row-border-light">
+                <div class="col-md-3 pt-0">
+                    <div class="list-group list-group-flush account-settings-links">
+                        <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">Ogólne</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Zmień hasło</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Informacje</a>
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-notifications">Powiadomienia</a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="account-general">
+
+                            <div class="card-body media align-items-center">
+                                <img th:src="*{'data:image/png;base64,'+ getByte64Image()}" class="d-block ui-w-80 rounded-circle" >
+                                <img id="imageResult" src="#" alt="" class="d-block ui-w-80 rounded-circle">
+                                <div class="media-body ml-4">
+                                    <label class="btn btn-outline-primary">
+                                        Dodaj nowe zdjęcie
+                                        <input onchange="readURL(this);" type="file" th:field="*{image}" class="account-settings-fileinput" >
+                                    </label>
+                                    <button id="btnDelete" type="button" class="btn btn-default md-btn-flat">Resetuj</button>
+                                    <div class="text-light small mt-1">Dozwolone JPG, GIF or PNG. Rozmiar < 800K</div>
+                                </div>
+                            </div>
+                            <script>
+                                function readURL(input) {
+                                    if (input.files && input.files[0]) {
+                                        var reader = new FileReader();
+
+                                        reader.onload = function (e) {
+                                            $('#imageResult').attr('src', e.target.result);
+                                        };
+                                        reader.readAsDataURL(input.files[0]);
+                                    }
+                                }
+
+                                (function () {
+                                    $('#upload').on('change', function () {
+                                        readURL(input);
+                                    });
+
+                                });
+                            </script>
+                            <hr class="border-light m-0">
+
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="form-label">Nazwa użytkownika</label>
+                                    <input type="text" class="form-control mb-1" th:field="*{username}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Imię</label>
+                                    <input type="text" class="form-control" th:field="*{firstName}" >
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Nazwisko</label>
+                                    <input type="text" class="form-control"th:field="*{lastName}"  >
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">E-mail</label>
+                                    <input type="text" class="form-control mb-1"th:field="*{email}" >
+                                    <div class="alert alert-warning mt-3">
+                                        Twój adres e-mail nie jest potwierdzony! Sprawdź pocztę<br>
+                                        <a href="javascript:void(0)">Wyślij ponownie potwiedzenie</a>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Firma</label>
+                                    <input type="text" class="form-control" value="PTHW sp. z o.o.">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane fade" id="account-change-password">
+                            <div class="card-body pb-2">
+
+                                <div class="form-group">
+                                    <label class="form-label">Aktualne hasło</label>
+                                    <input type="password" th:field="*{currentPassword}" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Nowe hasło</label>
+                                    <input type="password"th:field="*{newPassword}" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Powtórz nowe hasło</label>
+                                    <input type="password" th:field="*{repeatNewPassword}" class="form-control">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="account-info">
+                            <div class="card-body pb-2">
+
+                                <div class="form-group">
+                                    <label class="form-label">O mnie</label>
+                                    <textarea class="form-control" rows="5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nunc arcu, dignissim sit amet sollicitudin iaculis, vehicula id urna. Sed luctus urna nunc. Donec fermentum, magna sit amet rutrum pretium, turpis dolor molestie diam, ut lacinia diam risus eleifend sapien. Curabitur ac nibh nulla. Maecenas nec augue placerat, viverra tellus non, pulvinar risus.</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Urodziny</label>
+                                    <input type="text" class="form-control" th:field="*{birthDate}" >
+                                </div>
+                            </div>
+                            <hr class="border-light m-0">
+                            <div class="card-body pb-2">
+
+                                <h6 class="mb-4">Dane kontatkowe</h6>
+                                <div class="form-group">
+                                    <label class="form-label">Telefon</label>
+                                    <input type="text" class="form-control"th:field="*{telNumber}">
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="tab-pane fade" id="account-notifications">
+                            <div class="card-body pb-2">
+
+                                <h6 class="mb-4">Aktywność</h6>
+
+                                <div class="form-group">
+                                    <label class="switcher">
+                                        <input type="checkbox" class="switcher-input" checked="">
+                                        <span class="switcher-indicator">
+                                            <span class="switcher-yes"></span>
+                                            <span class="switcher-no"></span>
+                                        </span>
+                                        <span class="switcher-label">Email me when someone comments on my article</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="switcher">
+                                        <input type="checkbox" class="switcher-input" checked="">
+                                        <span class="switcher-indicator">
+                                            <span class="switcher-yes"></span>
+                                            <span class="switcher-no"></span>
+                                        </span>
+                                        <span class="switcher-label">Email me when someone answers on my forum thread</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="switcher">
+                                        <input type="checkbox" class="switcher-input">
+                                        <span class="switcher-indicator">
+                                            <span class="switcher-yes"></span>
+                                                <span class="switcher-no"></span>
+                                            </span>
+                                        <span class="switcher-label">Email me when someone follows me</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <hr class="border-light m-0">
+                            <div class="card-body pb-2">
+
+                                <h6 class="mb-4">Application</h6>
+
+                                <div class="form-group">
+                                    <label class="switcher">
+                                        <input type="checkbox" class="switcher-input" checked="">
+                                        <span class="switcher-indicator">
+                                            <span class="switcher-yes"></span>
+                                            <span class="switcher-no"></span>
+                                        </span>
+                                        <span class="switcher-label">News and announcements</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="switcher">
+                                        <input type="checkbox" class="switcher-input">
+                                        <span class="switcher-indicator">
+                                            <span class="switcher-yes"></span>
+                                            <span class="switcher-no"></span>
+                                        </span>
+                                        <span class="switcher-label">Weekly product updates</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="switcher">
+                                        <input type="checkbox" class="switcher-input" checked="">
+                                        <span class="switcher-indicator">
+                                            <span class="switcher-yes"></span>
+                                            <span class="switcher-no"></span>
+                                        </span>
+                                        <span class="switcher-label">Weekly blog digest</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-right mt-3">
+            <button type="submit" name="action" value="save" class="btn btn-primary">Zapisz zmiany</button>&nbsp;
+            <button type="cancel" name="action" value="cancel" class="btn btn-warning">Anuluj</button>
+        </div>
+        </form>
+    </div>
+
+</div>
+
 </body>
 </html>

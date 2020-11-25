@@ -35,7 +35,6 @@ public class UserRegistrationDto {
     private String email;
 
 
-
     @AssertTrue(message = "Zaakceptuj warunki użytkownika!")
     private Boolean terms;
 

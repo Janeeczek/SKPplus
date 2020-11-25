@@ -2,32 +2,21 @@ package com.JanCode.SKPplus.config;
 
 import com.JanCode.SKPplus.Authentication.MyDaoAuthenticationProvider;
 import com.JanCode.SKPplus.Listeners.LogoutListener;
-import com.JanCode.SKPplus.service.ActiveUserService;
-import com.JanCode.SKPplus.service.ActiveUserServiceImpl;
-import com.JanCode.SKPplus.service.MyHttpSessionEventPublisher;
+import com.JanCode.SKPplus.Listeners.MyHttpSessionEventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionDestroyedEvent;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Configuration
@@ -47,13 +36,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public ApplicationListener<SessionDestroyedEvent> logoutListener() {
         return new LogoutListener();
     }
+    @Bean
+    public SessionRegistry sessionRegistry() { return new SessionRegistryImpl(); }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/login*","/reset","/register*","/css/**", "/img/**", "/js/**", "/vendor/**", "/scss/**","/layouts/**","/fragments/**")
                 .permitAll();
-
+        http.sessionManagement().maximumSessions(-1).sessionRegistry(sessionRegistry());
         http.authorizeRequests()
                 .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
@@ -62,19 +53,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and().formLogin()
                 .failureUrl("/login?error")
                 .loginPage("/login*")
-                .defaultSuccessUrl("/",true);
+                .defaultSuccessUrl("/",true)
 
-        http.logout()
+        .and().logout()
                 //.invalidateHttpSession(true)
                 //.clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout");
-      //  http.sessionManagement()
-               // .sessionCreationPolicy(SessionCreationPolicy.NEVER);
-        http.sessionManagement().maximumSessions(1).expiredUrl("/login?sessionExpired").maxSessionsPreventsLogin(true);
-        http.sessionManagement()
+
+
+
+
+        /*http.sessionManagement()
                 .sessionFixation().migrateSession();
+
+         */
         //http.authorizeRequests().antMatchers("/webjars/**").permitAll();
 
         http.exceptionHandling().accessDeniedPage("/error?accesdenied");
