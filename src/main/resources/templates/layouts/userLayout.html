@@ -345,7 +345,7 @@
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profil
                             </a>
-                            <a class="dropdown-item" href="/" th:href="@{/profile{u}/edit (u=${currentUser.getUsername()})}">
+                            <a class="dropdown-item" href="/" th:href="@{/profile/{u}/edit (u=${currentUser.getUsername()})}">
                                 <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Ustawienia
                             </a>

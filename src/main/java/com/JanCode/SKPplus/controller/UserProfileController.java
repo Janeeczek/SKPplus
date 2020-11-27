@@ -35,7 +35,7 @@ public class UserProfileController {
     private UserDetailsService userDetailsService;
     @Autowired
     MyDaoAuthenticationProvider authenticationProvider;
-    @GetMapping("/profile")
+    @GetMapping("/profile/{u}")
     public ModelAndView showProfileDefaultWithParam(@RequestParam(required = false) String u,Authentication authentication) {
         MyUserPrincipal principal;
         ModelAndView model = new ModelAndView("/user/profile");
@@ -44,6 +44,7 @@ public class UserProfileController {
             principal = (MyUserPrincipal) authentication.getPrincipal();
             //System.out.println(principal.getAuthorities());
         } else {
+            System.out.println("ELSE");
             principal = new MyUserPrincipal(userService.findByUsername(u));
         }
         model.addObject("activeService",activeUserService);
@@ -51,7 +52,19 @@ public class UserProfileController {
 
         return model;
     }
-    @GetMapping("/profile{u}/edit")
+    @GetMapping("/profile")
+    public ModelAndView showProfileDefaultWithoutParam(Authentication authentication) {
+        MyUserPrincipal principal;
+        ModelAndView model = new ModelAndView("/user/profile");
+
+            principal = (MyUserPrincipal) authentication.getPrincipal();
+            //System.out.println(principal.getAuthorities());
+        model.addObject("activeService",activeUserService);
+        model.addObject("user",principal);
+
+        return model;
+    }
+    @GetMapping("/profile/{u}/edit")
     public ModelAndView showProfileEdit(@RequestParam(required = false) String u,Authentication authentication) {
         ModelAndView model = new ModelAndView("/user/editProfile");
         MyUserPrincipal principal;
@@ -81,7 +94,7 @@ public class UserProfileController {
         }
 
 
-        return "redirect:/profile?"+ u;
+        return "redirect:/profile/"+ u;
     }
     public void authWithAuthManager(HttpServletRequest request, MyUserPrincipal principal) {
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());
