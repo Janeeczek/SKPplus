@@ -23,10 +23,12 @@ public class FileStorageService {
     }
 
     public FileDB getFile(String id) {
-        return fileDBRepository.findById(id).get();
+        //TODO dodaj zwrot
+        return null;
     }
 
     public Stream<FileDB> getAllFiles() {
-        return fileDBRepository.findAll().stream();
+        //TODO dodaj zwrot all
+        return null;
     }
 }

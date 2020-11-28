@@ -1,8 +1,6 @@
 package com.JanCode.SKPplus.repository;
 
 import com.JanCode.SKPplus.model.ActiveUsers;
-import com.JanCode.SKPplus.model.Role;
-import com.JanCode.SKPplus.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

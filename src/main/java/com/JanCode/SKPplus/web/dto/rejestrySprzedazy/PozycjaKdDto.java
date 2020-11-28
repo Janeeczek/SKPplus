@@ -8,7 +8,6 @@ public class PozycjaKdDto {
     private double NOTOWANIE_WALUTY_ILE_KD;
     private double NOTOWANIE_WALUTY_ZA_ILE_KD;
     private String DATA_KURSU_KD;
-
     public PozycjaKdDto() {
     }
 
