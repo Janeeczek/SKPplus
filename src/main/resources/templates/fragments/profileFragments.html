@@ -12,7 +12,7 @@
             <div class="media-body ml-4">
                 <h4 class="font-weight-bold mb-0"th:text="${user.getFirstname() + ' ' + user.getLastname()}">aaa<span class="text-muted font-weight-normal">@nick</span></h4>
                 <div class="text-muted mb-2"th:text="${currentUser.getUsername()}">ID: 3425433</div>
-                <a th:if="${currentUser.getUsername() == user.getUsername() or currentUser.isAdmin()}" href="/" th:href="@{/profile{u}/edit (u=${user.getUsername()})}" class="btn btn-primary btn-sm">Edytuj</a>&nbsp;
+                <a th:if="${currentUser.getUsername() == user.getUsername() or currentUser.isAdmin()}" href="/" th:href="@{/profile/{u}/edit (u=${user.getUsername()})}" class="btn btn-primary btn-sm">Edytuj</a>&nbsp;
                 <a  class="btn btn-default btn-sm icon-btn"><i class="fa fa-mail"></i></a>
             </div>
         </div>
@@ -399,7 +399,7 @@
                                         Dodaj nowe zdjęcie
                                         <input onchange="readURL(this);" type="file" th:field="*{image}" class="account-settings-fileinput" >
                                     </label>
-                                    <button id="btnDelete" type="button" class="btn btn-default md-btn-flat">Resetuj</button>
+                                    <button id="btnDelete1" type="button" class="btn btn-default md-btn-flat">Resetuj</button>
                                     <div class="text-light small mt-1">Dozwolone JPG, GIF or PNG. Rozmiar < 800K</div>
                                 </div>
                             </div>
@@ -582,6 +582,24 @@
     </div>
 
 </div>
+<div th:fragment="upload">
+    <div class="container light-style flex-grow-1 container-p-y">
+        <h4 class="font-weight-bold py-2 mb-4">
+            Przesyłanie raportu
+        </h4>
+        <form  th:action="@{/upload}" th:object="${raportDto}" th:method="POST" enctype="multipart/form-data" >
+            <div class="media-body ml-4">
+                Dodaj nowy raport
+                <label class="btn btn-outline-primary">
+                    <input type="file" th:field="*{raport}" class="account-settings-fileinput" >
 
+                </label>
+
+                <button id="btnDelete" type="button" class="btn btn-default md-btn-flat">Usuń</button>
+                <button type="submit" name="action" value="save" class="btn btn-primary">Dodaj</button>&nbsp;
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>

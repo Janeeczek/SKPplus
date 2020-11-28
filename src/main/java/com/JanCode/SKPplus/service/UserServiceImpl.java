@@ -92,13 +92,11 @@ public class UserServiceImpl implements UserService {
         user.setLastActiveDate(LocalDateTime.now());
 
         if (userdto.getImage() != null) {
-            System.out.println("No jakis obraz jest ale jaki to ni wiadomo xd");
             user.setImage(userdto.getByteImage());
         }
         if (userdto.getNewPassword() != null && userdto.getCurrentPassword() != null && userdto.getRepeatNewPassword() != null) {
             if (passwordEncoder.matches(userdto.getCurrentPassword(),user.getPassword())) {
                 user.setPassword(passwordEncoder.encode(userdto.getNewPassword()));
-                System.out.println("Zmieniono hasło na: " + userdto.getNewPassword());
             }
         }
         return userRepository.save(user);

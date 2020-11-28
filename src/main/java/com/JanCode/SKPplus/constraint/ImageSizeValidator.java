@@ -1,6 +1,5 @@
 package com.JanCode.SKPplus.constraint;
 
-import com.JanCode.SKPplus.util.MultipartImage;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;

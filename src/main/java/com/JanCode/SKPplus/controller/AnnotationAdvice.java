@@ -37,12 +37,9 @@ public class AnnotationAdvice {
             userService.updateLastActiveTime(principal.getEmail());
             return principal;
         }
-
-        //return (authentication == null) ? null : (UserDetails) authentication.getPrincipal();
     }
     @ModelAttribute("activeUsers")
     public List<ActiveUsers> getActiveUsers() {
-
         List<ActiveUsers> a = activeUsersRepository.getAllActiveUsers();
         return (a == null) ? null : a;
     }
@@ -51,7 +48,6 @@ public class AnnotationAdvice {
         if (authentication == null)
             return null;
         else {
-            System.out.println("ADVICE CONTROLLER: prosza mnie o zdjecie wiec je daje");
             MyUserPrincipal principal = (MyUserPrincipal)  authentication.getPrincipal();
             return principal.getByte64Image();
         }
