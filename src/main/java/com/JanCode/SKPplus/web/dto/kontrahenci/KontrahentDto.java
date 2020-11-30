@@ -1,8 +1,13 @@
 package com.JanCode.SKPplus.web.dto.kontrahenci;
 
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.List;
-
+import java.util.Set;
+@XmlRootElement(name = "KONTRAHENT")
+@XmlType(propOrder={ "ID_ZRODLA","AKRONIM","FINALNY","ADRESY"})
 public class KontrahentDto {
     private int ID_ZRODLA;
     private int AKRONIM;
@@ -43,6 +48,7 @@ public class KontrahentDto {
         this.FINALNY = FINALNY;
     }
 
+    @XmlElement(name="ADRESY")
     public List<AdresyDto> getADRESY() {
         return ADRESY;
     }
@@ -50,4 +56,5 @@ public class KontrahentDto {
     public void setADRESY(List<AdresyDto> ADRESY) {
         this.ADRESY = ADRESY;
     }
+
 }

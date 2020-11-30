@@ -2,6 +2,7 @@ package com.JanCode.SKPplus.model.raportModel;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Kontrahent {
@@ -15,7 +16,7 @@ public class Kontrahent {
 
     @OneToMany(cascade = CascadeType.DETACH)
     @JoinColumn(name = "kontrahent_id",referencedColumnName = "id")
-    private List<Adres> adresy = new ArrayList<>();
+    private List<Adres> adresy;
 
     public Kontrahent() {
     }

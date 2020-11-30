@@ -4,6 +4,7 @@ import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.PozycjaKdDto;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class KwotyDodatkowe {

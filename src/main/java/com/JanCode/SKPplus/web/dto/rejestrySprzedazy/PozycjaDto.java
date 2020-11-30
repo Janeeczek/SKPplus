@@ -1,5 +1,10 @@
 package com.JanCode.SKPplus.web.dto.rejestrySprzedazy;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlRootElement(name = "POZYCJA")
+@XmlType(propOrder={"STAWKA_VAT","STATUS_VAT","NETTO","VAT","NETTO_SYS","VAT_SYS","NETTO_SYS2","VAT_SYS2"})
 public class PozycjaDto {
     private double STAWKA_VAT;
     private String STATUS_VAT;

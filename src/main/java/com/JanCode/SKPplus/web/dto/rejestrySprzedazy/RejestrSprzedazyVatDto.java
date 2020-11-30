@@ -1,8 +1,16 @@
 package com.JanCode.SKPplus.web.dto.rejestrySprzedazy;
 
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.List;
-
+import java.util.Set;
+@XmlRootElement(name = "REJESTR_SPRZEDAZY_VAT")
+@XmlType(propOrder={ "MODUL","TYP","REJESTR","DATA_WYSTAWIENIA","DATA_SPRZEDAZY","TERMIN","NUMER","WEWNETRZNA","FISKALNA",
+        "DETALICZNA","TYP_PODMIOTU","PODMIOT","NAZWA1","NAZWA2","NAZWA3","NIP_KRAJ","NIP","ULICA","NR_DOMU","MIASTO","KOD_POCZTOWY",
+        "POCZTA","KATEGORIA","WALUTA","FORMA_PLATNOSCI","KURS_WALUTY","NOTOWANIE_WALUTY_ILE","NOTOWANIE_WALUTY_ZA_ILE","DATA_KURSU",
+        "KURS_DO_KSIEGOWANIA","KURS_WALUTY_2","NOTOWANIE_WALUTY_ILE_2","DATA_KURSU_2","POZYCJE","KWOTY_DODATKOWE","PLATNOSCI"})
 public class RejestrSprzedazyVatDto {
     private String MODUL;
     private String TYP;
@@ -12,7 +20,7 @@ public class RejestrSprzedazyVatDto {
     private String TERMIN;
     private String NUMER;
     private String WEWNETRZNA;
-    private String FISKALNA;
+    private String FISKALNA; //9
     private String DETALICZNA;
     private String TYP_PODMIOTU;
     private String PODMIOT;
@@ -24,7 +32,7 @@ public class RejestrSprzedazyVatDto {
     private String ULICA;
     private String NR_DOMU;
     private String MIASTO;
-    private String KOD_POCZTOWY;
+    private String KOD_POCZTOWY;//12
     private String POCZTA;
     private String KATEGORIA;
     private String WALUTA;
@@ -32,16 +40,16 @@ public class RejestrSprzedazyVatDto {
     private String KURS_WALUTY;
     private String NOTOWANIE_WALUTY_ILE;
     private String NOTOWANIE_WALUTY_ZA_ILE;
-    private String DATA_KURSU;
+    private String DATA_KURSU;//8
     private String KURS_DO_KSIEGOWANIA;
     private String KURS_WALUTY_2;
     private String NOTOWANIE_WALUTY_ILE_2;
     private String DATA_KURSU_2;
-    private List<PozycjaDto> POZYCJE;
+    private List<PozycjeDto> POZYCJE;
     private List<KwotyDodatkoweDto> KWOTY_DODATKOWE;
     private List<PlatnosciDto> PLATNOSCI;
 
-    public RejestrSprzedazyVatDto(String MODUL, String TYP, String REJESTR, String DATA_WYSTAWIENIA, String DATA_SPRZEDAZY, String TERMIN, String NUMER, String WEWNETRZNA, String FISKALNA, String DETALICZNA, String TYP_PODMIOTU, String PODMIOT, String NAZWA1, String NAZWA2, String NAZWA3, String NIP_KRAJ, String NIP, String ULICA, String NR_DOMU, String MIASTO, String KOD_POCZTOWY, String POCZTA, String KATEGORIA, String WALUTA, String FORMA_PLATNOSCI, String KURS_WALUTY, String NOTOWANIE_WALUTY_ILE, String NOTOWANIE_WALUTY_ZA_ILE, String DATA_KURSU, String KURS_DO_KSIEGOWANIA, String KURS_WALUTY_2, String NOTOWANIE_WALUTY_ILE_2, String DATA_KURSU_2, List<PozycjaDto> POZYCJE, List<KwotyDodatkoweDto> KWOTY_DODATKOWE, List<PlatnosciDto> PLATNOSCI) {
+    public RejestrSprzedazyVatDto( String MODUL, String TYP, String REJESTR, String DATA_WYSTAWIENIA, String DATA_SPRZEDAZY, String TERMIN, String NUMER, String WEWNETRZNA, String FISKALNA, String DETALICZNA, String TYP_PODMIOTU, String PODMIOT, String NAZWA1, String NAZWA2, String NAZWA3, String NIP_KRAJ, String NIP, String ULICA, String NR_DOMU, String MIASTO, String KOD_POCZTOWY, String POCZTA, String KATEGORIA, String WALUTA, String FORMA_PLATNOSCI, String KURS_WALUTY, String NOTOWANIE_WALUTY_ILE, String NOTOWANIE_WALUTY_ZA_ILE, String DATA_KURSU, String KURS_DO_KSIEGOWANIA, String KURS_WALUTY_2, String NOTOWANIE_WALUTY_ILE_2, String DATA_KURSU_2, List<PozycjeDto> POZYCJE, List<KwotyDodatkoweDto> KWOTY_DODATKOWE, List<PlatnosciDto> PLATNOSCI) {
         this.MODUL = MODUL;
         this.TYP = TYP;
         this.REJESTR = REJESTR;
@@ -346,15 +354,15 @@ public class RejestrSprzedazyVatDto {
     public void setDATA_KURSU_2(String DATA_KURSU_2) {
         this.DATA_KURSU_2 = DATA_KURSU_2;
     }
-
-    public List<PozycjaDto> getPOZYCJE() {
+    @XmlElement(name="POZYCJE")
+    public List<PozycjeDto> getPOZYCJE() {
         return POZYCJE;
     }
 
-    public void setPOZYCJE(List<PozycjaDto> POZYCJE) {
+    public void setPOZYCJE(List<PozycjeDto> POZYCJE) {
         this.POZYCJE = POZYCJE;
     }
-
+    @XmlElement(name="KWOTY_DODATKOWE")
     public List<KwotyDodatkoweDto> getKWOTY_DODATKOWE() {
         return KWOTY_DODATKOWE;
     }
@@ -362,7 +370,7 @@ public class RejestrSprzedazyVatDto {
     public void setKWOTY_DODATKOWE(List<KwotyDodatkoweDto> KWOTY_DODATKOWE) {
         this.KWOTY_DODATKOWE = KWOTY_DODATKOWE;
     }
-
+    @XmlElement(name="PLATNOSCI")
     public List<PlatnosciDto> getPLATNOSCI() {
         return PLATNOSCI;
     }
@@ -370,4 +378,5 @@ public class RejestrSprzedazyVatDto {
     public void setPLATNOSCI(List<PlatnosciDto> PLATNOSCI) {
         this.PLATNOSCI = PLATNOSCI;
     }
+
 }

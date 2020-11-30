@@ -7,6 +7,7 @@ import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.PozycjaDto;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class RejestrSprzedazyVat {
@@ -49,18 +50,18 @@ public class RejestrSprzedazyVat {
 
     @OneToMany(cascade = CascadeType.DETACH)
     @JoinColumn(name = "rejestr_sprzedazy_vat_id",referencedColumnName = "id")
-    private List<PozycjaDto> pozycje = new ArrayList<>();
+    private List<Pozycja> pozycje ;
     @OneToMany(cascade = CascadeType.DETACH)
     @JoinColumn(name = "rejestr_sprzedazy_vat_id",referencedColumnName = "id")
-    private List<KwotyDodatkoweDto> kwotyDodatkowe = new ArrayList<>();
+    private List<KwotyDodatkowe> kwotyDodatkowe ;
     @OneToMany(cascade = CascadeType.DETACH)
     @JoinColumn(name = "rejestr_sprzedazy_vat_id",referencedColumnName = "id")
-    private List<PlatnosciDto> platnosci = new ArrayList<>();
+    private List<Platnosc> platnosci ;
 
     public RejestrSprzedazyVat() {
     }
 
-    public RejestrSprzedazyVat(long id, String modul, String typ, String rejestr, String data_wystawienia, String data_sprzedazy, String termin, String numer, String wewnetrzna, String fiskalna, String detaliczna, String typ_podmiotu, String podmiot, String nazwa1, String nazwa2, String nazwa3, String ulica, String nr_domu, String miasto, String kod_pocztowy, String poczta, String nip_kraj, String nip, String kategoria, String waluta, String forma_platnosci, String kurs_waluty, String notowanie_waluty_ile, String notowanie_waluty_za_ile, String data_kursu, String kurs_do_ksiegowania, String kurs_waluty_2, String notowanie_waluty_ile_2, String data_kursu_2, List<PozycjaDto> pozycje, List<KwotyDodatkoweDto> kwotyDodatkowe, List<PlatnosciDto> platnosci) {
+    public RejestrSprzedazyVat(long id, String modul, String typ, String rejestr, String data_wystawienia, String data_sprzedazy, String termin, String numer, String wewnetrzna, String fiskalna, String detaliczna, String typ_podmiotu, String podmiot, String nazwa1, String nazwa2, String nazwa3, String ulica, String nr_domu, String miasto, String kod_pocztowy, String poczta, String nip_kraj, String nip, String kategoria, String waluta, String forma_platnosci, String kurs_waluty, String notowanie_waluty_ile, String notowanie_waluty_za_ile, String data_kursu, String kurs_do_ksiegowania, String kurs_waluty_2, String notowanie_waluty_ile_2, String data_kursu_2, List<Pozycja> pozycje, List<KwotyDodatkowe> kwotyDodatkowe, List<Platnosc> platnosci) {
         this.id = id;
         this.modul = modul;
         this.typ = typ;
@@ -372,27 +373,27 @@ public class RejestrSprzedazyVat {
         this.data_kursu_2 = data_kursu_2;
     }
 
-    public List<PozycjaDto> getPozycje() {
+    public List<Pozycja> getPozycje() {
         return pozycje;
     }
 
-    public void setPozycje(List<PozycjaDto> pozycje) {
+    public void setPozycje(List<Pozycja> pozycje) {
         this.pozycje = pozycje;
     }
 
-    public List<KwotyDodatkoweDto> getKwotyDodatkowe() {
+    public List<KwotyDodatkowe> getKwotyDodatkowe() {
         return kwotyDodatkowe;
     }
 
-    public void setKwotyDodatkowe(List<KwotyDodatkoweDto> kwotyDodatkowe) {
+    public void setKwotyDodatkowe(List<KwotyDodatkowe> kwotyDodatkowe) {
         this.kwotyDodatkowe = kwotyDodatkowe;
     }
 
-    public List<PlatnosciDto> getPlatnosci() {
+    public List<Platnosc> getPlatnosci() {
         return platnosci;
     }
 
-    public void setPlatnosci(List<PlatnosciDto> platnosci) {
+    public void setPlatnosci(List<Platnosc> platnosci) {
         this.platnosci = platnosci;
     }
 }

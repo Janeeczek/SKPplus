@@ -1,5 +1,9 @@
 package com.JanCode.SKPplus.web.dto.kontrahenci;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+@XmlRootElement(name = "ADRES")
+@XmlType(propOrder={"STATUS", "NAZWA1", "NAZWA2", "NAZWA3","ULICA","NR_DOMU","MIASTO","KOD_POCZTOWY","POCZTA","NIP_KRAJ","NIP"})
 public class AdresDto {
     private String STATUS;
     private String NAZWA1;

@@ -1,5 +1,11 @@
 package com.JanCode.SKPplus.web.dto.rejestrySprzedazy;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlRootElement(name = "PLATNOSC")
+@XmlType(propOrder={"TERMIN_PLAT","FORMA_PLATNOSCI_PLAT","KWOTA_PLAT","WALUTA_PLAT","KURS_WALUTY_PLAT","NOTOWANIE_WALUTY_ILE_PLAT","NOTOWANIE_WALUTY_ZA_ILE_PLAT",
+        "KWOTA_PLN_PLAT","KIERUNEK","PODLEGA_ROZLICZENIU","KONTO","DATA_KURSU_PLAT","WALUTA_DOK"})
 public class PlatnoscDto {
     private String TERMIN_PLAT;
     private String FORMA_PLATNOSCI_PLAT;
