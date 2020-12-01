@@ -1,5 +1,7 @@
 package com.JanCode.SKPplus.model.raportModel;
 
+import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.PozycjaDto;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,7 +34,16 @@ public class Pozycja {
         this.netto_sys2 = netto_sys2;
         this.vat_sys2 = vat_sys2;
     }
-
+    public Pozycja(PozycjaDto pozycjaDto) {
+        this.stawka_vat = pozycjaDto.getSTAWKA_VAT();
+        this.status_vat = pozycjaDto.getSTATUS_VAT();
+        this.netto = pozycjaDto.getNETTO();
+        this.vat = pozycjaDto.getVAT();
+        this.netto_sys = pozycjaDto.getNETTO_SYS();
+        this.vat_sys = pozycjaDto.getVAT_SYS();
+        this.netto_sys2 = pozycjaDto.getNETTO_SYS2();
+        this.vat_sys2 = pozycjaDto.getVAT_SYS2();
+    }
     public long getId() {
         return id;
     }

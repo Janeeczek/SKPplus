@@ -45,11 +45,11 @@ public class RejestrSprzedazyVatDto {
     private String KURS_WALUTY_2;
     private String NOTOWANIE_WALUTY_ILE_2;
     private String DATA_KURSU_2;
-    private List<PozycjeDto> POZYCJE;
+    private PozycjeDto POZYCJE;
     private KwotyDodatkoweDto KWOTY_DODATKOWE;
-    private List<PlatnosciDto> PLATNOSCI;
+    private PlatnosciDto PLATNOSCI;
 
-    public RejestrSprzedazyVatDto( String MODUL, String TYP, String REJESTR, String DATA_WYSTAWIENIA, String DATA_SPRZEDAZY, String TERMIN, String NUMER, String WEWNETRZNA, String FISKALNA, String DETALICZNA, String TYP_PODMIOTU, String PODMIOT, String NAZWA1, String NAZWA2, String NAZWA3, String NIP_KRAJ, String NIP, String ULICA, String NR_DOMU, String MIASTO, String KOD_POCZTOWY, String POCZTA, String KATEGORIA, String WALUTA, String FORMA_PLATNOSCI, String KURS_WALUTY, String NOTOWANIE_WALUTY_ILE, String NOTOWANIE_WALUTY_ZA_ILE, String DATA_KURSU, String KURS_DO_KSIEGOWANIA, String KURS_WALUTY_2, String NOTOWANIE_WALUTY_ILE_2, String DATA_KURSU_2, List<PozycjeDto> POZYCJE, KwotyDodatkoweDto KWOTY_DODATKOWE, List<PlatnosciDto> PLATNOSCI) {
+    public RejestrSprzedazyVatDto( String MODUL, String TYP, String REJESTR, String DATA_WYSTAWIENIA, String DATA_SPRZEDAZY, String TERMIN, String NUMER, String WEWNETRZNA, String FISKALNA, String DETALICZNA, String TYP_PODMIOTU, String PODMIOT, String NAZWA1, String NAZWA2, String NAZWA3, String NIP_KRAJ, String NIP, String ULICA, String NR_DOMU, String MIASTO, String KOD_POCZTOWY, String POCZTA, String KATEGORIA, String WALUTA, String FORMA_PLATNOSCI, String KURS_WALUTY, String NOTOWANIE_WALUTY_ILE, String NOTOWANIE_WALUTY_ZA_ILE, String DATA_KURSU, String KURS_DO_KSIEGOWANIA, String KURS_WALUTY_2, String NOTOWANIE_WALUTY_ILE_2, String DATA_KURSU_2, PozycjeDto POZYCJE, KwotyDodatkoweDto KWOTY_DODATKOWE, PlatnosciDto PLATNOSCI) {
         this.MODUL = MODUL;
         this.TYP = TYP;
         this.REJESTR = REJESTR;
@@ -354,12 +354,11 @@ public class RejestrSprzedazyVatDto {
     public void setDATA_KURSU_2(String DATA_KURSU_2) {
         this.DATA_KURSU_2 = DATA_KURSU_2;
     }
-    @XmlElement(name="POZYCJE")
-    public List<PozycjeDto> getPOZYCJE() {
+    public PozycjeDto getPOZYCJE() {
         return POZYCJE;
     }
 
-    public void setPOZYCJE(List<PozycjeDto> POZYCJE) {
+    public void setPOZYCJE(PozycjeDto POZYCJE) {
         this.POZYCJE = POZYCJE;
     }
 
@@ -370,12 +369,11 @@ public class RejestrSprzedazyVatDto {
     public void setKWOTY_DODATKOWE(KwotyDodatkoweDto KWOTY_DODATKOWE) {
         this.KWOTY_DODATKOWE = KWOTY_DODATKOWE;
     }
-    @XmlElement(name="PLATNOSCI")
-    public List<PlatnosciDto> getPLATNOSCI() {
+    public PlatnosciDto getPLATNOSCI() {
         return PLATNOSCI;
     }
 
-    public void setPLATNOSCI(List<PlatnosciDto> PLATNOSCI) {
+    public void setPLATNOSCI(PlatnosciDto PLATNOSCI) {
         this.PLATNOSCI = PLATNOSCI;
     }
 

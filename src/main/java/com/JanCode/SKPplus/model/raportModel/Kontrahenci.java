@@ -1,13 +1,11 @@
 package com.JanCode.SKPplus.model.raportModel;
 
-import com.JanCode.SKPplus.model.Raport;
 import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahenciDto;
 import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahentDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 @Entity
 public class Kontrahenci {
     @Id

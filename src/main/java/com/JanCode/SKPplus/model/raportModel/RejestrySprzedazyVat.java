@@ -1,8 +1,12 @@
 package com.JanCode.SKPplus.model.raportModel;
 
 import com.JanCode.SKPplus.model.Raport;
+import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahentDto;
+import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.RejestrSprzedazyVatDto;
+import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.RejestrySprzedazyVatDto;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,13 +19,8 @@ public class RejestrySprzedazyVat {
     private String bazaZrdId;
     private String bazaDocId;
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "rejestrySprzedazyVat_rejestrSprzedazyVat",
-            joinColumns = @JoinColumn(
-                    name = "rejestrySprzedazyVat_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "rejestrSprzedazyVat_id", referencedColumnName = "id"))
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "rejestr_sprzedazy_vat_id",referencedColumnName = "id")
     private List<RejestrSprzedazyVat> rejestrSprzedazyVat;
 
     public RejestrySprzedazyVat() {
@@ -34,7 +33,18 @@ public class RejestrySprzedazyVat {
         this.bazaDocId = bazaDocId;
         this.rejestrSprzedazyVat = rejestrSprzedazyVat;
     }
-
+    public RejestrySprzedazyVat(RejestrySprzedazyVatDto rejestrySprzedazyVatDto) {
+        this.wersja = rejestrySprzedazyVatDto.getWERSJA();
+        this.bazaZrdId = rejestrySprzedazyVatDto.getBAZA_ZRD_ID();
+        this.bazaDocId = rejestrySprzedazyVatDto.getBAZA_DOC_ID();
+        List<RejestrSprzedazyVatDto> rejDtoList =new ArrayList<>( rejestrySprzedazyVatDto.getREJESTR_SPRZEDAZY_VAT());
+        List<RejestrSprzedazyVat> rejList = new ArrayList<>();
+        for (int i = 0; i < rejDtoList.size(); i++) {
+            rejList.add(new RejestrSprzedazyVat(rejDtoList.get(i)));
+        }
+        System.out.println("JEST "+ rejDtoList.size()+ " rejestrow sprzedazy dto");
+        this.rejestrSprzedazyVat = rejList;
+    }
     public long getId() {
         return id;
     }

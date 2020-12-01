@@ -1,9 +1,13 @@
 package com.JanCode.SKPplus.model.raportModel;
 
+import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.PozycjaKdDto;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
+
 @Entity
 public class PozycjaKd {
     @Id
@@ -15,12 +19,12 @@ public class PozycjaKd {
     private String waluta_kd;
     private double notowanie_waluty_ile_kd;
     private double notowanie_waluty_za_ile_kd;
-    private String data_kursu_kd;
+    private LocalDate data_kursu_kd;
 
     public PozycjaKd() {
     }
 
-    public PozycjaKd(long id, String kategoria_kd, double kwota_kd, double kwota_kd_SYS, String waluta_kd, double notowanie_waluty_ile_kd, double notowanie_waluty_za_ile_kd, String data_kursu_kd) {
+    public PozycjaKd(long id, String kategoria_kd, double kwota_kd, double kwota_kd_SYS, String waluta_kd, double notowanie_waluty_ile_kd, double notowanie_waluty_za_ile_kd, LocalDate  data_kursu_kd) {
         this.id = id;
         this.kategoria_kd = kategoria_kd;
         this.kwota_kd = kwota_kd;
@@ -30,7 +34,15 @@ public class PozycjaKd {
         this.notowanie_waluty_za_ile_kd = notowanie_waluty_za_ile_kd;
         this.data_kursu_kd = data_kursu_kd;
     }
-
+    public PozycjaKd(PozycjaKdDto pozycjaKdDto) {
+        this.kategoria_kd = pozycjaKdDto.getKATEGORIA_KD();
+        this.kwota_kd = pozycjaKdDto.getKWOTA_KD();
+        this.kwota_kd_SYS = pozycjaKdDto.getKWOTA_KD_SYS();
+        this.waluta_kd = pozycjaKdDto.getWALUTA_KD();
+        this.notowanie_waluty_ile_kd = pozycjaKdDto.getNOTOWANIE_WALUTY_ILE_KD();
+        this.notowanie_waluty_za_ile_kd = pozycjaKdDto.getNOTOWANIE_WALUTY_ZA_ILE_KD();
+        this.data_kursu_kd = LocalDate.parse(pozycjaKdDto.getDATA_KURSU_KD());
+    }
     public long getId() {
         return id;
     }
@@ -87,11 +99,11 @@ public class PozycjaKd {
         this.notowanie_waluty_za_ile_kd = notowanie_waluty_za_ile_kd;
     }
 
-    public String getData_kursu_kd() {
+    public LocalDate getData_kursu_kd() {
         return data_kursu_kd;
     }
 
-    public void setData_kursu_kd(String data_kursu_kd) {
+    public void setData_kursu_kd(LocalDate data_kursu_kd) {
         this.data_kursu_kd = data_kursu_kd;
     }
 }

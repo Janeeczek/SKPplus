@@ -7,6 +7,7 @@ import com.JanCode.SKPplus.model.raportModel.RejestrySprzedazyVat;
 import com.JanCode.SKPplus.web.dto.DaneRaportuDto;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 
 @Entity
@@ -22,6 +23,7 @@ public class Raport {
     @JoinColumn(name = "rejestrySprzedazyVat_id")
     private RejestrySprzedazyVat rejestrySprzedazyVat;
 
+    private LocalDate dataUtworzenia;
 
     public Raport() {
     }
@@ -29,7 +31,8 @@ public class Raport {
 
     public Raport(DaneRaportuDto daneRaportuDto) {
         this.kontrahenci =  new Kontrahenci(daneRaportuDto.getKONTRAHENCI());
-        //this.rejestrySprzedazyVat = daneRaportuDto.getREJESTRY_SPRZEDAZY_VAT();
+        this.rejestrySprzedazyVat = new RejestrySprzedazyVat(daneRaportuDto.getREJESTRY_SPRZEDAZY_VAT());
+        this.dataUtworzenia =  LocalDate.now();
     }
 
     public long getId() {

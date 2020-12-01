@@ -1,5 +1,6 @@
 package com.JanCode.SKPplus.model.raportModel;
 
+import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.KwotyDodatkoweDto;
 import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.PozycjaKdDto;
 
 import javax.persistence.*;
@@ -25,7 +26,17 @@ public class KwotyDodatkowe {
         this.pozycjaKd = pozycjaKd;
         this.opisKd = opisKd;
     }
+    public KwotyDodatkowe(KwotyDodatkoweDto kwotyDodatkoweDto) {
+        if(kwotyDodatkoweDto == null)
+        {
+            this.pozycjaKd = new PozycjaKd();
+            this.opisKd = null;
+        }else{
+            this.pozycjaKd = new PozycjaKd(kwotyDodatkoweDto.getPOZYCJA_KD());
+            this.opisKd = kwotyDodatkoweDto.getOPIS_KD();
+        }
 
+    }
     public long getId() {
         return id;
     }
