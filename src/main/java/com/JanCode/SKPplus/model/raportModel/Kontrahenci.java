@@ -1,8 +1,11 @@
 package com.JanCode.SKPplus.model.raportModel;
 
 import com.JanCode.SKPplus.model.Raport;
+import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahenciDto;
+import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahentDto;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 @Entity
@@ -13,7 +16,7 @@ public class Kontrahenci {
     private double wersja;
     private String bazaZrdId;
     private String bazaDocId;
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.DETACH)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(
             name = "kontrahenci_kontrahent",
             joinColumns = @JoinColumn(
@@ -24,7 +27,17 @@ public class Kontrahenci {
 
     public Kontrahenci() {
     }
-
+    public Kontrahenci(KontrahenciDto kontrahenciDto) {
+        this.wersja = kontrahenciDto.getWERSJA();
+        this.bazaZrdId = kontrahenciDto.getBAZA_ZRD_ID();
+        this.bazaDocId = kontrahenciDto.getBAZA_DOC_ID();
+        List<KontrahentDto> konDtoList =new ArrayList<>( kontrahenciDto.getKONTRAHENT());
+        List<Kontrahent> konList = new ArrayList<>();
+        for (int i = 0; i < konDtoList.size(); i++) {
+            konList.add(new Kontrahent(konDtoList.get(i)));
+        }
+        this.kontrahent = konList;
+    }
     public Kontrahenci(long id, double wersja, String bazaZrdId, String bazaDocId, List<Kontrahent> kontrahent) {
         this.id = id;
         this.wersja = wersja;

@@ -11,19 +11,19 @@ public class KwotyDodatkowe {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @OneToMany(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "kwoty_dodatkowe_id",referencedColumnName = "id")
-    private List<PozycjaKd> pozycjakd;
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "pozycjaKd_id")
+    private PozycjaKd pozycjaKd;
 
-    private String opiskd;
+    private String opisKd;
 
     public KwotyDodatkowe() {
     }
 
-    public KwotyDodatkowe(long id, List<PozycjaKd> pozycjakd, String opiskd) {
+    public KwotyDodatkowe(long id, PozycjaKd pozycjaKd, String opisKd) {
         this.id = id;
-        this.pozycjakd = pozycjakd;
-        this.opiskd = opiskd;
+        this.pozycjaKd = pozycjaKd;
+        this.opisKd = opisKd;
     }
 
     public long getId() {
@@ -34,19 +34,19 @@ public class KwotyDodatkowe {
         this.id = id;
     }
 
-    public List<PozycjaKd> getPozycjakd() {
-        return pozycjakd;
+    public PozycjaKd getPozycjaKd() {
+        return pozycjaKd;
     }
 
-    public void setPozycjakd(List<PozycjaKd> pozycjakd) {
-        this.pozycjakd = pozycjakd;
+    public void setPozycjaKd(PozycjaKd pozycjaKd) {
+        this.pozycjaKd = pozycjaKd;
     }
 
-    public String getOpiskd() {
-        return opiskd;
+    public String getOpisKd() {
+        return opisKd;
     }
 
-    public void setOpiskd(String opiskd) {
-        this.opiskd = opiskd;
+    public void setOpisKd(String opisKd) {
+        this.opisKd = opisKd;
     }
 }

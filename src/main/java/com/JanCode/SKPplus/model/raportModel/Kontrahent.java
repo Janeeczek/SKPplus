@@ -1,6 +1,11 @@
 package com.JanCode.SKPplus.model.raportModel;
+import com.JanCode.SKPplus.web.dto.kontrahenci.AdresDto;
+import com.JanCode.SKPplus.web.dto.kontrahenci.AdresyDto;
+import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahentDto;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -14,11 +19,25 @@ public class Kontrahent {
     private int akronim;
     private String finalny;
 
-    @OneToMany(cascade = CascadeType.DETACH)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "kontrahent_id",referencedColumnName = "id")
     private List<Adres> adresy;
 
     public Kontrahent() {
+    }
+    public Kontrahent(KontrahentDto kontrahentDto) {
+        this.zrodloId = kontrahentDto.getID_ZRODLA();
+        this.akronim = kontrahentDto.getAKRONIM();
+        this.finalny = kontrahentDto.getFINALNY();
+        List<Adres> adres = new ArrayList<>();
+        List<AdresDto> adresDto = new ArrayList<>(kontrahentDto.getADRESY().getADRES());
+        for (int i = 0; i < adresDto.size(); i++) {
+            adres.add(new Adres(adresDto.get(i)));
+        }
+
+
+        this.adresy = adres;
+
     }
 
     public Kontrahent(long id, int zrodloId, int akronim, String finalny, List<Adres> adresy) {

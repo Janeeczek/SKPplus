@@ -15,7 +15,7 @@ public class RejestrySprzedazyVat {
     private String bazaZrdId;
     private String bazaDocId;
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.DETACH)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(
             name = "rejestrySprzedazyVat_rejestrSprzedazyVat",
             joinColumns = @JoinColumn(

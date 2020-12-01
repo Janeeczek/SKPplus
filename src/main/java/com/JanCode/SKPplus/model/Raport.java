@@ -14,11 +14,11 @@ public class Raport {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "kontrahenci_id")
     private Kontrahenci kontrahenci;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "rejestrySprzedazyVat_id")
     private RejestrySprzedazyVat rejestrySprzedazyVat;
 
@@ -27,8 +27,9 @@ public class Raport {
     }
 
 
-    public Raport(DaneRaportuDto dane) {
-        //TODO zrob tutaj cos
+    public Raport(DaneRaportuDto daneRaportuDto) {
+        this.kontrahenci =  new Kontrahenci(daneRaportuDto.getKONTRAHENCI());
+        //this.rejestrySprzedazyVat = daneRaportuDto.getREJESTRY_SPRZEDAZY_VAT();
     }
 
     public long getId() {

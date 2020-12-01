@@ -48,20 +48,20 @@ public class RejestrSprzedazyVat {
     private String notowanie_waluty_ile_2;
     private String data_kursu_2;
 
-    @OneToMany(cascade = CascadeType.DETACH)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "rejestr_sprzedazy_vat_id",referencedColumnName = "id")
     private List<Pozycja> pozycje ;
-    @OneToMany(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "rejestr_sprzedazy_vat_id",referencedColumnName = "id")
-    private List<KwotyDodatkowe> kwotyDodatkowe ;
-    @OneToMany(cascade = CascadeType.DETACH)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "kwotyDodatkowe_id")
+    private KwotyDodatkowe kwotyDodatkowe;
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "rejestr_sprzedazy_vat_id",referencedColumnName = "id")
     private List<Platnosc> platnosci ;
 
     public RejestrSprzedazyVat() {
     }
 
-    public RejestrSprzedazyVat(long id, String modul, String typ, String rejestr, String data_wystawienia, String data_sprzedazy, String termin, String numer, String wewnetrzna, String fiskalna, String detaliczna, String typ_podmiotu, String podmiot, String nazwa1, String nazwa2, String nazwa3, String ulica, String nr_domu, String miasto, String kod_pocztowy, String poczta, String nip_kraj, String nip, String kategoria, String waluta, String forma_platnosci, String kurs_waluty, String notowanie_waluty_ile, String notowanie_waluty_za_ile, String data_kursu, String kurs_do_ksiegowania, String kurs_waluty_2, String notowanie_waluty_ile_2, String data_kursu_2, List<Pozycja> pozycje, List<KwotyDodatkowe> kwotyDodatkowe, List<Platnosc> platnosci) {
+    public RejestrSprzedazyVat(long id, String modul, String typ, String rejestr, String data_wystawienia, String data_sprzedazy, String termin, String numer, String wewnetrzna, String fiskalna, String detaliczna, String typ_podmiotu, String podmiot, String nazwa1, String nazwa2, String nazwa3, String ulica, String nr_domu, String miasto, String kod_pocztowy, String poczta, String nip_kraj, String nip, String kategoria, String waluta, String forma_platnosci, String kurs_waluty, String notowanie_waluty_ile, String notowanie_waluty_za_ile, String data_kursu, String kurs_do_ksiegowania, String kurs_waluty_2, String notowanie_waluty_ile_2, String data_kursu_2, List<Pozycja> pozycje, KwotyDodatkowe kwotyDodatkowe, List<Platnosc> platnosci) {
         this.id = id;
         this.modul = modul;
         this.typ = typ;
@@ -381,11 +381,11 @@ public class RejestrSprzedazyVat {
         this.pozycje = pozycje;
     }
 
-    public List<KwotyDodatkowe> getKwotyDodatkowe() {
+    public KwotyDodatkowe getKwotyDodatkowe() {
         return kwotyDodatkowe;
     }
 
-    public void setKwotyDodatkowe(List<KwotyDodatkowe> kwotyDodatkowe) {
+    public void setKwotyDodatkowe(KwotyDodatkowe kwotyDodatkowe) {
         this.kwotyDodatkowe = kwotyDodatkowe;
     }
 

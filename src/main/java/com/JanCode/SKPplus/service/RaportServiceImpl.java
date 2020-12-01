@@ -1,10 +1,12 @@
 package com.JanCode.SKPplus.service;
 
 import com.JanCode.SKPplus.model.Raport;
+import com.JanCode.SKPplus.repository.RaporRepository;
 import com.JanCode.SKPplus.web.dto.DaneRaportuDto;
 import com.JanCode.SKPplus.web.dto.RaportDto;
 import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahenciDto;
 import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahentDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -20,11 +22,13 @@ import java.util.Set;
 
 @Service
 public class RaportServiceImpl implements RaportService{
+    @Autowired
+    RaporRepository raporRepository;
     @Override
     public Raport createRaport() {
-        DaneRaportuDto que;
+        Raport raport = null;
         try {
-            Resource resource = new ClassPathResource("test.xml");
+            Resource resource = new ClassPathResource("Eksport.xml");
 
             File file = resource.getFile();
             JAXBContext jc = JAXBContext.newInstance(DaneRaportuDto.class);
@@ -32,7 +36,7 @@ public class RaportServiceImpl implements RaportService{
             Unmarshaller unmarshaller = jc.createUnmarshaller();
 
             DaneRaportuDto daneRaportuDto = (DaneRaportuDto) unmarshaller.unmarshal(file);
-            //daneraportudto->raport
+            raport = new Raport(daneRaportuDto);
 
 
         } catch (JAXBException e) {
@@ -41,9 +45,10 @@ public class RaportServiceImpl implements RaportService{
             e.printStackTrace();
         }
 
-
-        return null;
+        raporRepository.save(raport);
+        return raport;
     }
+
 
     @Override
     public Raport getRaportById() {
@@ -53,5 +58,6 @@ public class RaportServiceImpl implements RaportService{
     @Override
     public Raport saveRaport() {
         return null;
+
     }
 }

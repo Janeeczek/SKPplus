@@ -1,5 +1,7 @@
 package com.JanCode.SKPplus.model.raportModel;
 
+import com.JanCode.SKPplus.web.dto.kontrahenci.AdresDto;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +25,18 @@ public class Adres {
     private String nip;
 
     public Adres() {
+    }
+    public Adres(AdresDto adresDto) {
+        this.status = adresDto.getSTATUS();
+        this.nazwa1 = adresDto.getNAZWA1();
+        this.nazwa2 = adresDto.getNAZWA2();
+        this.nazwa3 = adresDto.getNAZWA3();
+        this.ulica = adresDto.getULICA();
+        this.nr_domu = adresDto.getNR_DOMU();
+        this.miasto = adresDto.getMIASTO();
+        this.poczta = adresDto.getPOCZTA();
+        this.nip_kraj = adresDto.getNIP_KRAJ();
+        this.nip = adresDto.getNIP();
     }
 
     public Adres(long id, String status, String nazwa1, String nazwa2, String nazwa3, String ulica, String nr_domu, String miasto, String kod_pocztowy, String poczta, String nip_kraj, String nip) {

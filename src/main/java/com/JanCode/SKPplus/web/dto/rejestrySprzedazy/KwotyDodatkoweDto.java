@@ -10,22 +10,21 @@ import java.util.Set;
 @XmlRootElement(name = "KWOTY_DODATKOWE")
 @XmlType(propOrder={"POZYCJA_KD","OPIS_KD"})
 public class KwotyDodatkoweDto {
-    private List<PozycjaKdDto> POZYCJA_KD;
+    private PozycjaKdDto POZYCJA_KD;
     private String OPIS_KD;
 
     public KwotyDodatkoweDto() {
     }
 
-    public KwotyDodatkoweDto(List<PozycjaKdDto> POZYCJA_KD, String OPIS_KD) {
+    public KwotyDodatkoweDto(PozycjaKdDto POZYCJA_KD, String OPIS_KD) {
         this.POZYCJA_KD = POZYCJA_KD;
         this.OPIS_KD = OPIS_KD;
     }
-    @XmlElement(name="POZYCJA_KD")
-    public List<PozycjaKdDto> getPOZYCJA_KD() {
+    public PozycjaKdDto getPOZYCJA_KD() {
         return POZYCJA_KD;
     }
 
-    public void setPOZYCJA_KD(List<PozycjaKdDto> POZYCJA_KD) {
+    public void setPOZYCJA_KD(PozycjaKdDto POZYCJA_KD) {
         this.POZYCJA_KD = POZYCJA_KD;
     }
 
