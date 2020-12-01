@@ -13,10 +13,10 @@ public class Kontrahenci {
     private long id;
     private double wersja;
     private String bazaZrdId;
-    private String bazaDocId;
+    private String bazaDocId ;
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(
-            name = "kontrahenci_kontrahent",
+            name = "kontrahenci_w_raporcie",
             joinColumns = @JoinColumn(
                     name = "kontrahenci_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(

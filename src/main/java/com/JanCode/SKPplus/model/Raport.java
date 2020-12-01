@@ -43,4 +43,27 @@ public class Raport {
         this.id = id;
     }
 
+    public Kontrahenci getKontrahenci() {
+        return kontrahenci;
+    }
+
+    public void setKontrahenci(Kontrahenci kontrahenci) {
+        this.kontrahenci = kontrahenci;
+    }
+
+    public RejestrySprzedazyVat getRejestrySprzedazyVat() {
+        return rejestrySprzedazyVat;
+    }
+
+    public void setRejestrySprzedazyVat(RejestrySprzedazyVat rejestrySprzedazyVat) {
+        this.rejestrySprzedazyVat = rejestrySprzedazyVat;
+    }
+
+    public LocalDate getDataUtworzenia() {
+        return dataUtworzenia;
+    }
+
+    public void setDataUtworzenia(LocalDate dataUtworzenia) {
+        this.dataUtworzenia = dataUtworzenia;
+    }
 }

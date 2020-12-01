@@ -4,6 +4,7 @@ import com.JanCode.SKPplus.model.ActiveUsers;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.repository.ActiveUsersRepository;
 import com.JanCode.SKPplus.service.ActiveUserService;
+import com.JanCode.SKPplus.service.RaportServiceImpl;
 import com.JanCode.SKPplus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -26,7 +27,8 @@ public class AnnotationAdvice {
     private ActiveUserService activeUserService;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private RaportServiceImpl raportService;
     @ModelAttribute("currentUser")
     public UserDetails getCurrentUser(Authentication authentication) {
 
@@ -51,5 +53,11 @@ public class AnnotationAdvice {
             MyUserPrincipal principal = (MyUserPrincipal)  authentication.getPrincipal();
             return principal.getByte64Image();
         }
+    }
+    @ModelAttribute("allIncome")
+    public double getAllIncome() {
+        //if(raportService.getAllIncome() > 0)
+        return raportService.getAllIncome();
+        //return 0;
     }
 }

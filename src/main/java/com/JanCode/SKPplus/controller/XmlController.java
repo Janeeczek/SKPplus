@@ -43,5 +43,15 @@ public class XmlController {
 
         return model;
     }
+    @GetMapping("/delete")
+    public ModelAndView showDelete(Authentication authentication) {
+        MyUserPrincipal principal;
+        ModelAndView model = new ModelAndView("/user/user");
+
+        principal = (MyUserPrincipal) authentication.getPrincipal();
+        reportService.removeAll();
+
+        return model;
+    }
 
 }

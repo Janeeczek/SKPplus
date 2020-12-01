@@ -166,8 +166,8 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Przychody (Miesięcznie)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">40,000zł</div>
+                                Przychody (Ostatni miesiąc)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${allIncome}"></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -600,6 +600,59 @@
             </div>
         </form>
     </div>
+</div>
+<div th:fragment="wyswietlTabliceRap">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary"></h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Data Utworzenia</th>
+                            <th>ID kontrahentów</th>
+                            <th>ID rejestrów sprzedaży</th>
+                            <th>Akcja</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Data Utworzenia</th>
+                            <th>ID kontrahentów</th>
+                            <th>ID rejestrów sprzedaży</th>
+                            <th>Akcja</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr th:each="rap, iterStat: ${raporty}">
+                            <td th:text="${rap.getId()}"></td>
+                            <td th:text="${rap.getDataUtworzenia()}"></td>
+                            <td th:text="${rap.getKontrahenci().getId()}"></td>
+                            <td th:text="${rap.getRejestrySprzedazyVat().getId()}"></td>
+                            <td>
+                                <div class="btn-group btn-block">
+                                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Akcja
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/" th:href="@{/raport/usunRaport/{id} (id=${rap.getId()})}">Usuń</a>
+
+                                        <a class="dropdown-item" href="#">Pokaż więcej info</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="/" th:href="@{/raport/pokaz/{id} (id=${rap.getId()})}"></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 </div>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.JanCode.SKPplus.service;
 
 import com.JanCode.SKPplus.model.Raport;
+import com.JanCode.SKPplus.repository.PlatnoscRepository;
 import com.JanCode.SKPplus.repository.RaporRepository;
 import com.JanCode.SKPplus.web.dto.DaneRaportuDto;
 import com.JanCode.SKPplus.web.dto.RaportDto;
@@ -24,6 +25,8 @@ import java.util.Set;
 public class RaportServiceImpl implements RaportService{
     @Autowired
     RaporRepository raporRepository;
+    @Autowired
+    PlatnoscRepository platnoscRepository;
     @Override
     public Raport createRaport() {
         Raport raport = null;
@@ -59,5 +62,29 @@ public class RaportServiceImpl implements RaportService{
     public Raport saveRaport() {
         return null;
 
+    }
+    @Override
+    public void removeById(long id) {
+       raporRepository.deleteById(id);
+       if(raporRepository.existsById(id))
+            System.out.println("Błąd! Nie usunięto raportu o id: "+ id);
+       else
+           System.out.println("Sukces! Usunięto raport o id: "+ id);
+    }
+
+    @Override
+    public void removeAll() {
+        raporRepository.deleteAll();
+    }
+
+    @Override
+    public double getAllIncome() {
+        if(platnoscRepository.getAllIncome() > 0)
+            return platnoscRepository.getAllIncome();
+        else return 0;
+    }
+    @Override
+    public List<Raport> getAllRaports() {
+        return raporRepository.findAll();
     }
 }

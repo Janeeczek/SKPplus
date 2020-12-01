@@ -21,7 +21,7 @@ public class RejestrySprzedazyVat {
 
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(
-            name = "rejestrySprzedazyVat_rejestrSprzedazyVat",
+            name = "rejestry_w_raporcie",
             joinColumns = @JoinColumn(
                     name = "rejestrySprzedazyVat_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(

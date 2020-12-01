@@ -34,7 +34,7 @@ public class UserProfileController {
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    MyDaoAuthenticationProvider authenticationProvider;
+    private MyDaoAuthenticationProvider authenticationProvider;
     @GetMapping("/profile/{u}")
     public ModelAndView showProfileDefaultWithParam(@RequestParam(required = false) String u,Authentication authentication) {
         MyUserPrincipal principal;
