@@ -19,8 +19,13 @@ public class RejestrySprzedazyVat {
     private String bazaZrdId;
     private String bazaDocId;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "rejestr_sprzedazy_vat_id",referencedColumnName = "id")
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "rejestrySprzedazyVat_rejestrSprzedazyVat",
+            joinColumns = @JoinColumn(
+                    name = "rejestrySprzedazyVat_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "rejestrSprzedazyVat_id", referencedColumnName = "id"))
     private List<RejestrSprzedazyVat> rejestrSprzedazyVat;
 
     public RejestrySprzedazyVat() {

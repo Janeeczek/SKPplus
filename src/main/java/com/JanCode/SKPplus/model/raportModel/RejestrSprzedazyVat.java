@@ -47,13 +47,14 @@ public class RejestrSprzedazyVat {
     private String notowanie_waluty_ile_2;
     private LocalDate  data_kursu_2;
 
-    @OneToMany(cascade = CascadeType.ALL)
+
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "rejestr_sprzedazy_vat_id",referencedColumnName = "id")
     private List<Pozycja> pozycje ;
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "kwotyDodatkowe_id")
     private KwotyDodatkowe kwotyDodatkowe;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "rejestr_sprzedazy_vat_id",referencedColumnName = "id")
     private List<Platnosc> platnosci;
 

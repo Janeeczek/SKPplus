@@ -19,7 +19,7 @@ public class Kontrahent {
     private int akronim;
     private String finalny;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "kontrahent_id",referencedColumnName = "id")
     private List<Adres> adresy;
 

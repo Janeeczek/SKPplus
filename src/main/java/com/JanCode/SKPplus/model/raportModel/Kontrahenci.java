@@ -14,7 +14,7 @@ public class Kontrahenci {
     private double wersja;
     private String bazaZrdId;
     private String bazaDocId;
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(
             name = "kontrahenci_kontrahent",
             joinColumns = @JoinColumn(
