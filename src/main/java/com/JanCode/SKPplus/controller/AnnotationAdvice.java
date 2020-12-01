@@ -1,6 +1,7 @@
 package com.JanCode.SKPplus.controller;
 
 import com.JanCode.SKPplus.model.ActiveUsers;
+import com.JanCode.SKPplus.model.InfoModel.WykresKołowyData;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.repository.ActiveUsersRepository;
 import com.JanCode.SKPplus.service.ActiveUserService;
@@ -36,7 +37,7 @@ public class AnnotationAdvice {
             return null;
         } else {
             MyUserPrincipal principal = (MyUserPrincipal) authentication.getPrincipal();
-            userService.updateLastActiveTime(principal.getEmail());
+            //userService.updateLastActiveTime(principal.getEmail()); //Chyba to niszczylo error page
             return principal;
         }
     }
@@ -56,8 +57,22 @@ public class AnnotationAdvice {
     }
     @ModelAttribute("allIncome")
     public double getAllIncome() {
-        //if(raportService.getAllIncome() > 0)
-        return raportService.getAllIncome();
-        //return 0;
+        Double income = raportService.getAllIncome();
+        return (income == null) ? 0 : income;
+    }
+    @ModelAttribute("daneWykresuKolowego")
+    public WykresKołowyData getDaneWykresuKolowego() {
+        List<Double> lista = raportService.getAllIncomeList();
+        int osobowe = 0;
+        int ciezarowe = 0;
+        int inne = 0;
+        for (Double a : lista) {
+            if(a == 99.0) osobowe++;
+            else if(a == 177.0 || a == 154.0 || a== 200.0 || a == 178.0 || a == 162.0 || a == 79) ciezarowe++;
+            else inne++;
+        }
+        System.out.println("ILE= "+lista.size()+"  Osobowe= "+osobowe+" Ciezarowe= "+ciezarowe+" Inne= "+inne);
+        WykresKołowyData daneWykresu = new WykresKołowyData(osobowe,ciezarowe,inne);
+        return daneWykresu;
     }
 }

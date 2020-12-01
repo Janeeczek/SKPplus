@@ -14,4 +14,6 @@ public interface RaportService {
     double getAllIncome();
 
     List<Raport> getAllRaports();
+
+    List<Double> getAllIncomeList();
 }

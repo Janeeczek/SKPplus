@@ -87,4 +87,9 @@ public class RaportServiceImpl implements RaportService{
     public List<Raport> getAllRaports() {
         return raporRepository.findAll();
     }
+    @Override
+    public List<Double> getAllIncomeList() {
+        return platnoscRepository.getAllIncomeList();
+
+    }
 }
