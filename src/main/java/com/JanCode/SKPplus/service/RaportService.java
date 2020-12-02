@@ -5,7 +5,7 @@ import com.JanCode.SKPplus.model.Raport;
 import java.util.List;
 
 public interface RaportService {
-    Raport createRaport();
+    Raport createRaport(String id,String username);
     Raport getRaportById();
     Raport saveRaport();
 

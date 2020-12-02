@@ -1,45 +1,65 @@
 package com.JanCode.SKPplus.service;
 
+import com.JanCode.SKPplus.model.FileDB;
 import com.JanCode.SKPplus.model.Raport;
+import com.JanCode.SKPplus.model.User;
 import com.JanCode.SKPplus.repository.PlatnoscRepository;
 import com.JanCode.SKPplus.repository.RaporRepository;
 import com.JanCode.SKPplus.web.dto.DaneRaportuDto;
 import com.JanCode.SKPplus.web.dto.RaportDto;
 import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahenciDto;
 import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahentDto;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Set;
 
 @Service
 public class RaportServiceImpl implements RaportService{
     @Autowired
-    RaporRepository raporRepository;
+    private RaporRepository raporRepository;
     @Autowired
-    PlatnoscRepository platnoscRepository;
+    private PlatnoscRepository platnoscRepository;
+    @Autowired
+    private FileStorageService storageService;
+    @Autowired
+    private UserService userService;
     @Override
-    public Raport createRaport() {
+    public Raport createRaport(String id,String username) {
         Raport raport = null;
         try {
-            Resource resource = new ClassPathResource("Eksport.xml");
+            FileDB fileDB = storageService.getFile(id);
+            if(fileDB == null) System.out.println("FILEDB IS NULL");
+            User user = userService.findByUsername(username);
+            if(user == null) System.out.println("USER IS NULL");
+            MultipartFile multipartFile = new MockMultipartFile("Raport",fileDB.getData());
+            File file = null;
+            try (OutputStream os = new FileOutputStream(file)) {
+                os.write(multipartFile.getBytes());
+            }
 
-            File file = resource.getFile();
+            //multipartFile.transferTo(file);
+           // FileUtils.writeByteArrayToFile(file, multipartFile.getBytes());
             JAXBContext jc = JAXBContext.newInstance(DaneRaportuDto.class);
 
             Unmarshaller unmarshaller = jc.createUnmarshaller();
 
             DaneRaportuDto daneRaportuDto = (DaneRaportuDto) unmarshaller.unmarshal(file);
-            raport = new Raport(daneRaportuDto);
+            raport = new Raport(daneRaportuDto,user,fileDB);
 
 
         } catch (JAXBException e) {

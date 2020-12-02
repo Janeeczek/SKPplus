@@ -598,7 +598,7 @@
         <div th:if="${cancelMsg}">
             <div class="alert alert-info"th:text="${cancelMsg}">Anulowano wgrywanie pliku!</div>
         </div>
-        <form  th:action="@{/raport/upload/post}" th:object="${raportDto}" th:method="POST" enctype="multipart/form-data" >
+        <form  th:action="@{/pliki/upload/post}" th:object="${raportDto}" th:method="POST" enctype="multipart/form-data" >
             <div class="media-body ml-4">
                 Dodaj nowy raport
                 <label class="btn btn-outline-primary">
@@ -665,6 +665,74 @@
                 </div>
             </div>
         </div>
+</div>
+<div th:fragment="wyswietlTablicePlik">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"></h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nazwa</th>
+                        <th>Data Utworzenia</th>
+                        <th>ID twórcy</th>
+                        <th>Typ</th>
+                        <th>Akcja</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nazwa</th>
+                        <th>Data Utworzenia</th>
+                        <th>ID twórcy</th>
+                        <th>Typ</th>
+                        <th>Akcja</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr th:each="plik, iterStat: ${pliki}">
+                        <td th:text="${plik.getId()}"></td>
+                        <td th:text="${plik.getName()}"></td>
+                        <td th:text="${plik.getDataPrzeslania()}"></td>
+                        <td th:text="${plik.getUser().getId()}"></td>
+                        <td th:text="${plik.getType()}"></td>
+                        <td>
+                            <div class="btn-group btn-block">
+                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Akcja
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/" th:href="@{/raport/createFromFile/{id} (id=${plik.getId()})}">Utwórz raport</a>
+                                    <a class="dropdown-item" href="/" th:href="@{/pliki/usun/{id} (id=${plik.getId()})}">Usuń</a>
+
+                                    <a class="dropdown-item" href="#">Pokaż więcej info</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/" th:href="@{/plik/pokaz/{id} (id=${plik.getId()})}"></a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:fragment="wyswietlPlikInfo">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"></h6>
+        </div>
+        <div class="card-body">
+
+            TU BEDZIE INFO SZCZEGOLOWE PLIKU
+        </div>
+    </div>
 </div>
 </body>
 </html>

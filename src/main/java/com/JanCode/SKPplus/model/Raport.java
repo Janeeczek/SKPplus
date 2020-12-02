@@ -11,6 +11,7 @@ import java.time.LocalDate;
 
 
 @Entity
+@Table(name="RAPORT")
 public class Raport {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,15 +25,22 @@ public class Raport {
     private RejestrySprzedazyVat rejestrySprzedazyVat;
 
     private LocalDate dataUtworzenia;
-
+    @ManyToOne
+    @JoinColumn(name="source_file_id", nullable=false)
+    private FileDB files;
+    @ManyToOne
+    @JoinColumn(name="creator_id", nullable=false)
+    private User user;
     public Raport() {
     }
 
 
-    public Raport(DaneRaportuDto daneRaportuDto) {
+    public Raport(DaneRaportuDto daneRaportuDto, User user, FileDB files) {
         this.kontrahenci =  new Kontrahenci(daneRaportuDto.getKONTRAHENCI());
         this.rejestrySprzedazyVat = new RejestrySprzedazyVat(daneRaportuDto.getREJESTRY_SPRZEDAZY_VAT());
         this.dataUtworzenia =  LocalDate.now();
+        this.user = user;
+        this.files = files;
     }
 
     public long getId() {
@@ -65,5 +73,29 @@ public class Raport {
 
     public void setDataUtworzenia(LocalDate dataUtworzenia) {
         this.dataUtworzenia = dataUtworzenia;
+    }
+
+    public FileDB getFileDB() {
+        return files;
+    }
+
+    public void setFileDB(FileDB files) {
+        this.files = files;
+    }
+
+    public FileDB getFiles() {
+        return files;
+    }
+
+    public void setFiles(FileDB files) {
+        this.files = files;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -3,8 +3,12 @@ package com.JanCode.SKPplus.model;
 import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import java.time.LocalDate;
+import java.util.List;
+
 @Entity
-@Table(name = "files")
+@Table(name = "FILES")
 public class FileDB {
     @Id
     @GeneratedValue(generator = "uuid")
@@ -14,19 +18,25 @@ public class FileDB {
     private String name;
 
     private String type;
-
+    private LocalDate dataPrzeslania;
     @Lob
     private byte[] data;
+    @ManyToOne
+    @JoinColumn(name="tworca_id", nullable=false)
+    private User user;
 
-    private String sender;
+    @OneToMany(mappedBy="files")
+    private List<Raport> raports;
+
     public FileDB() {
     }
 
-    public FileDB(String name, String type, byte[] data,String sender) {
+    public FileDB(String name, String type, byte[] data,User user) {
         this.name = name;
         this.type = type;
         this.data = data;
-        this.sender = sender;
+        this.user = user;
+        this.dataPrzeslania = LocalDate.now();
     }
 
     public String getId() {
@@ -61,11 +71,27 @@ public class FileDB {
         this.id = id;
     }
 
-    public String getSender() {
-        return sender;
+    public User getUser() {
+        return user;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Raport> getRaports() {
+        return raports;
+    }
+
+    public void setRaports(List<Raport> raports) {
+        this.raports = raports;
+    }
+
+    public LocalDate getDataPrzeslania() {
+        return dataPrzeslania;
+    }
+
+    public void setDataPrzeslania(LocalDate dataPrzeslania) {
+        this.dataPrzeslania = dataPrzeslania;
     }
 }

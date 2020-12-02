@@ -19,25 +19,23 @@ import javax.validation.Valid;
 public class XmlController {
     @Autowired
     private RaportServiceImpl reportService;
-    @GetMapping("/upload")
-    public ModelAndView showUpload(Authentication authentication) {
+    @GetMapping("/raport/createFromFile/{id}")
+    public ModelAndView showUpload(Authentication authentication, @PathVariable String id) {
         MyUserPrincipal principal;
         ModelAndView model = new ModelAndView("/user/user");
 
         principal = (MyUserPrincipal) authentication.getPrincipal();
-        Raport raport;
-        raport = reportService.createRaport();
+
+        Raport raport = reportService.createRaport(id,principal.getUsername());
 
         return model;
     }
     @PostMapping("/upload-save")
     public ModelAndView getProfileUpdate(@ModelAttribute @Valid RaportDto raportDto, @RequestParam(value="action", required=true) String action, BindingResult bindingResult, HttpServletRequest request ) {
         if (action.equals("save")) {
-            System.out.println("SAVE");
         }
 
         if (action.equals("cancel")) {
-            System.out.println("SAVE");
         }
         ModelAndView model = new ModelAndView("/");
 

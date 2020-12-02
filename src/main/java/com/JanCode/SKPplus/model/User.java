@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -35,9 +36,12 @@ public class User {
     private LocalDateTime lastActiveDate;
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private String birthDate;
-    public User() {
 
-    }
+    @OneToMany(mappedBy="user")
+    private List<FileDB> fileList;
+    @OneToMany(mappedBy="user")
+    private List<Raport> raportList;
+    public User() { }
 
     public User(User user) {
         this.id = user.id;
@@ -160,6 +164,22 @@ public class User {
 
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public List<FileDB> getFileList() {
+        return fileList;
+    }
+
+    public void setFileList(List<FileDB> fileList) {
+        this.fileList = fileList;
+    }
+
+    public List<Raport> getRaportList() {
+        return raportList;
+    }
+
+    public void setRaportList(List<Raport> raportList) {
+        this.raportList = raportList;
     }
 
     @Override

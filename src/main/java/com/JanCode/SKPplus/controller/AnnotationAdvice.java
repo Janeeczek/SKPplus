@@ -3,6 +3,7 @@ package com.JanCode.SKPplus.controller;
 import com.JanCode.SKPplus.model.ActiveUsers;
 import com.JanCode.SKPplus.model.InfoModel.WykresKołowyData;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
+import com.JanCode.SKPplus.model.Raport;
 import com.JanCode.SKPplus.repository.ActiveUsersRepository;
 import com.JanCode.SKPplus.service.ActiveUserService;
 import com.JanCode.SKPplus.service.RaportServiceImpl;
@@ -57,22 +58,36 @@ public class AnnotationAdvice {
     }
     @ModelAttribute("allIncome")
     public double getAllIncome() {
-        Double income = raportService.getAllIncome();
-        return (income == null) ? 0 : income;
+        List<Raport> raports = raportService.getAllRaports();
+        if (raports.size() > 0)
+        {
+            System.out.println("Lista INCOME != null");
+            Double income = raportService.getAllIncome();
+            return (income == null) ? 0 : income;
+        }
+        return 0.0;
+
+
     }
     @ModelAttribute("daneWykresuKolowego")
     public WykresKołowyData getDaneWykresuKolowego() {
-        List<Double> lista = raportService.getAllIncomeList();
-        int osobowe = 0;
-        int ciezarowe = 0;
-        int inne = 0;
-        for (Double a : lista) {
-            if(a == 99.0) osobowe++;
-            else if(a == 177.0 || a == 154.0 || a== 200.0 || a == 178.0 || a == 162.0 || a == 79) ciezarowe++;
-            else inne++;
+        List<Raport> raports = raportService.getAllRaports();
+        if (raports.size() > 0)
+        {
+            System.out.println("Lista wykresu != null");
+            List<Double> lista = raportService.getAllIncomeList();
+            int osobowe = 0;
+            int ciezarowe = 0;
+            int inne = 0;
+            for (Double a : lista) {
+                if(a == 99.0) osobowe++;
+                else if(a == 177.0 || a == 154.0 || a== 200.0 || a == 178.0 || a == 162.0 || a == 79) ciezarowe++;
+                else inne++;
+            }
+            System.out.println("ILE= "+lista.size()+"  Osobowe= "+osobowe+" Ciezarowe= "+ciezarowe+" Inne= "+inne);
+            return new WykresKołowyData(osobowe,ciezarowe,inne);
         }
-        System.out.println("ILE= "+lista.size()+"  Osobowe= "+osobowe+" Ciezarowe= "+ciezarowe+" Inne= "+inne);
-        WykresKołowyData daneWykresu = new WykresKołowyData(osobowe,ciezarowe,inne);
-        return daneWykresu;
+        else return new WykresKołowyData(2,1,4);
+
     }
 }
