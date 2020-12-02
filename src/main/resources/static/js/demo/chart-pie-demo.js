@@ -10,7 +10,6 @@ link = document.querySelector('#ciezarowe');
 var ciezarowe = link.getAttribute('value');
 link = document.querySelector('#inne');
 var inne = link.getAttribute('value');
-//console.log("osobowe = "+target);
 var myPieChart = new Chart(ctx, {
   type: 'doughnut',
   data: {

@@ -589,7 +589,16 @@
         <h4 class="font-weight-bold py-2 mb-4">
             Przesyłanie raportu
         </h4>
-        <form  th:action="@{/upload}" th:object="${raportDto}" th:method="POST" enctype="multipart/form-data" >
+        <div th:if="${successMsg}">
+            <div class="alert alert-success"th:text="${successMsg}">Plik załadowano pomyślnie!</div>
+        </div>
+        <div th:if="${errorMsg}">
+            <div class="alert alert-danger"th:text="${errorMsg}">Błąd zapisu pliku!</div>
+        </div>
+        <div th:if="${cancelMsg}">
+            <div class="alert alert-info"th:text="${cancelMsg}">Anulowano wgrywanie pliku!</div>
+        </div>
+        <form  th:action="@{/raport/upload/post}" th:object="${raportDto}" th:method="POST" enctype="multipart/form-data" >
             <div class="media-body ml-4">
                 Dodaj nowy raport
                 <label class="btn btn-outline-primary">
@@ -597,10 +606,11 @@
 
                 </label>
 
-                <button id="btnDelete" type="button" class="btn btn-default md-btn-flat">Usuń</button>
+                <button type="submit" name="action" value="cancel" class="btn btn-default md-btn-flat">Anuluj</button>
                 <button type="submit" name="action" value="save" class="btn btn-primary">Dodaj</button>&nbsp;
             </div>
         </form>
+
     </div>
 </div>
 <div th:fragment="wyswietlTabliceRap">
