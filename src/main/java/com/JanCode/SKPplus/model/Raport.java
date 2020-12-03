@@ -16,6 +16,9 @@ public class Raport {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    private String xmlns;
+
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "kontrahenci_id")
     private Kontrahenci kontrahenci;
@@ -36,11 +39,20 @@ public class Raport {
 
 
     public Raport(DaneRaportuDto daneRaportuDto, User user, FileDB files) {
+        //this.xmlns = daneRaportuDto.getXmlns();
         this.kontrahenci =  new Kontrahenci(daneRaportuDto.getKONTRAHENCI());
         this.rejestrySprzedazyVat = new RejestrySprzedazyVat(daneRaportuDto.getREJESTRY_SPRZEDAZY_VAT());
         this.dataUtworzenia =  LocalDate.now();
         this.user = user;
         this.files = files;
+    }
+
+    public String getXmlns() {
+        return xmlns;
+    }
+
+    public void setXmlns(String xmlns) {
+        this.xmlns = xmlns;
     }
 
     public long getId() {

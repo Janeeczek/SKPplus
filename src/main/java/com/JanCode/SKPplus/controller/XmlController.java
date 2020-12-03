@@ -30,6 +30,16 @@ public class XmlController {
 
         return model;
     }
+    @GetMapping("/raport/createFromFileTEST")
+    public ModelAndView showUpload() {
+        ModelAndView model = new ModelAndView("/user/user");
+
+
+
+        Raport raport = reportService.createTESTRaport();
+
+        return model;
+    }
     @PostMapping("/upload-save")
     public ModelAndView getProfileUpdate(@ModelAttribute @Valid RaportDto raportDto, @RequestParam(value="action", required=true) String action, BindingResult bindingResult, HttpServletRequest request ) {
         if (action.equals("save")) {
