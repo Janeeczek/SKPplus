@@ -16,9 +16,9 @@ public class RejestrSprzedazyVat {
     private String modul;
     private String typ;
     private String rejestr;
-    private LocalDate  data_wystawienia;
-    private LocalDate data_sprzedazy;
-    private LocalDate  termin;
+    private String  data_wystawienia;
+    private String data_sprzedazy;
+    private String  termin;
     private String numer;
     private String wewnetrzna;
     private String fiskalna;
@@ -41,27 +41,28 @@ public class RejestrSprzedazyVat {
     private String kurs_waluty;
     private String notowanie_waluty_ile;
     private String notowanie_waluty_za_ile;
-    private LocalDate data_kursu;
+    private String data_kursu;
     private String kurs_do_ksiegowania;
     private String kurs_waluty_2;
     private String notowanie_waluty_ile_2;
-    private LocalDate  data_kursu_2;
+    private String notowanie_waluty_za_ile_2;
+    private String  data_kursu_2;
 
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "rejestr_sprzedazy_vat_id",referencedColumnName = "id")
-    private List<Pozycja> pozycje ;
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "pozycje_id")
+    private Pozycje pozycje;
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "kwotyDodatkowe_id")
     private KwotyDodatkowe kwotyDodatkowe;
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "rejestr_sprzedazy_vat_id",referencedColumnName = "id")
-    private List<Platnosc> platnosci;
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "platnosci_id")
+    private Platnosci platnosci;
 
     public RejestrSprzedazyVat() {
     }
 
-    public RejestrSprzedazyVat(long id, String modul, String typ, String rejestr, LocalDate  data_wystawienia, LocalDate  data_sprzedazy, LocalDate  termin, String numer, String wewnetrzna, String fiskalna, String detaliczna, String typ_podmiotu, String podmiot, String nazwa1, String nazwa2, String nazwa3, String ulica, String nr_domu, String miasto, String kod_pocztowy, String poczta, String nip_kraj, String nip, String kategoria, String waluta, String forma_platnosci, String kurs_waluty, String notowanie_waluty_ile, String notowanie_waluty_za_ile, LocalDate  data_kursu, String kurs_do_ksiegowania, String kurs_waluty_2, String notowanie_waluty_ile_2, LocalDate  data_kursu_2, List<Pozycja> pozycje, KwotyDodatkowe kwotyDodatkowe, List<Platnosc> platnosci) {
+    public RejestrSprzedazyVat(long id, String modul, String typ, String rejestr, String  data_wystawienia, String  data_sprzedazy, String  termin, String numer, String wewnetrzna, String fiskalna, String detaliczna, String typ_podmiotu, String podmiot, String nazwa1, String nazwa2, String nazwa3, String ulica, String nr_domu, String miasto, String kod_pocztowy, String poczta, String nip_kraj, String nip, String kategoria, String waluta, String forma_platnosci, String kurs_waluty, String notowanie_waluty_ile, String notowanie_waluty_za_ile, String  data_kursu, String kurs_do_ksiegowania, String kurs_waluty_2, String notowanie_waluty_ile_2,String notowanie_waluty_za_ile_2, String  data_kursu_2, Pozycje pozycje, KwotyDodatkowe kwotyDodatkowe, Platnosci platnosci) {
         this.id = id;
         this.modul = modul;
         this.typ = typ;
@@ -95,6 +96,7 @@ public class RejestrSprzedazyVat {
         this.kurs_do_ksiegowania = kurs_do_ksiegowania;
         this.kurs_waluty_2 = kurs_waluty_2;
         this.notowanie_waluty_ile_2 = notowanie_waluty_ile_2;
+        this.notowanie_waluty_za_ile_2 = notowanie_waluty_za_ile_2;
         this.data_kursu_2 = data_kursu_2;
         this.pozycje = pozycje;
         this.kwotyDodatkowe = kwotyDodatkowe;
@@ -104,9 +106,9 @@ public class RejestrSprzedazyVat {
         this.modul = rejestrSprzedazyVatDto.getMODUL();
         this.typ = rejestrSprzedazyVatDto.getTYP();
         this.rejestr = rejestrSprzedazyVatDto.getREJESTR();
-        this.data_wystawienia = LocalDate.parse(rejestrSprzedazyVatDto.getDATA_WYSTAWIENIA());
-        this.data_sprzedazy = LocalDate.parse(rejestrSprzedazyVatDto.getDATA_SPRZEDAZY());
-        this.termin = LocalDate.parse(rejestrSprzedazyVatDto.getTERMIN());
+        this.data_wystawienia = rejestrSprzedazyVatDto.getDATA_WYSTAWIENIA();
+        this.data_sprzedazy = rejestrSprzedazyVatDto.getDATA_SPRZEDAZY();
+        this.termin = rejestrSprzedazyVatDto.getTERMIN();
         this.numer = rejestrSprzedazyVatDto.getNUMER();
         this.wewnetrzna = rejestrSprzedazyVatDto.getWEWNETRZNA();
         this.fiskalna = rejestrSprzedazyVatDto.getFISKALNA();
@@ -129,26 +131,15 @@ public class RejestrSprzedazyVat {
         this.kurs_waluty = rejestrSprzedazyVatDto.getKURS_WALUTY();
         this.notowanie_waluty_ile = rejestrSprzedazyVatDto.getNOTOWANIE_WALUTY_ILE();
         this.notowanie_waluty_za_ile = rejestrSprzedazyVatDto.getNOTOWANIE_WALUTY_ZA_ILE();
-        this.data_kursu = LocalDate.parse(rejestrSprzedazyVatDto.getDATA_KURSU());
+        this.data_kursu = rejestrSprzedazyVatDto.getDATA_KURSU();
         this.kurs_do_ksiegowania = rejestrSprzedazyVatDto.getKURS_DO_KSIEGOWANIA();
         this.kurs_waluty_2 = rejestrSprzedazyVatDto.getKURS_WALUTY_2();
         this.notowanie_waluty_ile_2 = rejestrSprzedazyVatDto.getNOTOWANIE_WALUTY_ILE_2();
-        this.data_kursu_2 = LocalDate.parse(rejestrSprzedazyVatDto.getDATA_KURSU_2());
+        this.notowanie_waluty_za_ile_2 = rejestrSprzedazyVatDto.getNOTOWANIE_WALUTY_ZA_ILE_2();
+        this.data_kursu_2 = rejestrSprzedazyVatDto.getDATA_KURSU_2();
         this.kwotyDodatkowe = new KwotyDodatkowe(rejestrSprzedazyVatDto.getKWOTY_DODATKOWE());
-
-        List<PozycjaDto> pozDtoList =new ArrayList<>(rejestrSprzedazyVatDto.getPOZYCJE().getPOZYCJA());
-        List<Pozycja> pozList = new ArrayList<>();
-        List<PlatnoscDto> platDtoList =new ArrayList<>(rejestrSprzedazyVatDto.getPLATNOSCI().getPLATNOSC());
-        List<Platnosc> platList = new ArrayList<>();
-        for (int i = 0; i < pozDtoList.size(); i++) {
-            pozList.add(new Pozycja(pozDtoList.get(i)));
-        }
-        for (int i = 0; i < platDtoList.size(); i++) {
-            platList.add(new Platnosc(platDtoList.get(i)));
-        }
-        this.pozycje = pozList;
-
-        this.platnosci = platList;
+        this.pozycje = new Pozycje(rejestrSprzedazyVatDto.getPOZYCJE());
+        this.platnosci = new Platnosci(rejestrSprzedazyVatDto.getPLATNOSCI());
     }
     public long getId() {
         return id;
@@ -182,27 +173,27 @@ public class RejestrSprzedazyVat {
         this.rejestr = rejestr;
     }
 
-    public LocalDate  getData_wystawienia() {
+    public String  getData_wystawienia() {
         return data_wystawienia;
     }
 
-    public void setData_wystawienia(LocalDate  data_wystawienia) {
+    public void setData_wystawienia(String  data_wystawienia) {
         this.data_wystawienia = data_wystawienia;
     }
 
-    public LocalDate  getData_sprzedazy() {
+    public String  getData_sprzedazy() {
         return data_sprzedazy;
     }
 
-    public void setData_sprzedazy(LocalDate  data_sprzedazy) {
+    public void setData_sprzedazy(String  data_sprzedazy) {
         this.data_sprzedazy = data_sprzedazy;
     }
 
-    public LocalDate  getTermin() {
+    public String  getTermin() {
         return termin;
     }
 
-    public void setTermin(LocalDate  termin) {
+    public void setTermin(String  termin) {
         this.termin = termin;
     }
 
@@ -382,11 +373,11 @@ public class RejestrSprzedazyVat {
         this.notowanie_waluty_za_ile = notowanie_waluty_za_ile;
     }
 
-    public LocalDate getData_kursu() {
+    public String getData_kursu() {
         return data_kursu;
     }
 
-    public void setData_kursu(LocalDate data_kursu) {
+    public void setData_kursu(String data_kursu) {
         this.data_kursu = data_kursu;
     }
 
@@ -414,19 +405,27 @@ public class RejestrSprzedazyVat {
         this.notowanie_waluty_ile_2 = notowanie_waluty_ile_2;
     }
 
-    public LocalDate getData_kursu_2() {
+    public String getNotowanie_waluty_za_ile_2() {
+        return notowanie_waluty_za_ile_2;
+    }
+
+    public void setNotowanie_waluty_za_ile_2(String notowanie_waluty_za_ile_2) {
+        this.notowanie_waluty_za_ile_2 = notowanie_waluty_za_ile_2;
+    }
+
+    public String getData_kursu_2() {
         return data_kursu_2;
     }
 
-    public void setData_kursu_2(LocalDate data_kursu_2) {
+    public void setData_kursu_2(String data_kursu_2) {
         this.data_kursu_2 = data_kursu_2;
     }
 
-    public List<Pozycja> getPozycje() {
+    public Pozycje getPozycje() {
         return pozycje;
     }
 
-    public void setPozycje(List<Pozycja> pozycje) {
+    public void setPozycje(Pozycje pozycje) {
         this.pozycje = pozycje;
     }
 
@@ -438,11 +437,11 @@ public class RejestrSprzedazyVat {
         this.kwotyDodatkowe = kwotyDodatkowe;
     }
 
-    public List<Platnosc> getPlatnosci() {
+    public Platnosci getPlatnosci() {
         return platnosci;
     }
 
-    public void setPlatnosci(List<Platnosc> platnosci) {
+    public void setPlatnosci(Platnosci platnosci) {
         this.platnosci = platnosci;
     }
 }

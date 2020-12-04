@@ -33,6 +33,10 @@ public class FileStorageService {
 
     }
 
+    public FileDB store(FileDB fileDB) {
+        return fileDBRepository.save(fileDB);
+    }
+
     public FileDB getFile(String id) {
         return fileDBRepository.getById(id);
     }
@@ -40,4 +44,9 @@ public class FileStorageService {
     public List<FileDB> getAllFiles() {
         return fileDBRepository.findAll();
     }
+
+    public void deleteFileById(String id) {
+        fileDBRepository.deleteById(id);
+    }
+
 }

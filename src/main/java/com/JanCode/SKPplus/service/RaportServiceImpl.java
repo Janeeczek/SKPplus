@@ -4,12 +4,16 @@ package com.JanCode.SKPplus.service;
 import com.JanCode.SKPplus.model.FileDB;
 import com.JanCode.SKPplus.model.Raport;
 import com.JanCode.SKPplus.model.User;
+import com.JanCode.SKPplus.model.raportModel.Kontrahent;
 import com.JanCode.SKPplus.repository.PlatnoscRepository;
 import com.JanCode.SKPplus.repository.RaporRepository;
 import com.JanCode.SKPplus.web.dto.DaneRaportuDto;
 import com.JanCode.SKPplus.web.dto.RaportDto;
 import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahenciDto;
 import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahentDto;
+import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
+import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
+
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -22,19 +26,23 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.XMLConstants;
+import javax.xml.bind.*;
 import javax.xml.bind.annotation.XmlSchema;
+import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.sax.SAXSource;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @Service
-public class RaportServiceImpl implements RaportService{
+public class RaportServiceImpl{
     @Autowired
     private RaporRepository raporRepository;
     @Autowired
@@ -43,7 +51,7 @@ public class RaportServiceImpl implements RaportService{
     private FileStorageService storageService;
     @Autowired
     private UserService userService;
-    @Override
+
     public Raport createRaport(String id,String username) {
         Raport raport = null;
         try {
@@ -51,11 +59,11 @@ public class RaportServiceImpl implements RaportService{
             if(fileDB == null) System.out.println("FILEDB IS NULL");
             User user = userService.findByUsername(username);
             if(user == null) System.out.println("USER IS NULL");
-            //MultipartFile multipartFile = new MockMultipartFile("Raport",fileDB.getData());
+
             InputStream targetStream = new ByteArrayInputStream(fileDB.getData());
             InputSource is = new InputSource(targetStream);
-            JAXBContext jc = JAXBContext.newInstance(DaneRaportuDto.class);
 
+            JAXBContext jc = JAXBContext.newInstance(DaneRaportuDto.class);
             Unmarshaller unmarshaller = jc.createUnmarshaller();
 
 
@@ -71,7 +79,6 @@ public class RaportServiceImpl implements RaportService{
 
 
             DaneRaportuDto daneRaportuDto = (DaneRaportuDto) unmarshaller.unmarshal(source);
-            System.out.println("daneRaportuDto.getKONTRAHENCI().getBAZA_DOC_ID() :"+daneRaportuDto.getKONTRAHENCI().getBAZA_DOC_ID());
             raport = new Raport(daneRaportuDto,user,fileDB);
 
 
@@ -82,43 +89,43 @@ public class RaportServiceImpl implements RaportService{
         raporRepository.save(raport);
         return raport;
     }
-    public Raport createTESTRaport() {
-        Raport raport = null;
+    //DB -> daneRaportuDto -> Marshal -> FileDb ->storeFile
+    public byte[] createFileFromRaport(long id, String username) {
+        byte[] resoult = null;
+        ByteArrayOutputStream byteArrayOutputStream =  new ByteArrayOutputStream();
         try {
-            Resource resource = new ClassPathResource("Eksport.xml");
+            JAXBContext jaxbContext = JAXBContext.newInstance(DaneRaportuDto.class);
+            Raport raport = raporRepository.myFindById(id);
+            DaneRaportuDto daneRaportuDto = new DaneRaportuDto(raport);
 
-            File file = resource.getFile();
-            JAXBContext jc = JAXBContext.newInstance(DaneRaportuDto.class);
-
-            Unmarshaller unmarshaller = jc.createUnmarshaller();
-
-
-
-            DaneRaportuDto daneRaportuDto = (DaneRaportuDto) unmarshaller.unmarshal(file);
-            raport = new Raport(daneRaportuDto,null,null);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,false);
+            //marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, "windows-1250");
+           // marshaller.setProperty("com.sun.xml.bind.xmlDeclaration", false);
+            //marshaller.setProperty("com.sun.xml.bind.xmlHeaders", "<?xml version=\"1.0\" encoding=\"windows-1250\"?>");
+            marshaller.setProperty("com.sun.xml.bind.marshaller.CharacterEscapeHandler", new CharacterEscapeHandler() {
+                @Override
+                public void escape(char[] ac, int i, int j, boolean flag, Writer writer) throws IOException {
+                    writer.write(ac, i, j);
+                }
+            });
+            marshaller.marshal(daneRaportuDto,byteArrayOutputStream);
+            resoult = byteArrayOutputStream.toByteArray();
 
 
         } catch (JAXBException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        return resoult;
 
-        raporRepository.save(raport);
-        return raport;
     }
 
-    @Override
     public Raport getRaportById() {
         return null;
     }
 
-    @Override
-    public Raport saveRaport() {
-        return null;
 
-    }
-    @Override
     public void removeById(long id) {
        raporRepository.deleteById(id);
        if(raporRepository.existsById(id))
@@ -127,24 +134,25 @@ public class RaportServiceImpl implements RaportService{
            System.out.println("Sukces! Usunięto raport o id: "+ id);
     }
 
-    @Override
+
     public void removeAll() {
         raporRepository.deleteAll();
     }
 
-    @Override
+
     public double getAllIncome() {
-        if(platnoscRepository.getAllIncome() > 0)
-            return platnoscRepository.getAllIncome();
-        else return 0;
+       // if(platnoscRepository.getAllIncome() > 0)
+         //   return platnoscRepository.getAllIncome();
+        //else return 0;
+        return 0;
     }
-    @Override
+
     public List<Raport> getAllRaports() {
         return raporRepository.findAll();
     }
-    @Override
-    public List<Double> getAllIncomeList() {
-        return platnoscRepository.getAllIncomeList();
 
+    public List<Double> getAllIncomeList() {
+        //return platnoscRepository.getAllIncomeList();
+return null;
     }
 }

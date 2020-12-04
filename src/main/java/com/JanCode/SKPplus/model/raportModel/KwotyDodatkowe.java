@@ -1,9 +1,11 @@
 package com.JanCode.SKPplus.model.raportModel;
 
+import com.JanCode.SKPplus.util.AdapterCDATA;
 import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.KwotyDodatkoweDto;
 import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.PozycjaKdDto;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +17,7 @@ public class KwotyDodatkowe {
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "pozycjaKd_id")
     private PozycjaKd pozycjaKd;
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     private String opisKd;
 
     public KwotyDodatkowe() {

@@ -1,22 +1,27 @@
 package com.JanCode.SKPplus.web.dto.rejestrySprzedazy;
 
+import com.JanCode.SKPplus.model.raportModel.PozycjaKd;
+import com.JanCode.SKPplus.util.AdapterCDATA;
+import com.JanCode.SKPplus.util.AdapterDouble;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlRootElement(name = "POZYCJA_KD")
 @XmlType(propOrder={"KATEGORIA_KD","KWOTA_KD","KWOTA_KD_SYS","WALUTA_KD","NOTOWANIE_WALUTY_ILE_KD","NOTOWANIE_WALUTY_ZA_ILE_KD","DATA_KURSU_KD"})
 public class PozycjaKdDto {
     private String KATEGORIA_KD;
-    private double KWOTA_KD;
-    private double KWOTA_KD_SYS;
+    private Double KWOTA_KD;
+    private Double KWOTA_KD_SYS;
     private String WALUTA_KD;
-    private double NOTOWANIE_WALUTY_ILE_KD;
-    private double NOTOWANIE_WALUTY_ZA_ILE_KD;
+    private Double NOTOWANIE_WALUTY_ILE_KD;
+    private Double NOTOWANIE_WALUTY_ZA_ILE_KD;
     private String DATA_KURSU_KD;
     public PozycjaKdDto() {
     }
 
-    public PozycjaKdDto(String KATEGORIA_KD, double KWOTA_KD, double KWOTA_KD_SYS, String WALUTA_KD, double NOTOWANIE_WALUTY_ILE_KD, double NOTOWANIE_WALUTY_ZA_ILE_KD, String DATA_KURSU_KD) {
+    public PozycjaKdDto(String KATEGORIA_KD, Double KWOTA_KD, Double KWOTA_KD_SYS, String WALUTA_KD, Double NOTOWANIE_WALUTY_ILE_KD, Double NOTOWANIE_WALUTY_ZA_ILE_KD, String DATA_KURSU_KD) {
         this.KATEGORIA_KD = KATEGORIA_KD;
         this.KWOTA_KD = KWOTA_KD;
         this.KWOTA_KD_SYS = KWOTA_KD_SYS;
@@ -26,6 +31,18 @@ public class PozycjaKdDto {
         this.DATA_KURSU_KD = DATA_KURSU_KD;
     }
 
+    public PozycjaKdDto(PozycjaKd pozycjaKd) {
+        this.KATEGORIA_KD = pozycjaKd.getKategoria_kd();
+        this.KWOTA_KD = pozycjaKd.getKwota_kd();
+        this.KWOTA_KD_SYS = pozycjaKd.getKwota_kd_SYS();
+        this.WALUTA_KD = pozycjaKd.getWaluta_kd();
+        this.NOTOWANIE_WALUTY_ILE_KD = pozycjaKd.getNotowanie_waluty_ile_kd();
+        this.NOTOWANIE_WALUTY_ZA_ILE_KD = pozycjaKd.getNotowanie_waluty_za_ile_kd();
+        if(pozycjaKd.getData_kursu_kd() != null)
+            this.DATA_KURSU_KD = pozycjaKd.getData_kursu_kd().toString();
+        else this.DATA_KURSU_KD = null;
+    }
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getKATEGORIA_KD() {
         return KATEGORIA_KD;
     }
@@ -33,23 +50,23 @@ public class PozycjaKdDto {
     public void setKATEGORIA_KD(String KATEGORIA_KD) {
         this.KATEGORIA_KD = KATEGORIA_KD;
     }
-
-    public double getKWOTA_KD() {
+    @XmlJavaTypeAdapter(AdapterDouble.class)
+    public Double getKWOTA_KD() {
         return KWOTA_KD;
     }
 
-    public void setKWOTA_KD(double KWOTA_KD) {
+    public void setKWOTA_KD(Double KWOTA_KD) {
         this.KWOTA_KD = KWOTA_KD;
     }
-
-    public double getKWOTA_KD_SYS() {
+    @XmlJavaTypeAdapter(AdapterDouble.class)
+    public Double getKWOTA_KD_SYS() {
         return KWOTA_KD_SYS;
     }
 
-    public void setKWOTA_KD_SYS(double KWOTA_KD_SYS) {
+    public void setKWOTA_KD_SYS(Double KWOTA_KD_SYS) {
         this.KWOTA_KD_SYS = KWOTA_KD_SYS;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getWALUTA_KD() {
         return WALUTA_KD;
     }
@@ -57,20 +74,20 @@ public class PozycjaKdDto {
     public void setWALUTA_KD(String WALUTA_KD) {
         this.WALUTA_KD = WALUTA_KD;
     }
-
-    public double getNOTOWANIE_WALUTY_ILE_KD() {
+    @XmlJavaTypeAdapter(AdapterDouble.class)
+    public Double getNOTOWANIE_WALUTY_ILE_KD() {
         return NOTOWANIE_WALUTY_ILE_KD;
     }
 
-    public void setNOTOWANIE_WALUTY_ILE_KD(double NOTOWANIE_WALUTY_ILE_KD) {
+    public void setNOTOWANIE_WALUTY_ILE_KD(Double NOTOWANIE_WALUTY_ILE_KD) {
         this.NOTOWANIE_WALUTY_ILE_KD = NOTOWANIE_WALUTY_ILE_KD;
     }
-
-    public double getNOTOWANIE_WALUTY_ZA_ILE_KD() {
+    @XmlJavaTypeAdapter(AdapterDouble.class)
+    public Double getNOTOWANIE_WALUTY_ZA_ILE_KD() {
         return NOTOWANIE_WALUTY_ZA_ILE_KD;
     }
 
-    public void setNOTOWANIE_WALUTY_ZA_ILE_KD(double NOTOWANIE_WALUTY_ZA_ILE_KD) {
+    public void setNOTOWANIE_WALUTY_ZA_ILE_KD(Double NOTOWANIE_WALUTY_ZA_ILE_KD) {
         this.NOTOWANIE_WALUTY_ZA_ILE_KD = NOTOWANIE_WALUTY_ZA_ILE_KD;
     }
 

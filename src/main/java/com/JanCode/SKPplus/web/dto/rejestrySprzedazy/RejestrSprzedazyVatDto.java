@@ -1,16 +1,20 @@
 package com.JanCode.SKPplus.web.dto.rejestrySprzedazy;
 
 
+import com.JanCode.SKPplus.model.raportModel.RejestrSprzedazyVat;
+import com.JanCode.SKPplus.util.AdapterCDATA;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 import java.util.Set;
 @XmlRootElement(name = "REJESTR_SPRZEDAZY_VAT")
 @XmlType(propOrder={ "MODUL","TYP","REJESTR","DATA_WYSTAWIENIA","DATA_SPRZEDAZY","TERMIN","NUMER","WEWNETRZNA","FISKALNA",
         "DETALICZNA","TYP_PODMIOTU","PODMIOT","NAZWA1","NAZWA2","NAZWA3","NIP_KRAJ","NIP","ULICA","NR_DOMU","MIASTO","KOD_POCZTOWY",
         "POCZTA","KATEGORIA","WALUTA","FORMA_PLATNOSCI","KURS_WALUTY","NOTOWANIE_WALUTY_ILE","NOTOWANIE_WALUTY_ZA_ILE","DATA_KURSU",
-        "KURS_DO_KSIEGOWANIA","KURS_WALUTY_2","NOTOWANIE_WALUTY_ILE_2","DATA_KURSU_2","POZYCJE","KWOTY_DODATKOWE","PLATNOSCI"})
+        "KURS_DO_KSIEGOWANIA","KURS_WALUTY_2","NOTOWANIE_WALUTY_ILE_2","NOTOWANIE_WALUTY_ZA_ILE_2","DATA_KURSU_2","POZYCJE","KWOTY_DODATKOWE","PLATNOSCI"})
 public class RejestrSprzedazyVatDto {
     private String MODUL;
     private String TYP;
@@ -44,12 +48,15 @@ public class RejestrSprzedazyVatDto {
     private String KURS_DO_KSIEGOWANIA;
     private String KURS_WALUTY_2;
     private String NOTOWANIE_WALUTY_ILE_2;
+    private String NOTOWANIE_WALUTY_ZA_ILE_2;
     private String DATA_KURSU_2;
     private PozycjeDto POZYCJE;
     private KwotyDodatkoweDto KWOTY_DODATKOWE;
     private PlatnosciDto PLATNOSCI;
 
-    public RejestrSprzedazyVatDto( String MODUL, String TYP, String REJESTR, String DATA_WYSTAWIENIA, String DATA_SPRZEDAZY, String TERMIN, String NUMER, String WEWNETRZNA, String FISKALNA, String DETALICZNA, String TYP_PODMIOTU, String PODMIOT, String NAZWA1, String NAZWA2, String NAZWA3, String NIP_KRAJ, String NIP, String ULICA, String NR_DOMU, String MIASTO, String KOD_POCZTOWY, String POCZTA, String KATEGORIA, String WALUTA, String FORMA_PLATNOSCI, String KURS_WALUTY, String NOTOWANIE_WALUTY_ILE, String NOTOWANIE_WALUTY_ZA_ILE, String DATA_KURSU, String KURS_DO_KSIEGOWANIA, String KURS_WALUTY_2, String NOTOWANIE_WALUTY_ILE_2, String DATA_KURSU_2, PozycjeDto POZYCJE, KwotyDodatkoweDto KWOTY_DODATKOWE, PlatnosciDto PLATNOSCI) {
+    public RejestrSprzedazyVatDto() { }
+
+    public RejestrSprzedazyVatDto( String MODUL, String TYP, String REJESTR, String DATA_WYSTAWIENIA, String DATA_SPRZEDAZY, String TERMIN, String NUMER, String WEWNETRZNA, String FISKALNA, String DETALICZNA, String TYP_PODMIOTU, String PODMIOT, String NAZWA1, String NAZWA2, String NAZWA3, String NIP_KRAJ, String NIP, String ULICA, String NR_DOMU, String MIASTO, String KOD_POCZTOWY, String POCZTA, String KATEGORIA, String WALUTA, String FORMA_PLATNOSCI, String KURS_WALUTY, String NOTOWANIE_WALUTY_ILE, String NOTOWANIE_WALUTY_ZA_ILE, String DATA_KURSU, String KURS_DO_KSIEGOWANIA, String KURS_WALUTY_2, String NOTOWANIE_WALUTY_ILE_2,String NOTOWANIE_WALUTY_ZA_ILE_2, String DATA_KURSU_2, PozycjeDto POZYCJE, KwotyDodatkoweDto KWOTY_DODATKOWE, PlatnosciDto PLATNOSCI) {
         this.MODUL = MODUL;
         this.TYP = TYP;
         this.REJESTR = REJESTR;
@@ -82,13 +89,56 @@ public class RejestrSprzedazyVatDto {
         this.KURS_DO_KSIEGOWANIA = KURS_DO_KSIEGOWANIA;
         this.KURS_WALUTY_2 = KURS_WALUTY_2;
         this.NOTOWANIE_WALUTY_ILE_2 = NOTOWANIE_WALUTY_ILE_2;
+        this.NOTOWANIE_WALUTY_ZA_ILE_2 = NOTOWANIE_WALUTY_ZA_ILE_2;
         this.DATA_KURSU_2 = DATA_KURSU_2;
         this.POZYCJE = POZYCJE;
         this.KWOTY_DODATKOWE = KWOTY_DODATKOWE;
         this.PLATNOSCI = PLATNOSCI;
     }
 
-    public RejestrSprzedazyVatDto() {
+    public RejestrSprzedazyVatDto(RejestrSprzedazyVat rejestrSprzedazyVat) {
+        this.MODUL = rejestrSprzedazyVat.getModul();
+        this.TYP = rejestrSprzedazyVat.getTyp();
+        this.REJESTR = rejestrSprzedazyVat.getRejestr();
+        this.DATA_WYSTAWIENIA = rejestrSprzedazyVat.getData_wystawienia().toString();
+        this.DATA_SPRZEDAZY = rejestrSprzedazyVat.getData_sprzedazy().toString();
+        this.TERMIN = rejestrSprzedazyVat.getTermin().toString();
+        this.NUMER = rejestrSprzedazyVat.getNumer();
+        this.WEWNETRZNA = rejestrSprzedazyVat.getWewnetrzna();
+        this.FISKALNA = rejestrSprzedazyVat.getFiskalna();
+        this.DETALICZNA = rejestrSprzedazyVat.getDetaliczna();
+        this.TYP_PODMIOTU = rejestrSprzedazyVat.getTyp_podmiotu();
+        this.PODMIOT = rejestrSprzedazyVat.getPodmiot();
+        this.NAZWA1 = rejestrSprzedazyVat.getNazwa1();
+        this.NAZWA2 = rejestrSprzedazyVat.getNazwa2();
+        this.NAZWA3 = rejestrSprzedazyVat.getNazwa3();
+        this.NIP_KRAJ = rejestrSprzedazyVat.getNip_kraj();
+        this.NIP = rejestrSprzedazyVat.getNip();
+        this.ULICA = rejestrSprzedazyVat.getUlica();
+        this.NR_DOMU = rejestrSprzedazyVat.getNr_domu();
+        this.MIASTO = rejestrSprzedazyVat.getMiasto();
+        this.KOD_POCZTOWY = rejestrSprzedazyVat.getKod_pocztowy();
+        this.POCZTA = rejestrSprzedazyVat.getPoczta();
+        this.KATEGORIA = rejestrSprzedazyVat.getKategoria();
+        this.WALUTA = rejestrSprzedazyVat.getWaluta();
+        this.FORMA_PLATNOSCI = rejestrSprzedazyVat.getForma_platnosci();
+        this.KURS_WALUTY = rejestrSprzedazyVat.getKurs_waluty();
+        this.NOTOWANIE_WALUTY_ILE = rejestrSprzedazyVat.getNotowanie_waluty_ile();
+        this.NOTOWANIE_WALUTY_ZA_ILE = rejestrSprzedazyVat.getNotowanie_waluty_za_ile();
+        this.DATA_KURSU = rejestrSprzedazyVat.getData_kursu().toString();
+        this.KURS_DO_KSIEGOWANIA = rejestrSprzedazyVat.getKurs_do_ksiegowania();
+        this.KURS_WALUTY_2 = rejestrSprzedazyVat.getKurs_waluty_2();
+        this.NOTOWANIE_WALUTY_ILE_2 = rejestrSprzedazyVat.getNotowanie_waluty_ile_2();
+        this.NOTOWANIE_WALUTY_ZA_ILE_2 = rejestrSprzedazyVat.getNotowanie_waluty_za_ile_2();
+        this.DATA_KURSU_2 = rejestrSprzedazyVat.getData_kursu_2().toString();
+        this.POZYCJE = new PozycjeDto(rejestrSprzedazyVat.getPozycje());
+        if (rejestrSprzedazyVat.getKwotyDodatkowe() != null) {
+            this.KWOTY_DODATKOWE = new KwotyDodatkoweDto(rejestrSprzedazyVat.getKwotyDodatkowe());
+        } else {
+            this.KWOTY_DODATKOWE = null;
+        }
+
+        this.PLATNOSCI = new PlatnosciDto(rejestrSprzedazyVat.getPlatnosci());
     }
 
     public String getMODUL() {
@@ -106,7 +156,7 @@ public class RejestrSprzedazyVatDto {
     public void setTYP(String TYP) {
         this.TYP = TYP;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getREJESTR() {
         return REJESTR;
     }
@@ -114,7 +164,7 @@ public class RejestrSprzedazyVatDto {
     public void setREJESTR(String REJESTR) {
         this.REJESTR = REJESTR;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getDATA_WYSTAWIENIA() {
         return DATA_WYSTAWIENIA;
     }
@@ -122,7 +172,7 @@ public class RejestrSprzedazyVatDto {
     public void setDATA_WYSTAWIENIA(String DATA_WYSTAWIENIA) {
         this.DATA_WYSTAWIENIA = DATA_WYSTAWIENIA;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getDATA_SPRZEDAZY() {
         return DATA_SPRZEDAZY;
     }
@@ -130,7 +180,7 @@ public class RejestrSprzedazyVatDto {
     public void setDATA_SPRZEDAZY(String DATA_SPRZEDAZY) {
         this.DATA_SPRZEDAZY = DATA_SPRZEDAZY;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getTERMIN() {
         return TERMIN;
     }
@@ -138,7 +188,7 @@ public class RejestrSprzedazyVatDto {
     public void setTERMIN(String TERMIN) {
         this.TERMIN = TERMIN;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNUMER() {
         return NUMER;
     }
@@ -170,7 +220,7 @@ public class RejestrSprzedazyVatDto {
     public void setDETALICZNA(String DETALICZNA) {
         this.DETALICZNA = DETALICZNA;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getTYP_PODMIOTU() {
         return TYP_PODMIOTU;
     }
@@ -178,7 +228,7 @@ public class RejestrSprzedazyVatDto {
     public void setTYP_PODMIOTU(String TYP_PODMIOTU) {
         this.TYP_PODMIOTU = TYP_PODMIOTU;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getPODMIOT() {
         return PODMIOT;
     }
@@ -186,7 +236,7 @@ public class RejestrSprzedazyVatDto {
     public void setPODMIOT(String PODMIOT) {
         this.PODMIOT = PODMIOT;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNAZWA1() {
         return NAZWA1;
     }
@@ -194,7 +244,7 @@ public class RejestrSprzedazyVatDto {
     public void setNAZWA1(String NAZWA1) {
         this.NAZWA1 = NAZWA1;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNAZWA2() {
         return NAZWA2;
     }
@@ -202,7 +252,7 @@ public class RejestrSprzedazyVatDto {
     public void setNAZWA2(String NAZWA2) {
         this.NAZWA2 = NAZWA2;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNAZWA3() {
         return NAZWA3;
     }
@@ -210,7 +260,7 @@ public class RejestrSprzedazyVatDto {
     public void setNAZWA3(String NAZWA3) {
         this.NAZWA3 = NAZWA3;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNIP_KRAJ() {
         return NIP_KRAJ;
     }
@@ -218,7 +268,7 @@ public class RejestrSprzedazyVatDto {
     public void setNIP_KRAJ(String NIP_KRAJ) {
         this.NIP_KRAJ = NIP_KRAJ;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNIP() {
         return NIP;
     }
@@ -226,7 +276,7 @@ public class RejestrSprzedazyVatDto {
     public void setNIP(String NIP) {
         this.NIP = NIP;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getULICA() {
         return ULICA;
     }
@@ -234,7 +284,7 @@ public class RejestrSprzedazyVatDto {
     public void setULICA(String ULICA) {
         this.ULICA = ULICA;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNR_DOMU() {
         return NR_DOMU;
     }
@@ -242,7 +292,7 @@ public class RejestrSprzedazyVatDto {
     public void setNR_DOMU(String NR_DOMU) {
         this.NR_DOMU = NR_DOMU;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getMIASTO() {
         return MIASTO;
     }
@@ -250,7 +300,7 @@ public class RejestrSprzedazyVatDto {
     public void setMIASTO(String MIASTO) {
         this.MIASTO = MIASTO;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getKOD_POCZTOWY() {
         return KOD_POCZTOWY;
     }
@@ -258,7 +308,7 @@ public class RejestrSprzedazyVatDto {
     public void setKOD_POCZTOWY(String KOD_POCZTOWY) {
         this.KOD_POCZTOWY = KOD_POCZTOWY;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getPOCZTA() {
         return POCZTA;
     }
@@ -266,7 +316,7 @@ public class RejestrSprzedazyVatDto {
     public void setPOCZTA(String POCZTA) {
         this.POCZTA = POCZTA;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getKATEGORIA() {
         return KATEGORIA;
     }
@@ -274,7 +324,7 @@ public class RejestrSprzedazyVatDto {
     public void setKATEGORIA(String KATEGORIA) {
         this.KATEGORIA = KATEGORIA;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getWALUTA() {
         return WALUTA;
     }
@@ -282,7 +332,7 @@ public class RejestrSprzedazyVatDto {
     public void setWALUTA(String WALUTA) {
         this.WALUTA = WALUTA;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getFORMA_PLATNOSCI() {
         return FORMA_PLATNOSCI;
     }
@@ -290,7 +340,7 @@ public class RejestrSprzedazyVatDto {
     public void setFORMA_PLATNOSCI(String FORMA_PLATNOSCI) {
         this.FORMA_PLATNOSCI = FORMA_PLATNOSCI;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getKURS_WALUTY() {
         return KURS_WALUTY;
     }
@@ -314,7 +364,7 @@ public class RejestrSprzedazyVatDto {
     public void setNOTOWANIE_WALUTY_ZA_ILE(String NOTOWANIE_WALUTY_ZA_ILE) {
         this.NOTOWANIE_WALUTY_ZA_ILE = NOTOWANIE_WALUTY_ZA_ILE;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getDATA_KURSU() {
         return DATA_KURSU;
     }
@@ -322,7 +372,7 @@ public class RejestrSprzedazyVatDto {
     public void setDATA_KURSU(String DATA_KURSU) {
         this.DATA_KURSU = DATA_KURSU;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getKURS_DO_KSIEGOWANIA() {
         return KURS_DO_KSIEGOWANIA;
     }
@@ -330,7 +380,7 @@ public class RejestrSprzedazyVatDto {
     public void setKURS_DO_KSIEGOWANIA(String KURS_DO_KSIEGOWANIA) {
         this.KURS_DO_KSIEGOWANIA = KURS_DO_KSIEGOWANIA;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getKURS_WALUTY_2() {
         return KURS_WALUTY_2;
     }
@@ -347,6 +397,14 @@ public class RejestrSprzedazyVatDto {
         this.NOTOWANIE_WALUTY_ILE_2 = NOTOWANIE_WALUTY_ILE_2;
     }
 
+    public String getNOTOWANIE_WALUTY_ZA_ILE_2() {
+        return NOTOWANIE_WALUTY_ZA_ILE_2;
+    }
+
+    public void setNOTOWANIE_WALUTY_ZA_ILE_2(String NOTOWANIE_WALUTY_ZA_ILE_2) {
+        this.NOTOWANIE_WALUTY_ZA_ILE_2 = NOTOWANIE_WALUTY_ZA_ILE_2;
+    }
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getDATA_KURSU_2() {
         return DATA_KURSU_2;
     }

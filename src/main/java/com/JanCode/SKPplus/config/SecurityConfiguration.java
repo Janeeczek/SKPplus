@@ -3,8 +3,6 @@ package com.JanCode.SKPplus.config;
 import com.JanCode.SKPplus.Authentication.MyDaoAuthenticationProvider;
 import com.JanCode.SKPplus.Listeners.LogoutListener;
 import com.JanCode.SKPplus.Listeners.MyHttpSessionEventPublisher;
-import com.JanCode.SKPplus.service.RaportService;
-import com.JanCode.SKPplus.service.RaportServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;

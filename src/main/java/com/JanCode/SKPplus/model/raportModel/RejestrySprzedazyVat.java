@@ -15,7 +15,7 @@ public class RejestrySprzedazyVat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private double wersja;
+    private String wersja;
     private String bazaZrdId;
     private String bazaDocId;
 
@@ -31,7 +31,7 @@ public class RejestrySprzedazyVat {
     public RejestrySprzedazyVat() {
     }
 
-    public RejestrySprzedazyVat(long id, double wersja, String bazaZrdId, String bazaDocId, List<RejestrSprzedazyVat> rejestrSprzedazyVat) {
+    public RejestrySprzedazyVat(long id, String wersja, String bazaZrdId, String bazaDocId, List<RejestrSprzedazyVat> rejestrSprzedazyVat) {
         this.id = id;
         this.wersja = wersja;
         this.bazaZrdId = bazaZrdId;
@@ -58,11 +58,11 @@ public class RejestrySprzedazyVat {
         this.id = id;
     }
 
-    public double getWersja() {
+    public String getWersja() {
         return wersja;
     }
 
-    public void setWersja(double wersja) {
+    public void setWersja(String wersja) {
         this.wersja = wersja;
     }
 

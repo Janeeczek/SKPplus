@@ -35,6 +35,7 @@ public class Adres {
         this.nr_domu = adresDto.getNR_DOMU();
         this.miasto = adresDto.getMIASTO();
         this.poczta = adresDto.getPOCZTA();
+        this.kod_pocztowy = adresDto.getKOD_POCZTOWY();
         this.nip_kraj = adresDto.getNIP_KRAJ();
         this.nip = adresDto.getNIP();
     }

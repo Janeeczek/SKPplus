@@ -1,11 +1,17 @@
 package com.JanCode.SKPplus.web.dto.kontrahenci;
 
+import com.JanCode.SKPplus.model.raportModel.Adres;
+import com.JanCode.SKPplus.util.AdapterCDATA;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 @XmlRootElement(name = "ADRES")
 @XmlType(propOrder={"STATUS", "NAZWA1", "NAZWA2", "NAZWA3","ULICA","NR_DOMU","MIASTO","KOD_POCZTOWY","POCZTA","NIP_KRAJ","NIP"})
 public class AdresDto {
     private String STATUS;
+
     private String NAZWA1;
     private String NAZWA2;
     private String NAZWA3;
@@ -33,6 +39,19 @@ public class AdresDto {
         this.NIP_KRAJ = NIP_KRAJ;
         this.NIP = NIP;
     }
+    public AdresDto(Adres adres) {
+        this.STATUS = adres.getStatus();
+        this.NAZWA1 = adres.getNazwa1();
+        this.NAZWA2 = adres.getNazwa2();
+        this.NAZWA3 = adres.getNazwa3();
+        this.ULICA = adres.getUlica();
+        this.NR_DOMU = adres.getNr_domu();
+        this.MIASTO = adres.getMiasto();
+        this.KOD_POCZTOWY = adres.getKod_pocztowy();
+        this.POCZTA = adres.getPoczta();
+        this.NIP_KRAJ = adres.getNip_kraj();
+        this.NIP = adres.getNip();
+    }
 
     public String getSTATUS() {
         return STATUS;
@@ -41,7 +60,7 @@ public class AdresDto {
     public void setSTATUS(String STATUS) {
         this.STATUS = STATUS;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNAZWA1() {
         return NAZWA1;
     }
@@ -49,7 +68,7 @@ public class AdresDto {
     public void setNAZWA1(String NAZWA1) {
         this.NAZWA1 = NAZWA1;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNAZWA2() {
         return NAZWA2;
     }
@@ -57,7 +76,7 @@ public class AdresDto {
     public void setNAZWA2(String NAZWA2) {
         this.NAZWA2 = NAZWA2;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNAZWA3() {
         return NAZWA3;
     }
@@ -65,7 +84,7 @@ public class AdresDto {
     public void setNAZWA3(String NAZWA3) {
         this.NAZWA3 = NAZWA3;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getULICA() {
         return ULICA;
     }
@@ -73,7 +92,7 @@ public class AdresDto {
     public void setULICA(String ULICA) {
         this.ULICA = ULICA;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNR_DOMU() {
         return NR_DOMU;
     }
@@ -81,7 +100,7 @@ public class AdresDto {
     public void setNR_DOMU(String NR_DOMU) {
         this.NR_DOMU = NR_DOMU;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getMIASTO() {
         return MIASTO;
     }
@@ -89,7 +108,7 @@ public class AdresDto {
     public void setMIASTO(String MIASTO) {
         this.MIASTO = MIASTO;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getKOD_POCZTOWY() {
         return KOD_POCZTOWY;
     }
@@ -97,7 +116,7 @@ public class AdresDto {
     public void setKOD_POCZTOWY(String KOD_POCZTOWY) {
         this.KOD_POCZTOWY = KOD_POCZTOWY;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getPOCZTA() {
         return POCZTA;
     }
@@ -105,7 +124,7 @@ public class AdresDto {
     public void setPOCZTA(String POCZTA) {
         this.POCZTA = POCZTA;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNIP_KRAJ() {
         return NIP_KRAJ;
     }
@@ -113,7 +132,7 @@ public class AdresDto {
     public void setNIP_KRAJ(String NIP_KRAJ) {
         this.NIP_KRAJ = NIP_KRAJ;
     }
-
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getNIP() {
         return NIP;
     }

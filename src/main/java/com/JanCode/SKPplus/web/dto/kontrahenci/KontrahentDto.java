@@ -1,42 +1,55 @@
 package com.JanCode.SKPplus.web.dto.kontrahenci;
 
 
+import com.JanCode.SKPplus.model.raportModel.Adres;
+import com.JanCode.SKPplus.model.raportModel.Kontrahent;
+import com.JanCode.SKPplus.util.AdapterCDATA;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 @XmlRootElement(name = "KONTRAHENT")
 @XmlType(propOrder={ "ID_ZRODLA","AKRONIM","FINALNY","ADRESY"})
 public class KontrahentDto {
-    private int ID_ZRODLA;
-    private int AKRONIM;
+
+    private String ID_ZRODLA;
+    private String AKRONIM;
     private String FINALNY;
     private AdresyDto ADRESY;
 
     public KontrahentDto() {
     }
 
-    public KontrahentDto(int ID_ZRODLA, int AKRONIM, String FINALNY, AdresyDto ADRESY) {
+    public KontrahentDto(String ID_ZRODLA, String AKRONIM, String FINALNY, AdresyDto ADRESY) {
         this.ID_ZRODLA = ID_ZRODLA;
         this.AKRONIM = AKRONIM;
         this.FINALNY = FINALNY;
         this.ADRESY = ADRESY;
     }
-
-    public int getID_ZRODLA() {
+    public KontrahentDto(Kontrahent kontrahent) {
+        this.ID_ZRODLA = kontrahent.getZrodloId();
+        this.AKRONIM = kontrahent.getAkronim();
+        this.FINALNY = kontrahent.getFinalny();
+        this.ADRESY = new AdresyDto(kontrahent.getAdresy());
+    }
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
+    public String getID_ZRODLA() {
         return ID_ZRODLA;
     }
 
-    public void setID_ZRODLA(int ID_ZRODLA) {
+    public void setID_ZRODLA(String ID_ZRODLA) {
         this.ID_ZRODLA = ID_ZRODLA;
     }
-
-    public int getAKRONIM() {
+    @XmlJavaTypeAdapter(AdapterCDATA.class)
+    public String getAKRONIM() {
         return AKRONIM;
     }
 
-    public void setAKRONIM(int AKRONIM) {
+    public void setAKRONIM(String AKRONIM) {
         this.AKRONIM = AKRONIM;
     }
 

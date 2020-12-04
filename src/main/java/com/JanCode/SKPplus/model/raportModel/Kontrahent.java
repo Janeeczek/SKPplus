@@ -15,37 +15,29 @@ public class Kontrahent {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private int zrodloId;
-    private int akronim;
+    private String zrodloId;
+    private String akronim;
     private String finalny;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "kontrahent_id",referencedColumnName = "id")
-    private List<Adres> adresy;
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "adresy_id")
+    private Adresy adresy;
 
-    public Kontrahent() {
-    }
-    public Kontrahent(KontrahentDto kontrahentDto) {
-        this.zrodloId = kontrahentDto.getID_ZRODLA();
-        this.akronim = kontrahentDto.getAKRONIM();
-        this.finalny = kontrahentDto.getFINALNY();
-        List<Adres> adres = new ArrayList<>();
-        List<AdresDto> adresDto = new ArrayList<>(kontrahentDto.getADRESY().getADRES());
-        for (int i = 0; i < adresDto.size(); i++) {
-            adres.add(new Adres(adresDto.get(i)));
-        }
-
-
-        this.adresy = adres;
-
-    }
-
-    public Kontrahent(long id, int zrodloId, int akronim, String finalny, List<Adres> adresy) {
+    public Kontrahent() { }
+    public Kontrahent(long id, String zrodloId, String akronim, String finalny,Adresy adresy) {
         this.id = id;
         this.zrodloId = zrodloId;
         this.akronim = akronim;
         this.finalny = finalny;
         this.adresy = adresy;
+    }
+
+    public Kontrahent(KontrahentDto kontrahentDto) {
+        this.zrodloId = kontrahentDto.getID_ZRODLA();
+        this.akronim = kontrahentDto.getAKRONIM();
+        this.finalny = kontrahentDto.getFINALNY();
+        this.adresy = new Adresy(kontrahentDto.getADRESY());
+
     }
 
     public long getId() {
@@ -56,19 +48,19 @@ public class Kontrahent {
         this.id = id;
     }
 
-    public int getZrodloId() {
+    public String getZrodloId() {
         return zrodloId;
     }
 
-    public void setZrodloId(int zrodloId) {
+    public void setZrodloId(String zrodloId) {
         this.zrodloId = zrodloId;
     }
 
-    public int getAkronim() {
+    public String getAkronim() {
         return akronim;
     }
 
-    public void setAkronim(int akronim) {
+    public void setAkronim(String akronim) {
         this.akronim = akronim;
     }
 
@@ -80,11 +72,11 @@ public class Kontrahent {
         this.finalny = finalny;
     }
 
-    public List<Adres> getAdresy() {
+    public Adresy getAdresy() {
         return adresy;
     }
 
-    public void setAdresy(List<Adres> adresy) {
+    public void setAdresy(Adresy adresy) {
         this.adresy = adresy;
     }
 }

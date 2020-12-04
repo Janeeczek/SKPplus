@@ -72,7 +72,7 @@ public class AnnotationAdvice {
     @ModelAttribute("daneWykresuKolowego")
     public WykresKołowyData getDaneWykresuKolowego() {
         List<Raport> raports = raportService.getAllRaports();
-        if (raports.size() > 0)
+        if (raports.size() > 6)
         {
             System.out.println("Lista wykresu != null");
             List<Double> lista = raportService.getAllIncomeList();

@@ -616,7 +616,16 @@
 <div th:fragment="wyswietlTabliceRap">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary"></h6>
+                <h6 class="m-0 font-weight-bold text-primary">Lista raportów</h6>
+            </div>
+            <div th:if="${successMsg}">
+                <div class="alert alert-success"th:text="${successMsg}"></div>
+            </div>
+            <div th:if="${errorMsg}">
+                <div class="alert alert-danger"th:text="${errorMsg}"></div>
+            </div>
+            <div th:if="${cancelMsg}">
+                <div class="alert alert-info"th:text="${cancelMsg}"></div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -652,7 +661,7 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="/" th:href="@{/raport/usunRaport/{id} (id=${rap.getId()})}">Usuń</a>
-
+                                        <a class="dropdown-item" href="/" th:href="@{/raport/createFileFromRaport/{id} (id=${rap.getId()})}">Utwórz plik z tego</a>
                                         <a class="dropdown-item" href="#">Pokaż więcej info</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="/" th:href="@{/raport/pokaz/{id} (id=${rap.getId()})}"></a>
@@ -669,7 +678,16 @@
 <div th:fragment="wyswietlTablicePlik">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary"></h6>
+            <h6 class="m-0 font-weight-bold text-primary">Lista plików</h6>
+        </div>
+        <div th:if="${successMsg}">
+            <div class="alert alert-success"th:text="${successMsg}"></div>
+        </div>
+        <div th:if="${errorMsg}">
+            <div class="alert alert-danger"th:text="${errorMsg}"></div>
+        </div>
+        <div th:if="${cancelMsg}">
+            <div class="alert alert-info"th:text="${cancelMsg}"></div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -709,7 +727,7 @@
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="/" th:href="@{/raport/createFromFile/{id} (id=${plik.getId()})}">Utwórz raport</a>
                                     <a class="dropdown-item" href="/" th:href="@{/pliki/usun/{id} (id=${plik.getId()})}">Usuń</a>
-
+                                    <a class="dropdown-item" href="/" th:href="@{/pliki/pobierz/{id} (id=${plik.getId()})}">Pobierz</a>
                                     <a class="dropdown-item" href="#">Pokaż więcej info</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="/" th:href="@{/plik/pokaz/{id} (id=${plik.getId()})}"></a>
