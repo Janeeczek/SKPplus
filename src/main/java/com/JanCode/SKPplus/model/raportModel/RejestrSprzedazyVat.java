@@ -51,13 +51,13 @@ public class RejestrSprzedazyVat {
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "pozycje_id")
-    private Pozycje pozycje;
+    private Pozycje pozycje= null;
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "kwotyDodatkowe_id")
-    private KwotyDodatkowe kwotyDodatkowe;
+    private KwotyDodatkowe kwotyDodatkowe = null;
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "platnosci_id")
-    private Platnosci platnosci;
+    private Platnosci platnosci= null;
 
     public RejestrSprzedazyVat() {
     }
@@ -137,9 +137,15 @@ public class RejestrSprzedazyVat {
         this.notowanie_waluty_ile_2 = rejestrSprzedazyVatDto.getNOTOWANIE_WALUTY_ILE_2();
         this.notowanie_waluty_za_ile_2 = rejestrSprzedazyVatDto.getNOTOWANIE_WALUTY_ZA_ILE_2();
         this.data_kursu_2 = rejestrSprzedazyVatDto.getDATA_KURSU_2();
-        this.kwotyDodatkowe = new KwotyDodatkowe(rejestrSprzedazyVatDto.getKWOTY_DODATKOWE());
-        this.pozycje = new Pozycje(rejestrSprzedazyVatDto.getPOZYCJE());
-        this.platnosci = new Platnosci(rejestrSprzedazyVatDto.getPLATNOSCI());
+        if (rejestrSprzedazyVatDto.getKWOTY_DODATKOWE() != null)
+            this.kwotyDodatkowe = new KwotyDodatkowe(rejestrSprzedazyVatDto.getKWOTY_DODATKOWE());
+            else this.kwotyDodatkowe = null;
+        if (rejestrSprzedazyVatDto.getPOZYCJE() != null)
+            this.pozycje = new Pozycje(rejestrSprzedazyVatDto.getPOZYCJE());
+        else this.pozycje = null;
+        if (rejestrSprzedazyVatDto.getPLATNOSCI() != null)
+            this.platnosci = new Platnosci(rejestrSprzedazyVatDto.getPLATNOSCI());
+        else this.platnosci = null;
     }
     public long getId() {
         return id;

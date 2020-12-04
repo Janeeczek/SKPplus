@@ -13,8 +13,8 @@ import java.util.Set;
 @XmlRootElement(name = "KWOTY_DODATKOWE")
 @XmlType(propOrder={"POZYCJA_KD","OPIS_KD"})
 public class KwotyDodatkoweDto {
-    private PozycjaKdDto POZYCJA_KD;
-    private String OPIS_KD;
+    private PozycjaKdDto POZYCJA_KD = null;
+    private String OPIS_KD = null;
 
     public KwotyDodatkoweDto() {
     }
@@ -24,8 +24,13 @@ public class KwotyDodatkoweDto {
     }
 
     public KwotyDodatkoweDto(KwotyDodatkowe kwotyDodatkowe) {
-        this.POZYCJA_KD = new PozycjaKdDto(kwotyDodatkowe.getPozycjaKd());
-        this.OPIS_KD = kwotyDodatkowe.getOpisKd();
+        if (kwotyDodatkowe != null) {
+            this.POZYCJA_KD = new PozycjaKdDto(kwotyDodatkowe.getPozycjaKd());
+            this.OPIS_KD = kwotyDodatkowe.getOpisKd();
+        } else {
+            this.POZYCJA_KD = null;
+            this.OPIS_KD = null;
+        }
     }
 
     public PozycjaKdDto getPOZYCJA_KD() {

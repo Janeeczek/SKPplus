@@ -10,12 +10,14 @@ import java.util.List;
 @Entity
 @Table(name = "FILES")
 public class FileDB {
+    private String name;
+
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
-    private String name;
+
 
     private String type;
     private LocalDate dataPrzeslania;

@@ -11,13 +11,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlRootElement(name = "POZYCJA_KD")
 @XmlType(propOrder={"KATEGORIA_KD","KWOTA_KD","KWOTA_KD_SYS","WALUTA_KD","NOTOWANIE_WALUTY_ILE_KD","NOTOWANIE_WALUTY_ZA_ILE_KD","DATA_KURSU_KD"})
 public class PozycjaKdDto {
-    private String KATEGORIA_KD;
-    private Double KWOTA_KD;
-    private Double KWOTA_KD_SYS;
-    private String WALUTA_KD;
-    private Double NOTOWANIE_WALUTY_ILE_KD;
-    private Double NOTOWANIE_WALUTY_ZA_ILE_KD;
-    private String DATA_KURSU_KD;
+    private String KATEGORIA_KD = null;
+    private Double KWOTA_KD = null;
+    private Double KWOTA_KD_SYS = null;
+    private String WALUTA_KD = null;
+    private Double NOTOWANIE_WALUTY_ILE_KD = null;
+    private Double NOTOWANIE_WALUTY_ZA_ILE_KD = null;
+    private String DATA_KURSU_KD = null;
     public PozycjaKdDto() {
     }
 
@@ -32,15 +32,24 @@ public class PozycjaKdDto {
     }
 
     public PozycjaKdDto(PozycjaKd pozycjaKd) {
-        this.KATEGORIA_KD = pozycjaKd.getKategoria_kd();
-        this.KWOTA_KD = pozycjaKd.getKwota_kd();
-        this.KWOTA_KD_SYS = pozycjaKd.getKwota_kd_SYS();
-        this.WALUTA_KD = pozycjaKd.getWaluta_kd();
-        this.NOTOWANIE_WALUTY_ILE_KD = pozycjaKd.getNotowanie_waluty_ile_kd();
-        this.NOTOWANIE_WALUTY_ZA_ILE_KD = pozycjaKd.getNotowanie_waluty_za_ile_kd();
-        if(pozycjaKd.getData_kursu_kd() != null)
-            this.DATA_KURSU_KD = pozycjaKd.getData_kursu_kd().toString();
-        else this.DATA_KURSU_KD = null;
+        if (pozycjaKd != null) {
+            this.KATEGORIA_KD = pozycjaKd.getKategoria_kd();
+            this.KWOTA_KD = pozycjaKd.getKwota_kd();
+            this.KWOTA_KD_SYS = pozycjaKd.getKwota_kd_SYS();
+            this.WALUTA_KD = pozycjaKd.getWaluta_kd();
+            this.NOTOWANIE_WALUTY_ILE_KD = pozycjaKd.getNotowanie_waluty_ile_kd();
+            this.NOTOWANIE_WALUTY_ZA_ILE_KD = pozycjaKd.getNotowanie_waluty_za_ile_kd();
+            this.DATA_KURSU_KD = pozycjaKd.getData_kursu_kd();
+        } else {
+            this.KATEGORIA_KD = null;
+            this.KWOTA_KD = null;
+            this.KWOTA_KD_SYS = null;
+            this.WALUTA_KD = null;
+            this.NOTOWANIE_WALUTY_ILE_KD = null;
+            this.NOTOWANIE_WALUTY_ZA_ILE_KD = null;
+            this.DATA_KURSU_KD = null;
+        }
+
     }
     @XmlJavaTypeAdapter(AdapterCDATA.class)
     public String getKATEGORIA_KD() {

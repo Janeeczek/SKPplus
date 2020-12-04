@@ -16,20 +16,20 @@ public class PozycjaKd {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @XmlJavaTypeAdapter(AdapterCDATA.class)
-    private String kategoria_kd;
-    private double kwota_kd;
-    private double kwota_kd_SYS;
+    private String kategoria_kd = null;
+    private Double kwota_kd = null;
+    private Double kwota_kd_SYS = null;
     @XmlJavaTypeAdapter(AdapterCDATA.class)
-    private String waluta_kd;
-    private double notowanie_waluty_ile_kd;
-    private double notowanie_waluty_za_ile_kd;
+    private String waluta_kd = null;
+    private Double notowanie_waluty_ile_kd = null;
+    private Double notowanie_waluty_za_ile_kd = null;
     @XmlJavaTypeAdapter(AdapterCDATA.class)
-    private String data_kursu_kd;
+    private String data_kursu_kd = null;
 
     public PozycjaKd() {
     }
 
-    public PozycjaKd(long id, String kategoria_kd, double kwota_kd, double kwota_kd_SYS, String waluta_kd, double notowanie_waluty_ile_kd, double notowanie_waluty_za_ile_kd, String  data_kursu_kd) {
+    public PozycjaKd(long id, String kategoria_kd, Double kwota_kd, Double kwota_kd_SYS, String waluta_kd, Double notowanie_waluty_ile_kd, Double notowanie_waluty_za_ile_kd, String  data_kursu_kd) {
         this.id = id;
         this.kategoria_kd = kategoria_kd;
         this.kwota_kd = kwota_kd;
@@ -40,13 +40,17 @@ public class PozycjaKd {
         this.data_kursu_kd = data_kursu_kd;
     }
     public PozycjaKd(PozycjaKdDto pozycjaKdDto) {
-        this.kategoria_kd = pozycjaKdDto.getKATEGORIA_KD();
-        this.kwota_kd = pozycjaKdDto.getKWOTA_KD();
-        this.kwota_kd_SYS = pozycjaKdDto.getKWOTA_KD_SYS();
-        this.waluta_kd = pozycjaKdDto.getWALUTA_KD();
-        this.notowanie_waluty_ile_kd = pozycjaKdDto.getNOTOWANIE_WALUTY_ILE_KD();
-        this.notowanie_waluty_za_ile_kd = pozycjaKdDto.getNOTOWANIE_WALUTY_ZA_ILE_KD();
-        this.data_kursu_kd = pozycjaKdDto.getDATA_KURSU_KD();
+        if (pozycjaKdDto != null)
+        {
+            this.kategoria_kd = pozycjaKdDto.getKATEGORIA_KD();
+            this.kwota_kd = pozycjaKdDto.getKWOTA_KD();
+            this.kwota_kd_SYS = pozycjaKdDto.getKWOTA_KD_SYS();
+            this.waluta_kd = pozycjaKdDto.getWALUTA_KD();
+            this.notowanie_waluty_ile_kd = pozycjaKdDto.getNOTOWANIE_WALUTY_ILE_KD();
+            this.notowanie_waluty_za_ile_kd = pozycjaKdDto.getNOTOWANIE_WALUTY_ZA_ILE_KD();
+            this.data_kursu_kd = pozycjaKdDto.getDATA_KURSU_KD();
+        }
+
     }
     public long getId() {
         return id;
@@ -64,19 +68,19 @@ public class PozycjaKd {
         this.kategoria_kd = kategoria_kd;
     }
 
-    public double getKwota_kd() {
+    public Double getKwota_kd() {
         return kwota_kd;
     }
 
-    public void setKwota_kd(double kwota_kd) {
+    public void setKwota_kd(Double kwota_kd) {
         this.kwota_kd = kwota_kd;
     }
 
-    public double getKwota_kd_SYS() {
+    public Double getKwota_kd_SYS() {
         return kwota_kd_SYS;
     }
 
-    public void setKwota_kd_SYS(double kwota_kd_SYS) {
+    public void setKwota_kd_SYS(Double kwota_kd_SYS) {
         this.kwota_kd_SYS = kwota_kd_SYS;
     }
 
@@ -88,19 +92,19 @@ public class PozycjaKd {
         this.waluta_kd = waluta_kd;
     }
 
-    public double getNotowanie_waluty_ile_kd() {
+    public Double getNotowanie_waluty_ile_kd() {
         return notowanie_waluty_ile_kd;
     }
 
-    public void setNotowanie_waluty_ile_kd(double notowanie_waluty_ile_kd) {
+    public void setNotowanie_waluty_ile_kd(Double notowanie_waluty_ile_kd) {
         this.notowanie_waluty_ile_kd = notowanie_waluty_ile_kd;
     }
 
-    public double getNotowanie_waluty_za_ile_kd() {
+    public Double getNotowanie_waluty_za_ile_kd() {
         return notowanie_waluty_za_ile_kd;
     }
 
-    public void setNotowanie_waluty_za_ile_kd(double notowanie_waluty_za_ile_kd) {
+    public void setNotowanie_waluty_za_ile_kd(Double notowanie_waluty_za_ile_kd) {
         this.notowanie_waluty_za_ile_kd = notowanie_waluty_za_ile_kd;
     }
 

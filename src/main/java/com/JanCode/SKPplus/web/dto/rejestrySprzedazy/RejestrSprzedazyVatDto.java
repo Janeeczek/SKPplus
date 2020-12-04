@@ -137,7 +137,6 @@ public class RejestrSprzedazyVatDto {
         } else {
             this.KWOTY_DODATKOWE = null;
         }
-
         this.PLATNOSCI = new PlatnosciDto(rejestrSprzedazyVat.getPlatnosci());
     }
 
