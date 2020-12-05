@@ -34,6 +34,7 @@ public class Raport {
     @ManyToOne
     @JoinColumn(name="creator_id", nullable=false)
     private User user;
+
     public Raport() {
     }
 

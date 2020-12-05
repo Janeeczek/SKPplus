@@ -46,7 +46,7 @@ public class RejestrSprzedazyVat {
     private String kurs_waluty_2;
     private String notowanie_waluty_ile_2;
     private String notowanie_waluty_za_ile_2;
-    private String  data_kursu_2;
+    private String data_kursu_2;
 
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
@@ -57,7 +57,7 @@ public class RejestrSprzedazyVat {
     private KwotyDodatkowe kwotyDodatkowe = null;
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "platnosci_id")
-    private Platnosci platnosci= null;
+    private Platnosci platnosci = null;
 
     public RejestrSprzedazyVat() {
     }

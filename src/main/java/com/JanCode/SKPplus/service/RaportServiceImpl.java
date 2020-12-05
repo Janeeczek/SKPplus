@@ -120,6 +120,39 @@ public class RaportServiceImpl{
         return resoult;
 
     }
+    public byte[] createFileFromRaportExtra(long id, String username) {
+        byte[] resoult = null;
+        ByteArrayOutputStream byteArrayOutputStream =  new ByteArrayOutputStream();
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(DaneRaportuDto.class);
+            Raport raport = raporRepository.myFindById(id);
+            DaneRaportuDto daneRaportuDto = new DaneRaportuDto(raport);
+            daneRaportuDto.getKONTRAHENCI().setBAZA_DOC_ID("STACJ");
+            daneRaportuDto.getKONTRAHENCI().setBAZA_ZRD_ID("STACJ");
+            daneRaportuDto.getREJESTRY_SPRZEDAZY_VAT().setBAZA_DOC_ID("STACJ");
+            daneRaportuDto.getREJESTRY_SPRZEDAZY_VAT().setBAZA_ZRD_ID("STACJ");
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,false);
+            //marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, "windows-1250");
+            // marshaller.setProperty("com.sun.xml.bind.xmlDeclaration", false);
+            //marshaller.setProperty("com.sun.xml.bind.xmlHeaders", "<?xml version=\"1.0\" encoding=\"windows-1250\"?>");
+            marshaller.setProperty("com.sun.xml.bind.marshaller.CharacterEscapeHandler", new CharacterEscapeHandler() {
+                @Override
+                public void escape(char[] ac, int i, int j, boolean flag, Writer writer) throws IOException {
+                    writer.write(ac, i, j);
+                }
+            });
+            marshaller.marshal(daneRaportuDto,byteArrayOutputStream);
+            resoult = byteArrayOutputStream.toByteArray();
+
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+        return resoult;
+
+    }
 
     public Raport getRaportById() {
         return null;
@@ -141,9 +174,9 @@ public class RaportServiceImpl{
 
 
     public double getAllIncome() {
-       // if(platnoscRepository.getAllIncome() > 0)
+        //if(platnoscRepository.getAllIncome() > 0)
          //   return platnoscRepository.getAllIncome();
-        //else return 0;
+       // else return 0;
         return 0;
     }
 
@@ -153,6 +186,6 @@ public class RaportServiceImpl{
 
     public List<Double> getAllIncomeList() {
         //return platnoscRepository.getAllIncomeList();
-return null;
+        return null;
     }
 }

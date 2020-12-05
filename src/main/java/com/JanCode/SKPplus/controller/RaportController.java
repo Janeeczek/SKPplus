@@ -65,4 +65,19 @@ public class RaportController {
 
         return "redirect:/pliki/pokazWszystkie";
     }
+    @GetMapping("/raport/createFileFromRaportExtra/{id}")
+    public String createFileFromRaportExtra(Authentication authentication, @PathVariable long id, RedirectAttributes atts) {
+
+        MyUserPrincipal principal = (MyUserPrincipal) authentication.getPrincipal();
+        User user = userService.findByUsername(principal.getUsername());
+        byte[] file = reportService.createFileFromRaportExtra(id,principal.getUsername());
+        FileDB fileDB = storageService.store(new FileDB("RaportZdbaExtra","text/xml",file,user));
+        if (fileDB != null) {
+            atts.addFlashAttribute("successMsg", "Poprawnie utworzono plik z Bazy Danych o id: " + id +" ");
+        } else {
+            atts.addFlashAttribute("errorMsg", "Błąd! Nie utworzono Bazy Danych o id: " + id + " ");
+        }
+
+        return "redirect:/pliki/pokazWszystkie";
+    }
 }
