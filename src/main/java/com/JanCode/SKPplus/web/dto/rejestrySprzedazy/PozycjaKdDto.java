@@ -2,11 +2,13 @@ package com.JanCode.SKPplus.web.dto.rejestrySprzedazy;
 
 import com.JanCode.SKPplus.model.raportModel.PozycjaKd;
 import com.JanCode.SKPplus.util.AdapterCDATA;
+import com.JanCode.SKPplus.util.AdapterCDATADate;
 import com.JanCode.SKPplus.util.AdapterDouble;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.time.LocalDate;
 
 @XmlRootElement(name = "POZYCJA_KD")
 @XmlType(propOrder={"KATEGORIA_KD","KWOTA_KD","KWOTA_KD_SYS","WALUTA_KD","NOTOWANIE_WALUTY_ILE_KD","NOTOWANIE_WALUTY_ZA_ILE_KD","DATA_KURSU_KD"})
@@ -39,7 +41,7 @@ public class PozycjaKdDto {
             this.WALUTA_KD = pozycjaKd.getWaluta_kd();
             this.NOTOWANIE_WALUTY_ILE_KD = pozycjaKd.getNotowanie_waluty_ile_kd();
             this.NOTOWANIE_WALUTY_ZA_ILE_KD = pozycjaKd.getNotowanie_waluty_za_ile_kd();
-            this.DATA_KURSU_KD = pozycjaKd.getData_kursu_kd();
+            this.DATA_KURSU_KD = pozycjaKd.getData_kursu_kd().toString();
         } else {
             this.KATEGORIA_KD = null;
             this.KWOTA_KD = null;
@@ -99,7 +101,6 @@ public class PozycjaKdDto {
     public void setNOTOWANIE_WALUTY_ZA_ILE_KD(Double NOTOWANIE_WALUTY_ZA_ILE_KD) {
         this.NOTOWANIE_WALUTY_ZA_ILE_KD = NOTOWANIE_WALUTY_ZA_ILE_KD;
     }
-
     public String getDATA_KURSU_KD() {
         return DATA_KURSU_KD;
     }

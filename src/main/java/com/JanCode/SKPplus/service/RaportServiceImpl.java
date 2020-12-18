@@ -174,10 +174,10 @@ public class RaportServiceImpl{
 
 
     public double getAllIncome() {
-        //if(platnoscRepository.getAllIncome() > 0)
-         //   return platnoscRepository.getAllIncome();
-       // else return 0;
-        return 0;
+        if(platnoscRepository.getAllIncome() > 0)
+            return platnoscRepository.getAllIncome();
+        else return 0;
+       // return 0;
     }
 
     public List<Raport> getAllRaports() {
@@ -185,7 +185,7 @@ public class RaportServiceImpl{
     }
 
     public List<Double> getAllIncomeList() {
-        //return platnoscRepository.getAllIncomeList();
-        return null;
+        return platnoscRepository.getAllIncomeList();
+        //return null;
     }
 }

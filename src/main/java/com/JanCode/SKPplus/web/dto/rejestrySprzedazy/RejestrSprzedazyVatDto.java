@@ -3,11 +3,13 @@ package com.JanCode.SKPplus.web.dto.rejestrySprzedazy;
 
 import com.JanCode.SKPplus.model.raportModel.RejestrSprzedazyVat;
 import com.JanCode.SKPplus.util.AdapterCDATA;
+import com.JanCode.SKPplus.util.AdapterCDATADate;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 @XmlRootElement(name = "REJESTR_SPRZEDAZY_VAT")

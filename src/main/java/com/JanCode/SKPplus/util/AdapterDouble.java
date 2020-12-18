@@ -2,7 +2,9 @@ package com.JanCode.SKPplus.util;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
+
 public class AdapterDouble extends XmlAdapter<String, Double> {
+
 
     @Override
     public Double unmarshal(String v) throws Exception {

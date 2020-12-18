@@ -1,6 +1,7 @@
 package com.JanCode.SKPplus.model.raportModel;
 
 import com.JanCode.SKPplus.util.AdapterCDATA;
+import com.JanCode.SKPplus.util.AdapterCDATADate;
 import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.PlatnoscDto;
 
 import javax.persistence.Entity;
@@ -16,30 +17,24 @@ public class Platnosc {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @XmlJavaTypeAdapter(AdapterCDATA.class)
-    private String termin_plat;
+    private LocalDate termin_plat;
     private String forma_platnosci_plat;
     private double kwota_plat;
-    @XmlJavaTypeAdapter(AdapterCDATA.class)
     private String waluta_plat;
-    @XmlJavaTypeAdapter(AdapterCDATA.class)
     private String kurs_waluty_plat;
     private double notowanie_waluty_ile_plat;
     private double notowanie_waluty_za_ile_plat;
     private double kwota_pln_plat;
     private String kierunek;
     private String podlega_rozliczeniu;
-    @XmlJavaTypeAdapter(AdapterCDATA.class)
     private String konto;
-    @XmlJavaTypeAdapter(AdapterCDATA.class)
-    private String data_kursu_plat;
-    @XmlJavaTypeAdapter(AdapterCDATA.class)
+    private LocalDate data_kursu_plat;
     private String waluta_dok;
 
     public Platnosc() {
     }
 
-    public Platnosc(long id, String termin_plat, String forma_platnosci_plat, double kwota_plat, String waluta_plat, String kurs_waluty_plat, double notowanie_waluty_ile_plat, double notowanie_waluty_za_ile_plat, double kwota_pln_plat, String kierunek, String podlega_rozliczeniu, String konto, String data_kursu_plat, String waluta_dok) {
+    public Platnosc(long id, LocalDate termin_plat, String forma_platnosci_plat, double kwota_plat, String waluta_plat, String kurs_waluty_plat, double notowanie_waluty_ile_plat, double notowanie_waluty_za_ile_plat, double kwota_pln_plat, String kierunek, String podlega_rozliczeniu, String konto, LocalDate data_kursu_plat, String waluta_dok) {
         this.id = id;
         this.termin_plat = termin_plat;
         this.forma_platnosci_plat = forma_platnosci_plat;
@@ -56,7 +51,13 @@ public class Platnosc {
         this.waluta_dok = waluta_dok;
     }
     public Platnosc(PlatnoscDto platnoscDto) {
-        this.termin_plat = platnoscDto.getTERMIN_PLAT();
+        if (  platnoscDto.getTERMIN_PLAT() == null) {
+            this.termin_plat = null;
+        }
+        else {
+            this.termin_plat = LocalDate.parse( platnoscDto.getTERMIN_PLAT());
+        }
+
         this.forma_platnosci_plat = platnoscDto.getFORMA_PLATNOSCI_PLAT();
         this.kwota_plat = platnoscDto.getKWOTA_PLAT();
         this.waluta_plat = platnoscDto.getWALUTA_PLAT();
@@ -67,7 +68,13 @@ public class Platnosc {
         this.kierunek = platnoscDto.getKIERUNEK();
         this.podlega_rozliczeniu = platnoscDto.getPODLEGA_ROZLICZENIU();
         this.konto = platnoscDto.getKONTO();
-        this.data_kursu_plat = platnoscDto.getDATA_KURSU_PLAT();
+        if ( platnoscDto.getDATA_KURSU_PLAT() == null) {
+            this.data_kursu_plat = null;
+        }
+        else {
+            this.data_kursu_plat = LocalDate.parse(platnoscDto.getDATA_KURSU_PLAT());
+        }
+
         this.waluta_dok = platnoscDto.getWALUTA_DOK();
     }
     public long getId() {
@@ -78,11 +85,11 @@ public class Platnosc {
         this.id = id;
     }
 
-    public String  getTermin_plat() {
+    public LocalDate  getTermin_plat() {
         return termin_plat;
     }
 
-    public void setTermin_plat(String termin_plat) {
+    public void setTermin_plat(LocalDate termin_plat) {
         this.termin_plat = termin_plat;
     }
 
@@ -166,11 +173,11 @@ public class Platnosc {
         this.konto = konto;
     }
 
-    public String  getData_kursu_plat() {
+    public LocalDate  getData_kursu_plat() {
         return data_kursu_plat;
     }
 
-    public void setData_kursu_plat(String  data_kursu_plat) {
+    public void setData_kursu_plat(LocalDate  data_kursu_plat) {
         this.data_kursu_plat = data_kursu_plat;
     }
 

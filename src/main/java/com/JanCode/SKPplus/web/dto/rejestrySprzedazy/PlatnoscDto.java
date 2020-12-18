@@ -2,11 +2,14 @@ package com.JanCode.SKPplus.web.dto.rejestrySprzedazy;
 
 import com.JanCode.SKPplus.model.raportModel.Platnosc;
 import com.JanCode.SKPplus.util.AdapterCDATA;
+import com.JanCode.SKPplus.util.AdapterCDATADate;
 import com.JanCode.SKPplus.util.AdapterDouble;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.time.LocalDate;
+import java.util.Date;
 
 @XmlRootElement(name = "PLATNOSC")
 @XmlType(propOrder={"TERMIN_PLAT","FORMA_PLATNOSCI_PLAT","KWOTA_PLAT","WALUTA_PLAT","KURS_WALUTY_PLAT","NOTOWANIE_WALUTY_ILE_PLAT","NOTOWANIE_WALUTY_ZA_ILE_PLAT",

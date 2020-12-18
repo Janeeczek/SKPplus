@@ -1,6 +1,7 @@
 package com.JanCode.SKPplus.model.raportModel;
 
 import com.JanCode.SKPplus.util.AdapterCDATA;
+import com.JanCode.SKPplus.util.AdapterCDATADate;
 import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.PozycjaKdDto;
 
 import javax.persistence.Entity;
@@ -15,21 +16,18 @@ public class PozycjaKd {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @XmlJavaTypeAdapter(AdapterCDATA.class)
     private String kategoria_kd = null;
     private Double kwota_kd = null;
     private Double kwota_kd_SYS = null;
-    @XmlJavaTypeAdapter(AdapterCDATA.class)
     private String waluta_kd = null;
     private Double notowanie_waluty_ile_kd = null;
     private Double notowanie_waluty_za_ile_kd = null;
-    @XmlJavaTypeAdapter(AdapterCDATA.class)
-    private String data_kursu_kd = null;
+    private LocalDate data_kursu_kd = null;
 
     public PozycjaKd() {
     }
 
-    public PozycjaKd(long id, String kategoria_kd, Double kwota_kd, Double kwota_kd_SYS, String waluta_kd, Double notowanie_waluty_ile_kd, Double notowanie_waluty_za_ile_kd, String  data_kursu_kd) {
+    public PozycjaKd(long id, String kategoria_kd, Double kwota_kd, Double kwota_kd_SYS, String waluta_kd, Double notowanie_waluty_ile_kd, Double notowanie_waluty_za_ile_kd, LocalDate  data_kursu_kd) {
         this.id = id;
         this.kategoria_kd = kategoria_kd;
         this.kwota_kd = kwota_kd;
@@ -48,7 +46,12 @@ public class PozycjaKd {
             this.waluta_kd = pozycjaKdDto.getWALUTA_KD();
             this.notowanie_waluty_ile_kd = pozycjaKdDto.getNOTOWANIE_WALUTY_ILE_KD();
             this.notowanie_waluty_za_ile_kd = pozycjaKdDto.getNOTOWANIE_WALUTY_ZA_ILE_KD();
-            this.data_kursu_kd = pozycjaKdDto.getDATA_KURSU_KD();
+            if ( pozycjaKdDto.getDATA_KURSU_KD() == null) {
+                this.data_kursu_kd = null;
+            }
+            else {
+                this.data_kursu_kd = LocalDate.parse(pozycjaKdDto.getDATA_KURSU_KD());
+            }
         }
 
     }
@@ -108,11 +111,11 @@ public class PozycjaKd {
         this.notowanie_waluty_za_ile_kd = notowanie_waluty_za_ile_kd;
     }
 
-    public String getData_kursu_kd() {
+    public LocalDate getData_kursu_kd() {
         return data_kursu_kd;
     }
 
-    public void setData_kursu_kd(String data_kursu_kd) {
+    public void setData_kursu_kd(LocalDate data_kursu_kd) {
         this.data_kursu_kd = data_kursu_kd;
     }
 }

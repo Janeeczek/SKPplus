@@ -2,6 +2,7 @@ package com.JanCode.SKPplus.controller;
 
 import com.JanCode.SKPplus.model.ActiveUsers;
 import com.JanCode.SKPplus.model.InfoModel.WykresKołowyData;
+import com.JanCode.SKPplus.model.InfoModel.WykresLiniowyData;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.model.Raport;
 import com.JanCode.SKPplus.repository.ActiveUsersRepository;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice("com.JanCode.SKPplus.controller")
@@ -57,22 +59,54 @@ public class AnnotationAdvice {
         }
     }
     @ModelAttribute("allIncome")
-    public double getAllIncome() {
+    public String getAllIncome() {
         List<Raport> raports = raportService.getAllRaports();
         if (raports.size() > 0)
         {
             System.out.println("Lista INCOME != null");
             Double income = raportService.getAllIncome();
-            return (income == null) ? 0 : income;
+            if (income == null) {
+                return "Brak dochodu";
+            } else if (income < 1000.0 ) {
+                if(income % 1 ==0)
+                    return String.format("%d",income.longValue())+ " zł";
+                else
+                    return String.format("%s",income) + " zł";
+            } else if (income < 10000.0 ) {
+                if(income % 1 ==0){
+                    String value = Double.toString(income);
+                    value = value.substring(0,2) + " " + value.substring(2,value.length())+ " zł";
+                    return value;
+                }
+                else {
+                    String value = Double.toString(income);
+                    value = value.substring(0,2) + " " + value.substring(2,value.length())+ " zł";
+                    return value;
+                }
+
+            } else if (income < 100000.0 ) {
+                if(income % 1 ==0){
+                    String value = Double.toString(income);
+                    value = value.substring(0,2) + " " + value.substring(2,value.length()-2 )+ " zł";
+                    return value;
+                }
+                else {
+                    String value = Double.toString(income);
+                    value = value.substring(0,2) + " " + value.substring(2,value.length())+ " zł";
+                    return value;
+                }
+
+            }
+
         }
-        return 0.0;
+        return "Brak dochodu";
 
 
     }
     @ModelAttribute("daneWykresuKolowego")
     public WykresKołowyData getDaneWykresuKolowego() {
         List<Raport> raports = raportService.getAllRaports();
-        if (raports.size() > 6)
+        if (raports.size() > 0)
         {
             System.out.println("Lista wykresu != null");
             List<Double> lista = raportService.getAllIncomeList();
@@ -88,6 +122,12 @@ public class AnnotationAdvice {
             return new WykresKołowyData(osobowe,ciezarowe,inne);
         }
         else return new WykresKołowyData(2,1,4);
+
+    }
+    @ModelAttribute("daneWykresuLiniowy")
+    public WykresLiniowyData getDaneWykresuLiniowego() {
+        List<Double> income = new ArrayList<>(List.of(1000.0,3000.0));
+        return new WykresLiniowyData(income);
 
     }
 }
