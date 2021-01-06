@@ -12,7 +12,7 @@
             <div class="media-body ml-4">
                 <h4 class="font-weight-bold mb-0"th:text="${user.getFirstname() + ' ' + user.getLastname()}">aaa<span class="text-muted font-weight-normal">@nick</span></h4>
                 <div class="text-muted mb-2"th:text="${currentUser.getUsername()}">ID: 3425433</div>
-                <a th:if="${currentUser.getUsername() == user.getUsername() or currentUser.isAdmin()}" href="/" th:href="@{/profile{u}/edit (u=${user.getUsername()})}" class="btn btn-primary btn-sm">Edytuj</a>&nbsp;
+                <a th:if="${currentUser.getUsername() == user.getUsername() or currentUser.isAdmin()}" href="/" th:href="@{/profile/{u}/edit (u=${user.getUsername()})}" class="btn btn-primary btn-sm">Edytuj</a>&nbsp;
                 <a  class="btn btn-default btn-sm icon-btn"><i class="fa fa-mail"></i></a>
             </div>
         </div>
@@ -166,8 +166,8 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Przychody (Miesięcznie)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">40,000zł</div>
+                                Przychody (Całość)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${allIncome}"></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -251,8 +251,7 @@
         <div class="col-xl-8 col-lg-7">
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
-                <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Liczba badań technicznych</h6>
                     <div class="dropdown no-arrow">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -304,6 +303,9 @@
                 <div class="card-body">
                     <div class="chart-pie pt-4 pb-2">
                         <canvas id="myPieChart"></canvas>
+                        <canvas th:value="${daneWykresuKolowego.getOsobowe()}" id="osobowe"></canvas>
+                        <canvas th:value="${daneWykresuKolowego.getCiezarowe()}" id="ciezarowe"></canvas>
+                        <canvas th:value="${daneWykresuKolowego.getInne()}" id="inne"></canvas>
                     </div>
                     <div class="mt-4 text-center small">
                                         <span class="mr-2">
@@ -399,7 +401,7 @@
                                         Dodaj nowe zdjęcie
                                         <input onchange="readURL(this);" type="file" th:field="*{image}" class="account-settings-fileinput" >
                                     </label>
-                                    <button id="btnDelete" type="button" class="btn btn-default md-btn-flat">Resetuj</button>
+                                    <button id="btnDelete1" type="button" class="btn btn-default md-btn-flat">Resetuj</button>
                                     <div class="text-light small mt-1">Dozwolone JPG, GIF or PNG. Rozmiar < 800K</div>
                                 </div>
                             </div>
@@ -582,6 +584,174 @@
     </div>
 
 </div>
+<div th:fragment="upload">
+    <div class="container light-style flex-grow-1 container-p-y">
+        <h4 class="font-weight-bold py-2 mb-4">
+            Przesyłanie raportu
+        </h4>
+        <div th:if="${successMsg}">
+            <div class="alert alert-success"th:text="${successMsg}">Plik załadowano pomyślnie!</div>
+        </div>
+        <div th:if="${errorMsg}">
+            <div class="alert alert-danger"th:text="${errorMsg}">Błąd zapisu pliku!</div>
+        </div>
+        <div th:if="${cancelMsg}">
+            <div class="alert alert-info"th:text="${cancelMsg}">Anulowano wgrywanie pliku!</div>
+        </div>
+        <form  th:action="@{/pliki/upload/post}" th:object="${raportDto}" th:method="POST" enctype="multipart/form-data" >
+            <div class="media-body ml-4">
+                Dodaj nowy raport
+                <label class="btn btn-outline-primary">
+                    <input type="file" th:field="*{raport}" class="account-settings-fileinput" >
 
+                </label>
+
+                <button type="submit" name="action" value="cancel" class="btn btn-default md-btn-flat">Anuluj</button>
+                <button type="submit" name="action" value="save" class="btn btn-primary">Dodaj</button>&nbsp;
+            </div>
+        </form>
+
+    </div>
+</div>
+<div th:fragment="wyswietlTabliceRap">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Lista raportów</h6>
+            </div>
+            <div th:if="${successMsg}">
+                <div class="alert alert-success"th:text="${successMsg}"></div>
+            </div>
+            <div th:if="${errorMsg}">
+                <div class="alert alert-danger"th:text="${errorMsg}"></div>
+            </div>
+            <div th:if="${cancelMsg}">
+                <div class="alert alert-info"th:text="${cancelMsg}"></div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Data Utworzenia</th>
+                            <th>ID kontrahentów</th>
+                            <th>ID rejestrów sprzedaży</th>
+                            <th>Akcja</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Data Utworzenia</th>
+                            <th>ID kontrahentów</th>
+                            <th>ID rejestrów sprzedaży</th>
+                            <th>Akcja</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr th:each="rap, iterStat: ${raporty}">
+                            <td th:text="${rap.getId()}"></td>
+                            <td th:text="${rap.getDataUtworzenia()}"></td>
+                            <td th:text="${rap.getKontrahenci().getId()}"></td>
+                            <td th:text="${rap.getRejestrySprzedazyVat().getId()}"></td>
+                            <td>
+                                <div class="btn-group btn-block">
+                                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Akcja
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/" th:href="@{/raport/usunRaport/{id} (id=${rap.getId()})}">Usuń</a>
+                                        <a class="dropdown-item" href="/" th:href="@{/raport/createFileFromRaport/{id} (id=${rap.getId()})}">Utwórz plik z tego</a>
+                                        <a class="dropdown-item" href="/" th:href="@{/raport/createFileFromRaportExtra/{id} (id=${rap.getId()})}">Utwórz plik STACJ z tego</a>
+                                        <a class="dropdown-item" href="#">Pokaż więcej info</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="/" th:href="@{/raport/pokaz/{id} (id=${rap.getId()})}"></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+</div>
+<div th:fragment="wyswietlTablicePlik">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Lista plików</h6>
+        </div>
+        <div th:if="${successMsg}">
+            <div class="alert alert-success"th:text="${successMsg}"></div>
+        </div>
+        <div th:if="${errorMsg}">
+            <div class="alert alert-danger"th:text="${errorMsg}"></div>
+        </div>
+        <div th:if="${cancelMsg}">
+            <div class="alert alert-info"th:text="${cancelMsg}"></div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nazwa</th>
+                        <th>Data Utworzenia</th>
+                        <th>ID twórcy</th>
+                        <th>Typ</th>
+                        <th>Akcja</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nazwa</th>
+                        <th>Data Utworzenia</th>
+                        <th>ID twórcy</th>
+                        <th>Typ</th>
+                        <th>Akcja</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr th:each="plik, iterStat: ${pliki}">
+                        <td th:text="${plik.getId()}"></td>
+                        <td th:text="${plik.getName()}"></td>
+                        <td th:text="${plik.getDataPrzeslania()}"></td>
+                        <td th:text="${plik.getUser().getId()}"></td>
+                        <td th:text="${plik.getType()}"></td>
+                        <td>
+                            <div class="btn-group btn-block">
+                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Akcja
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/" th:href="@{/raport/createFromFile/{id} (id=${plik.getId()})}">Utwórz raport</a>
+                                    <a class="dropdown-item" href="/" th:href="@{/pliki/usun/{id} (id=${plik.getId()})}">Usuń</a>
+                                    <a class="dropdown-item" href="/" th:href="@{/pliki/pobierz/{id} (id=${plik.getId()})}">Pobierz</a>
+                                    <a class="dropdown-item" href="#">Pokaż więcej info</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/" th:href="@{/plik/pokaz/{id} (id=${plik.getId()})}"></a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:fragment="wyswietlPlikInfo">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"></h6>
+        </div>
+        <div class="card-body">
+
+            TU BEDZIE INFO SZCZEGOLOWE PLIKU
+        </div>
+    </div>
+</div>
 </body>
 </html>

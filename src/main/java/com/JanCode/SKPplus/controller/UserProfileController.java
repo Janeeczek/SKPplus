@@ -34,7 +34,7 @@ public class UserProfileController {
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    MyDaoAuthenticationProvider authenticationProvider;
+    private MyDaoAuthenticationProvider authenticationProvider;
     @GetMapping("/profile/{u}")
     public ModelAndView showProfileDefaultWithParam(@RequestParam(required = false) String u,Authentication authentication) {
         MyUserPrincipal principal;
@@ -56,9 +56,7 @@ public class UserProfileController {
     public ModelAndView showProfileDefaultWithoutParam(Authentication authentication) {
         MyUserPrincipal principal;
         ModelAndView model = new ModelAndView("/user/profile");
-
-            principal = (MyUserPrincipal) authentication.getPrincipal();
-            //System.out.println(principal.getAuthorities());
+        principal = (MyUserPrincipal) authentication.getPrincipal();
         model.addObject("activeService",activeUserService);
         model.addObject("user",principal);
 
@@ -70,13 +68,9 @@ public class UserProfileController {
         MyUserPrincipal principal;
         if  (u == null) {
             principal = (MyUserPrincipal) authentication.getPrincipal();
-            //System.out.println(principal.getAuthorities());
         } else {
             principal = new MyUserPrincipal(userService.findByUsername(u));
         }
-        //model.addObject("activeService",activeUserService);
-        //UserUpdateProfileDto userUpdateProfileDto;
-
         model.addObject("user",principal);
         model.addObject("userDto", new UserUpdateProfileDto(principal));
         return model;
