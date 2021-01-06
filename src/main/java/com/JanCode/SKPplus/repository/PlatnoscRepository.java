@@ -3,6 +3,7 @@ package com.JanCode.SKPplus.repository;
 import com.JanCode.SKPplus.model.raportModel.Platnosc;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +17,8 @@ public interface PlatnoscRepository extends JpaRepository<Platnosc, Long> {
     double getAllIncome();
     @Query(value= "SELECT platnosc.kwota_plat FROM platnosc",nativeQuery = true)
     List<Double> getAllIncomeList();
-    @Query(value= " SELECT SUM(platnosc.kwota_plat) FROM platnosc WHERE MONTH(data_kursu_plat) = ?1",nativeQuery = true)
-    double getAllIncomeByMonth(int monthInt);
-
+    @Query(value= " SELECT SUM(platnosc.kwota_plat) FROM platnosc WHERE YEAR(data_kursu_plat) = :year AND MONTH(data_kursu_plat) = :month",nativeQuery = true)
+    double getIncomeByMonth(@Param("month")int month,@Param("year")int year);
+    @Query(value= "SELECT SUM(platnosc.kwota_plat) FROM platnosc WHERE YEAR(data_kursu_plat) = :year AND MONTH(data_kursu_plat) = :month AND DAY(data_kursu_plat) BETWEEN :fromDay AND :untilDay",nativeQuery = true)
+    double getAllIncomeByDate(@Param("fromDay")int fromDay,@Param("untilDay")int untilDay,@Param("month")int month,@Param("year")int year);
 }
