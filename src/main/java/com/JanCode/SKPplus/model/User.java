@@ -18,6 +18,8 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+    private boolean enabled;
+    private boolean locked;
     private String password;
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(
@@ -41,7 +43,10 @@ public class User {
     private List<FileDB> fileList;
     @OneToMany(mappedBy="user")
     private List<Raport> raportList;
-    public User() { }
+    public User() {
+        super();
+        this.enabled=false;
+    }
 
     public User(User user) {
         this.id = user.id;
@@ -60,7 +65,7 @@ public class User {
         this.email = email;
         this.password = password;
     }
-    public User(String username, String firstName, String lastName, String email, String password, Collection<Role> roles, byte[] image) {
+    public User(String username, String firstName, String lastName, String email, String password, Collection<Role> roles, byte[] image, boolean enabled, boolean locked) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -68,6 +73,8 @@ public class User {
         this.password = password;
         this.roles = roles;
         this.image = image;
+        this.enabled = enabled;
+        this.locked = locked;
     }
 
     public long getId() {
@@ -180,6 +187,22 @@ public class User {
 
     public void setRaportList(List<Raport> raportList) {
         this.raportList = raportList;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     @Override

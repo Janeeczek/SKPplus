@@ -22,14 +22,16 @@ public class MyUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    //@Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username){
-        User user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        if (user == null) {
-            System.out.println("NIE ZNALEZIONO!");
-            throw new UsernameNotFoundException(username);
+        try {
+            User user = userRepository.findByUsername(username);
+            if (user == null) {
+                throw new UsernameNotFoundException("No user found with username: " + username);
+            }
+            return new MyUserPrincipal(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return new MyUserPrincipal(user);
     }
 }

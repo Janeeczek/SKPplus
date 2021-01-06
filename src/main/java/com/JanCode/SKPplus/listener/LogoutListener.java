@@ -1,10 +1,7 @@
-package com.JanCode.SKPplus.Listeners;
+package com.JanCode.SKPplus.listener;
 
 
-import com.JanCode.SKPplus.model.ActiveUsers;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
-import com.JanCode.SKPplus.model.User;
-import com.JanCode.SKPplus.repository.ActiveUsersRepository;
 import com.JanCode.SKPplus.service.ActiveUserService;
 import com.JanCode.SKPplus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
