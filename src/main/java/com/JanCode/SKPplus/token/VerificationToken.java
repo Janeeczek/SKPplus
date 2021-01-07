@@ -5,9 +5,12 @@ import com.JanCode.SKPplus.model.User;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 
-//@Entity
+@Entity
 public class VerificationToken {
     private static final int EXPIRATION = 60 * 24;
 
@@ -21,7 +24,7 @@ public class VerificationToken {
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    private Date expiryDate;
+    private LocalDateTime expiryDate;
 
     private Date calculateExpiryDate(int expiryTimeInMinutes) {
         Calendar cal = Calendar.getInstance();
@@ -30,10 +33,14 @@ public class VerificationToken {
         return new Date(cal.getTime().getTime());
     }
 
-    public VerificationToken(String token, User user, Date expiryDate) {
+    public VerificationToken(String token, User user) {
         this.token = token;
         this.user = user;
-        this.expiryDate = expiryDate;
+        this.expiryDate =
+        Instant.ofEpochMilli(calculateExpiryDate(EXPIRATION).getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        System.out.println("VerificationToken");
     }
 
     public VerificationToken() {
@@ -64,11 +71,11 @@ public class VerificationToken {
         this.user = user;
     }
 
-    public Date getExpiryDate() {
+    public LocalDateTime getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(Date expiryDate) {
+    public void setExpiryDate(LocalDateTime expiryDate) {
         this.expiryDate = expiryDate;
     }
 }

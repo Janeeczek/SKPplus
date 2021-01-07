@@ -1,9 +1,12 @@
 package com.JanCode.SKPplus.service;
 
+import com.JanCode.SKPplus.exeception.UserAlreadyExistException;
 import com.JanCode.SKPplus.model.Role;
 import com.JanCode.SKPplus.model.User;
 import com.JanCode.SKPplus.repository.RoleRepository;
 import com.JanCode.SKPplus.repository.UserRepository;
+import com.JanCode.SKPplus.repository.VerificationTokenRepository;
+import com.JanCode.SKPplus.token.VerificationToken;
 import com.JanCode.SKPplus.web.dto.UserRegistrationDto;
 import com.JanCode.SKPplus.web.dto.UserUpdateProfileDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,10 +42,13 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private VerificationTokenRepository tokenRepository;
+
+
+
     @Override
     public User findByEmail(String email){
         return userRepository.findByEmail(email);
@@ -50,8 +57,14 @@ public class UserServiceImpl implements UserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+
+    //używane gdy user zostaje tworzony podczas rejestracji
     @Override
-    public User save(UserRegistrationDto registration) {
+    public User registerNewUserAccount(UserRegistrationDto registration) throws UserAlreadyExistException {
+        if (emailExist(registration.getEmail())) {
+            throw new UserAlreadyExistException("Ten adres email jest już w użyciu!");
+        }
         User user = new User();
         user.setUsername(registration.getUsername());
         user.setFirstName(registration.getFirstName());
@@ -67,20 +80,18 @@ public class UserServiceImpl implements UserService {
             File file = resource.getFile();
             user.setImage(Files.readAllBytes(file.toPath()));
         } catch (IOException e) {
-            System.out.println("BLAD NIE ZNALEZIONO PLIKU" + e);
+            System.out.println("BLAD! NIE ZNALEZIONO PLIKU" + e);
         }
 
         return userRepository.save(user);
     }
-    @Override
-    public User save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(new HashSet< >(roleRepository.findAll()));
-        return userRepository.save(user);
-    }
 
+    //używane gdy user aktualizuje swoje dane
     @Override
-    public User save(UserUpdateProfileDto userdto,String username) {
+    public User saveUpdatedUser(UserUpdateProfileDto userdto,String username) {
+        if (emailExist(userdto.getEmail())) {
+            throw new UserAlreadyExistException("Ten adres email jest już w użyciu!");
+        }
         User user = userRepository.findByUsername(username);
         user.setUsername(userdto.getUsername());
         user.setFirstName(userdto.getFirstName());
@@ -101,7 +112,7 @@ public class UserServiceImpl implements UserService {
         }
         return userRepository.save(user);
     }
-
+    //używane gdy potrzeba zaktualizowac czas ostatniej aktywnosci
     @Override
     public User updateLastActiveTime(String email) {
         User user = userRepository.findByEmail(email);
@@ -109,6 +120,32 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    private boolean emailExist(String email) {
+        return userRepository.findByEmail(email) != null;
+    }
 
+    @Override
+    public void createVerificationToken(User user, String token) {
+        VerificationToken myToken = new VerificationToken(token, user);
+        tokenRepository.save(myToken);
+    }
 
+    @Override
+    public VerificationToken getVerificationToken(String VerificationToken) {
+        return tokenRepository.findByToken(VerificationToken);
+    }
+
+    @Override
+    public User getUser(String verificationToken) {
+        User user = tokenRepository.findByToken(verificationToken).getUser();
+        return user;
+    }
+
+    @Override
+    public void saveRegisteredUser(User user) {
+        VerificationToken myToken = tokenRepository.findByUser(user);
+        myToken.setExpiryDate(LocalDateTime.now());
+        tokenRepository.save(myToken);
+        userRepository.save(user);
+    }
 }

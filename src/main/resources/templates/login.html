@@ -44,15 +44,14 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Zaloguj się!</h1>
                                     </div>
+                                    <div th:if="${param.error != null}"
+                                         th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}"class="alert alert-danger text-center">error</div>
+                                    <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
+                                    <div th:if="${#ctx.containsVariable('InvalidMessage')}" th:text="${InvalidMessage}" class="alert alert-dark text-center"></div>
+                                    <div th:if="${#ctx.containsVariable('ExpiredMessage')}" th:text="${ExpiredMessage}" class="alert alert-dark text-center"></div>
                                     <form th:action="@{/login}" method="post">
-                                        <div th:if="${param.error}">
-                                            <div class="alert alert-danger">Nieprawidłowy nick lub hasło.</div>
-                                        </div>
                                         <div th:if="${param.logout}">
                                             <div class="alert alert-info">Zostałeś wylogowany!</div>
-                                        </div>
-                                        <div th:if="${param.reg}">
-                                            <div class="alert alert-info">Zarejestrowano pomyślnie! Zaloguj się.</div>
                                         </div>
                                         <div th:if="${param.reset}">
                                             <div class="alert alert-info">Wysłano email z kodem przywracania hasła!</div>

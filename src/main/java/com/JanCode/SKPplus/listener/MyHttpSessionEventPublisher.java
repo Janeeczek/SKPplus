@@ -1,4 +1,4 @@
-package com.JanCode.SKPplus.Listeners;
+package com.JanCode.SKPplus.listener;
 import javax.servlet.http.HttpSessionEvent;
 
 import com.JanCode.SKPplus.repository.ActiveUsersRepository;

@@ -1,9 +1,12 @@
 package com.JanCode.SKPplus.controller;
 
+import com.JanCode.SKPplus.event.OnRegistrationCompleteEvent;
+import com.JanCode.SKPplus.exeception.UserAlreadyExistException;
 import com.JanCode.SKPplus.model.User;
 import com.JanCode.SKPplus.service.UserService;
 import com.JanCode.SKPplus.web.dto.UserRegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 @Controller
 @RequestMapping("/register*")
@@ -23,7 +27,8 @@ public class UserRegistrationController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @GetMapping
     public String showRegistrationForm(Model model) {
@@ -32,25 +37,27 @@ public class UserRegistrationController {
     }
 
     @PostMapping
-    public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto userDto, BindingResult bindingResult) {
+    public ModelAndView registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto userDto, BindingResult bindingResult, HttpServletRequest request) {
+        ModelAndView mav;
         if (bindingResult.hasErrors()) {
-            return "register";
+            mav = new ModelAndView("register", "user", userDto);
+            return mav;
         }
-
-        if (userService.findByUsername(userDto.getUsername())!=null) {
-            return "redirect:/register?usernameDuplicate";
+        try {
+            User registered = userService.registerNewUserAccount(userDto);
+            String appUrl = request.getContextPath();
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
+        } catch (UserAlreadyExistException uaeEx) {
+            mav = new ModelAndView("register", "user", userDto);
+            mav.addObject("ErrorMessage", "Konto o podanej nazwie użytkownika lub adresie email już istnieje!");
+            return mav;
+        } catch (RuntimeException ex) {
+            System.out.println(ex);
+            return new ModelAndView("register", "user", userDto);
         }
-        if (userService.findByEmail(userDto.getEmail())!=null) {
-            return "redirect:/register?emailDuplicate";
-        }
-
-            userService.save(userDto);
-        return "redirect:/login?reg";
-
-        //return "login";
-
-
-
+        mav = new ModelAndView("register", "user", userDto);
+        mav.addObject("SuccessMessage", "Sprawdz swój email aby potwierdzić konto!");
+        return mav;
     }
 }
 
