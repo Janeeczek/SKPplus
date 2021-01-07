@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/userLayout.html}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+      <!--xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/userLayout.html}"-->
 <head>
     <title>PTHW+</title>
 </head>
 <body>
 
-<div layout:fragment="content">
+<!--<div layout:fragment="content">-->
     <!-- 404 Error Text -->
     <div class="text-center">
         <div class="error mx-auto" data-text="404">ELOO</div>
@@ -15,7 +15,7 @@
         <p class="text-gray-500 mb-0">Coś się chyba popsuło....</p>
         <a href="/" th:href="@{/}">&larr; Wróc na stronę główną</a>
     </div>
-</div>
+<!--</div>-->
 
 </body>
 </html>

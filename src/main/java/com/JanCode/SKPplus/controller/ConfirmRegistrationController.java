@@ -23,7 +23,7 @@ public class ConfirmRegistrationController {
     @GetMapping("/registrationConfirm")
     public ModelAndView confirmRegistration(WebRequest request, Model model, @RequestParam("token") String token) {
 
-        ModelAndView mav = new ModelAndView("login");
+        ModelAndView mav = new ModelAndView("newLogin");
         VerificationToken verificationToken = service.getVerificationToken(token);
         if (verificationToken == null) {
             model.addAttribute("InvalidMessage", "Link aktywacyjny jest niepoprawny!");

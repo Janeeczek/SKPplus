@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/login*","/reset","/register*","/registrationConfirm","/css/**", "/img/**", "/js/**", "/vendor/**", "/scss/**","/layouts/**","/fragments/**")
+                .antMatchers("/login*","/reset","/register*","/registrationConfirm","/css/**","/demo/**","/fonts/**", "/img/**", "/js/**", "/vendor/**", "/scss/**","/layouts/**","/fragments/**")
                 .permitAll();
         http.sessionManagement().maximumSessions(-1).sessionRegistry(sessionRegistry());
         http.authorizeRequests()
@@ -57,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticated()
         .and().formLogin()
                 .failureUrl("/login?error")
-                .loginPage("/login*")
+                .loginPage("/login")
                 .defaultSuccessUrl("/",true)
                 .failureHandler(authenticationFailureHandler())
 
