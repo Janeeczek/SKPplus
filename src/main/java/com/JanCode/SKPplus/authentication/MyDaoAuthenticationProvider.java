@@ -20,20 +20,17 @@ public class MyDaoAuthenticationProvider extends DaoAuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         User user = userService.findByUsername(authentication.getPrincipal().toString());
-
-
-
         if (user != null) {
             if(user.isEnabled() == false) {
-                System.out.println("Ten użytkownik nie jest aktywowany: " + user.getEmail());
-                return super.authenticate(authentication);
+                System.out.println("Ten użytkownik nie jest aktywowany: " + user.getUsername());
             }
-            System.out.println("ZALOGOWANO! email: " + user.getEmail());
-            if(activeUserService.findByEmail(user.getEmail())==null) {
-                System.out.println("Dodano email: " + user.getEmail() + " do bazy danych aktywnych użytkowników!");
+
+            if(activeUserService.findByUsername(user.getUsername())==null) {
+                System.out.println("Dodano uzytkownika: " + user.getUsername() + ", do bazy danych aktywnych użytkowników!");
                 activeUserService.save(user);
-                userService.updateLastActiveTime(user.getEmail());
+                userService.updateLastActiveTime(user.getUsername());
             }
+            System.out.println("Zalogowano uzytkownika: " + user.getUsername());
         }
 
         return super.authenticate(authentication);

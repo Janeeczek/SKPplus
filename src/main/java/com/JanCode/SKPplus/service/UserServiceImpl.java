@@ -114,10 +114,14 @@ public class UserServiceImpl implements UserService {
     }
     //używane gdy potrzeba zaktualizowac czas ostatniej aktywnosci
     @Override
-    public User updateLastActiveTime(String email) {
-        User user = userRepository.findByEmail(email);
-        user.setLastActiveDate(LocalDateTime.now());
-        return userRepository.save(user);
+    public User updateLastActiveTime(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user != null) {
+            user.setLastActiveDate(LocalDateTime.now());
+            return userRepository.save(user);
+        }
+        System.out.println("Nie można zaktualizować czasu ostatniej dla użytkownika: "+username+ " ponieważ on nie istnieje w bazie danych!");
+        return user;
     }
 
     private boolean emailExist(String email) {

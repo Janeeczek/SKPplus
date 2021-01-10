@@ -27,13 +27,13 @@ public class LogoutListener implements ApplicationListener<SessionDestroyedEvent
         List<SecurityContext> lstSecurityContext = event.getSecurityContexts();
         for (SecurityContext securityContext : lstSecurityContext)
         {
-            MyUserPrincipal principal = (MyUserPrincipal) securityContext.getAuthentication().getPrincipal();;
-            //User user = new User (userRepository.findByUsername(authentication.getPrincipal().toString()));
-            System.out.println("WYLOGOWANO! email: " + principal.getEmail());
-            if(activeUserService.findByEmail(principal.getEmail())!=null) {
-                System.out.println("Usunięto email: " + principal.getEmail() + " z bazy danych aktywnych użytkowników!");
+
+            MyUserPrincipal principal = (MyUserPrincipal) securityContext.getAuthentication().getPrincipal();
+            if(activeUserService.findByUsername(principal.getUsername())!=null) {
+                System.out.println("Usunięto uzytkownika: " + principal.getUsername() + ", z bazy danych aktywnych użytkowników!");
                 activeUserService.delete(principal);
-                userService.updateLastActiveTime(principal.getEmail());
+                userService.updateLastActiveTime(principal.getUsername());
+                System.out.println("Wylogowano uzytkownika: " + principal.getUsername());
             }
         }
     }

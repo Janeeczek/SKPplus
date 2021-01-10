@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 
 public interface ActiveUserService {
     ActiveUsers findByEmail(String email);
+    ActiveUsers findByUsername(String username);
     ActiveUsers save(User user);
     void delete(User user);
     void delete(MyUserPrincipal principal);

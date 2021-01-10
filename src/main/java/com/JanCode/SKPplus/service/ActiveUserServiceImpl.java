@@ -18,6 +18,10 @@ public class ActiveUserServiceImpl implements ActiveUserService {
         return activeUsersRepository.findByEmail(email);
     }
     @Override
+    public ActiveUsers findByUsername(String username) {
+        return activeUsersRepository.findByUsername(username);
+    }
+    @Override
     public ActiveUsers save(User user) {
         ActiveUsers activeUsers = new ActiveUsers(user);
 

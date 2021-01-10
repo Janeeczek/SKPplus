@@ -14,7 +14,7 @@ public interface UserService{
     User findByUsername(String username);
     User registerNewUserAccount(UserRegistrationDto registration) throws UserAlreadyExistException;
     User saveUpdatedUser(UserUpdateProfileDto userdto,String username);
-    User updateLastActiveTime(String email);
+    User updateLastActiveTime(String username);
     void createVerificationToken(User user, String token);
     VerificationToken getVerificationToken(String VerificationToken);
     User getUser(String verificationToken);
