@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -35,11 +38,16 @@ public class NewsController {
         System.out.println("WYSYLAM!");
         System.out.println("Title: " + title);
         System.out.println("Text: " + text);
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy ");
         String eventFormatted = null;
         try {
             eventFormatted = new JSONObject()
                     .put("title",title)
+                    .put("date", now.format(myFormatObj).toString())
                     .put("text",text).toString();
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -235,6 +235,10 @@
                             <h6 class="dropdown-header">
                                 Centrum powiadomień
                             </h6>
+                            <div id="pack">
+
+                            </div>
+                            <!--
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="mr-3">
                                     <div class="icon-circle bg-primary">
@@ -268,6 +272,7 @@
                                     Spending Alert: We've noticed unusually high spending for your account.
                                 </div>
                             </a>
+                            -->
                             <a class="dropdown-item text-center small text-gray-500" href="/" th:href="@{/pokazAlerty}">Pokaż wszystkie powiadomienia</a>
                         </div>
                     </li>
@@ -449,20 +454,74 @@
             console.log("test");
             eventSource.addEventListener("latest", function (event) {
                 var articleData = JSON.parse(event.data);
-                addBlock(articleData.title,articleData.text);
+                addBlock(articleData.title,articleData.text,articleData.date);
             })
         })
-        function addBlock(title,text) {
-            var a = document.createElement("article");
-            var h = document.createElement("H3")
-            var t = document.createTextNode(title);
-            h.appendChild(t);
-            var para = document.createElement("P");
-            para.innerHTML = text;
-            a.appendChild(h);
-            a.appendChild(para);
+        function addBlock(title,text,date) {
+var a = document.createElement("a");
+var divMR = document.createElement("div");
+var divIC = document.createElement("div");
+var div = document.createElement("div");
+var divSM = document.createElement("div");
+var i = document.createElement("i");
+var span = document.createElement("span");
 
-            document.getElementById("pack").appendChild(a);
+a.setAttribute('class',"dropdown-item d-flex align-items-center");
+a.setAttribute('href',"#");
+divMR.setAttribute('class',"mr-3");
+divIC.setAttribute('class',"icon-circle bg-primary");
+divSM.setAttribute('class',"small text-gray-500");
+i.setAttribute('class',"fas fa-file-alt text-white");
+span.setAttribute('class',"font-weight-bold");
+span.innerHTML = title;
+divSM.innerHTML = date;
+divIC.appendChild(i);
+divMR.appendChild(divIC);
+a.appendChild(divMR);
+div.appendChild(divSM);
+div.appendChild(span);
+a.appendChild(div);
+document.getElementById("pack").appendChild(a);
         }
     </script>
 </html>
+
+<a class="dropdown-item d-flex align-items-center" href="#">
+    <div class="mr-3">
+        <div class="icon-circle bg-primary">
+            <i class="fas fa-file-alt text-white"></i>
+        </div>
+    </div>
+    <div>
+        <div class="small text-gray-500">December 12, 2019</div>
+        <span class="font-weight-bold">A new monthly report is ready to download!</span>
+    </div>
+</a>
+<!--
+function addBlock(title,text) {
+var a = document.createElement("a");
+var divMR = document.createElement("div");
+var divIC = document.createElement("div");
+var div = document.createElement("div");
+var divSM = document.createElement("div");
+var i = document.createElement("i");
+var span = document.createElement("span");
+
+a.setAttribute('class',"dropdown-item d-flex align-items-center");
+a.setAttribute('href',"#");
+divMR.setAttribute('class',"mr-3");
+divIC.setAttribute('class',"icon-circle bg-primary");
+divSM.setAttribute('class',"small text-gray-500");
+i.setAttribute('class',"fas fa-file-alt text-white");
+span.setAttribute('class',"font-weight-bold");
+divSM.innerHTML = title;
+
+divIC.appendChild(i);
+divMR.appendChild(divIC);
+a.appendChild(divMR);
+div.appendChild(divIC);
+div.appendChild(span);
+a.appendChild(div);
+document.getElementById("pack").appendChild(a);
+}
+-->
