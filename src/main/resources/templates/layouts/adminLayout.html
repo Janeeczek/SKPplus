@@ -427,7 +427,30 @@
 <!-- Page level custom scripts-->
 <script src="/js/demo/chart-area-demo.js"></script>
 <script src="/js/demo/chart-pie-demo.js"></script>
-
+<script>
+function myFun() {
+	var tempTitle = document.getElementById("floatingInput").value;
+  var tempText = document.getElementById("floatingTextarea").value;
+	$.ajax({
+  type: "POST",
+  url: "/dispatchEvent",
+  data: {
+    title: tempTitle,
+    text: tempText
+  },
+  timeout: 100000,
+  success: function() {
+    console.log("SUCCESS: ");
+  },
+  error: function(e) {
+    console.log("ERROR");
+  },
+  done: function(e) {
+    console.log("DONE");
+  }
+});
+}
+</script>
 </body>
 
 </html>

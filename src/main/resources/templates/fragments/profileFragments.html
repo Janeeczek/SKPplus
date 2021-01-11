@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<script src="/vendor/jquery/jquery.min.js"></script>
 <head>
 
 </head>
@@ -31,7 +32,13 @@
                     </tr>
                     <tr>
                         <td>Zweryfikowany:</td>
-                        <td><span class="fa fa-check text-primary"></span>&nbsp; Tak</td>
+
+                        <div th:if="${user.isEnabled()}">
+                            <td><span class="fa fa-check text-primary"></span>&nbsp; Tak</td>
+                        </div>
+                        <div th:unless="${user.isEnabled()}">
+                            <td><span class="fa fa-check text-primary"></span>&nbsp; Nie</td>
+                        </div>
                     </tr>
                     <tr>
                         <td>Rola:</td>
@@ -106,7 +113,7 @@
                         <td th:text="${user.getUsername()}">nmaxwell</td>
                     </tr>
                     <tr>
-                        <td>Imię:</td>
+                        <td>Imię i nazwisko:</td>
                         <td th:text="${user.getFirstname() + ' ' + user.getLastname()}">Nelle Maxwell</td>
                     </tr>
                     <tr>
@@ -744,14 +751,18 @@
 </div>
 <div th:fragment="wyswietlPlikInfo">
     <div class="card shadow mb-4">
+        TEST
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary"></h6>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="pack">
 
-            TU BEDZIE INFO SZCZEGOLOWE PLIKU
+
         </div>
     </div>
+
+
 </div>
 </body>
+
 </html>

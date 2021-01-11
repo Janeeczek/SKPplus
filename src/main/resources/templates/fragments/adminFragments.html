@@ -65,6 +65,17 @@
     </div>
     <div th:fragment="wyswietlDomyslne">
         <h1 class="h3 mb-2 text-gray-800">cs</h1>
+        <div class="container-sm">
+        <div class="form-floating mb-3">
+            <input type="title" class="form-control" id="floatingInput" >
+            <label for="floatingInput">Tytuł</label>
+        </div>
+        <div class="form-floating">
+            <textarea class="form-control" placeholder="Wpisz tutaj treść" id="floatingTextarea"></textarea>
+            <label for="floatingTextarea">Treść</label>
+        </div>
+        <button class="btn btn-primary" onclick="myFun()" type="button">Wyślij</button>
+        </div>
     </div>
 
 

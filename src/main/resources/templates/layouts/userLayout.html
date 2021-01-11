@@ -435,12 +435,34 @@
 <script src="/js/sb-admin-2.min.js"></script>
 
 <!-- Page level plugins -->
-<script src="/vendor/chart.js/Chart.min.js"></script>
+<!--<script src="/vendor/chart.js/Chart.min.js"></script>-->
 
 <!-- Page level custom scripts-->
-<script src="/js/demo/chart-area-demo.js"></script>
-<script th:inline="javascript" src="/js/demo/chart-pie-demo.js"></script>
+<!--<script src="/js/demo/chart-area-demo.js"></script>-->
+<!--<script th:inline="javascript" src="/js/demo/chart-pie-demo.js"></script>-->
 
 </body>
+<script>
+        $(document).ready(function() {
+            var urlEndPoint = "http://localhost:8080/subscribe";
+            var eventSource = new EventSource(urlEndPoint);
+            console.log("test");
+            eventSource.addEventListener("latest", function (event) {
+                var articleData = JSON.parse(event.data);
+                addBlock(articleData.title,articleData.text);
+            })
+        })
+        function addBlock(title,text) {
+            var a = document.createElement("article");
+            var h = document.createElement("H3")
+            var t = document.createTextNode(title);
+            h.appendChild(t);
+            var para = document.createElement("P");
+            para.innerHTML = text;
+            a.appendChild(h);
+            a.appendChild(para);
 
+            document.getElementById("pack").appendChild(a);
+        }
+    </script>
 </html>

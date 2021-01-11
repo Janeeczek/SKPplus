@@ -2,6 +2,7 @@ package com.JanCode.SKPplus.config;
 
 import com.JanCode.SKPplus.authentication.MyDaoAuthenticationProvider;
 import com.JanCode.SKPplus.handler.CustomAuthenticationFailureHandler;
+import com.JanCode.SKPplus.handler.CustomLogoutSuccessHandler;
 import com.JanCode.SKPplus.listener.LogoutListener;
 import com.JanCode.SKPplus.listener.MyHttpSessionEventPublisher;
 import com.JanCode.SKPplus.service.MyUserDetailsService;
@@ -44,10 +45,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public SessionRegistry sessionRegistry() { return new SessionRegistryImpl(); }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.sessionManagement().maximumSessions(1)
+                .expiredUrl("/login?expired");
+                //.invalidSessionUrl("/invalidSession.html");
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/login*","/reset","/register*","/registrationConfirm","/css/**","/demo/**","/fonts/**", "/img/**", "/js/**", "/vendor/**", "/scss/**","/layouts/**","/fragments/**")
                 .permitAll();
-        http.sessionManagement().maximumSessions(-1).sessionRegistry(sessionRegistry());
+
         http.authorizeRequests()
                 .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
@@ -62,6 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and().logout()
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
+                .logoutSuccessHandler(new CustomLogoutSuccessHandler())
                 .deleteCookies("JSESSIONID")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout");
