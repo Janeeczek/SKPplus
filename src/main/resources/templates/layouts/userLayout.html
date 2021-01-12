@@ -227,7 +227,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-bell fa-fw"></i>
                             <!-- Counter - Alerts -->
-                            <span class="badge badge-danger badge-counter">3+</span>
+                            <span id="counter" class="badge badge-danger badge-counter"></span>
                         </a>
                         <!-- Dropdown - Alerts -->
                         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -454,10 +454,10 @@
             console.log("test");
             eventSource.addEventListener("latest", function (event) {
                 var articleData = JSON.parse(event.data);
-                addBlock(articleData.title,articleData.text,articleData.date);
+                addBlock(articleData.title,articleData.text,articleData.date, articleData.iconTypeName,articleData.iconTypeBack,articleData.counter);
             })
         })
-        function addBlock(title,text,date) {
+        function addBlock(title,text,date,iconTypeName,iconTypeBack,counter) {
 var a = document.createElement("a");
 var divMR = document.createElement("div");
 var divIC = document.createElement("div");
@@ -469,9 +469,9 @@ var span = document.createElement("span");
 a.setAttribute('class',"dropdown-item d-flex align-items-center");
 a.setAttribute('href',"#");
 divMR.setAttribute('class',"mr-3");
-divIC.setAttribute('class',"icon-circle bg-primary");
+divIC.setAttribute('class',"icon-circle " + iconTypeBack);
 divSM.setAttribute('class',"small text-gray-500");
-i.setAttribute('class',"fas fa-file-alt text-white");
+i.setAttribute('class',"fas "+iconTypeName+" text-white");
 span.setAttribute('class',"font-weight-bold");
 span.innerHTML = title;
 divSM.innerHTML = date;
@@ -481,22 +481,15 @@ a.appendChild(divMR);
 div.appendChild(divSM);
 div.appendChild(span);
 a.appendChild(div);
-document.getElementById("pack").appendChild(a);
+var list = document.getElementById("pack");
+list.insertBefore(a, list.childNodes[0]);
+counter++;
+var counterHTML = document.getElementById("counter");
+
+counterHTML.innerHTML = counter;
         }
     </script>
 </html>
-
-<a class="dropdown-item d-flex align-items-center" href="#">
-    <div class="mr-3">
-        <div class="icon-circle bg-primary">
-            <i class="fas fa-file-alt text-white"></i>
-        </div>
-    </div>
-    <div>
-        <div class="small text-gray-500">December 12, 2019</div>
-        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-    </div>
-</a>
 <!--
 function addBlock(title,text) {
 var a = document.createElement("a");

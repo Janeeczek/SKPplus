@@ -8,6 +8,8 @@ import com.JanCode.SKPplus.web.dto.UserRegistrationDto;
 import com.JanCode.SKPplus.web.dto.UserUpdateProfileDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 public interface UserService{
 
     User findByEmail(String email);
@@ -19,4 +21,5 @@ public interface UserService{
     VerificationToken getVerificationToken(String VerificationToken);
     User getUser(String verificationToken);
     void saveRegisteredUser(User user);
+    List<User> findAllUsers();
 }

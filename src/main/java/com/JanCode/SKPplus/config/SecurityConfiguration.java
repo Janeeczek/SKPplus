@@ -5,6 +5,7 @@ import com.JanCode.SKPplus.handler.CustomAuthenticationFailureHandler;
 import com.JanCode.SKPplus.handler.CustomLogoutSuccessHandler;
 import com.JanCode.SKPplus.listener.LogoutListener;
 import com.JanCode.SKPplus.listener.MyHttpSessionEventPublisher;
+import com.JanCode.SKPplus.service.EmitterService;
 import com.JanCode.SKPplus.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -43,6 +44,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
     @Bean
     public SessionRegistry sessionRegistry() { return new SessionRegistryImpl(); }
+
+    @Bean
+    public EmitterService emitterService() {return new EmitterService();}
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.sessionManagement().maximumSessions(1)

@@ -29,10 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -151,5 +148,12 @@ public class UserServiceImpl implements UserService {
         myToken.setExpiryDate(LocalDateTime.now());
         tokenRepository.save(myToken);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        List<User> userList = new ArrayList<>();
+        userList = userRepository.findAll();
+        return userList;
     }
 }

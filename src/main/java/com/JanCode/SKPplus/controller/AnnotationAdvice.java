@@ -1,7 +1,7 @@
 package com.JanCode.SKPplus.controller;
 
 import com.JanCode.SKPplus.model.ActiveUsers;
-import com.JanCode.SKPplus.model.InfoModel.WykresKołowyData;
+import com.JanCode.SKPplus.model.InfoModel.WykresKolowyData;
 import com.JanCode.SKPplus.model.InfoModel.WykresLiniowyData;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.model.Raport;
@@ -12,13 +12,9 @@ import com.JanCode.SKPplus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,7 +100,7 @@ public class AnnotationAdvice {
 
     }
     @ModelAttribute("daneWykresuKolowego")
-    public WykresKołowyData getDaneWykresuKolowego() {
+    public WykresKolowyData getDaneWykresuKolowego() {
         List<Raport> raports = raportService.getAllRaports();
         if (raports.size() > 0)
         {
@@ -119,9 +115,9 @@ public class AnnotationAdvice {
                 else inne++;
             }
             System.out.println("ILE= "+lista.size()+"  Osobowe= "+osobowe+" Ciezarowe= "+ciezarowe+" Inne= "+inne);
-            return new WykresKołowyData(osobowe,ciezarowe,inne);
+            return new WykresKolowyData(osobowe,ciezarowe,inne);
         }
-        else return new WykresKołowyData(2,1,4);
+        else return new WykresKolowyData(2,1,4);
 
     }
     @ModelAttribute("daneWykresuLiniowy")

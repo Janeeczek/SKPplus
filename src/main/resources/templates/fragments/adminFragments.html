@@ -66,15 +66,64 @@
     <div th:fragment="wyswietlDomyslne">
         <h1 class="h3 mb-2 text-gray-800">cs</h1>
         <div class="container-sm">
-        <div class="form-floating mb-3">
-            <input type="title" class="form-control" id="floatingInput" >
-            <label for="floatingInput">Tytuł</label>
-        </div>
-        <div class="form-floating">
-            <textarea class="form-control" placeholder="Wpisz tutaj treść" id="floatingTextarea"></textarea>
-            <label for="floatingTextarea">Treść</label>
-        </div>
-        <button class="btn btn-primary" onclick="myFun()" type="button">Wyślij</button>
+            <div class="form-floating mb-3">
+                <input type="tytul" class="form-control" id="tytul" >
+                <label for="tytul">Tytuł</label>
+            </div>
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Wpisz tutaj treść" id="tresc"></textarea>
+                <label for="tresc">Treść</label>
+            </div>
+            <div class="form-group">
+                <a class="btn btn-primary btn-circle">
+                    <input class="form-check-input" type="radio" name="ikona" id="ikona1" value="FILE">  <i class="fas fa-file-alt text-white"></i>
+                </a>
+                <a class="btn bg-success btn-circle">
+                    <input class="form-check-input" type="radio" name="ikona" id="ikona2" value="DONATE">  <i class="fas fa-donate text-white"></i>
+                </a>
+                <a class="btn bg-warning btn-circle">
+                    <input class="form-check-input" type="radio" name="ikona" id="ikona3" value="EXCLAMATION_TRIANGLE">  <i class="fas fa-exclamation-triangle text-white"></i>
+                </a>
+
+
+
+                <!--
+                <select class="form-control" id="ikona" data-show-content="true" required aria-label="select example">
+                    <option value="INFORMATION">
+                        <div class="mr-3">
+                            <div class="icon-circle bg-primary">
+                                <i class="fas fa-donate text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="small text-gray-500">INFORMATION</div>
+                        </div>
+                    </option>
+                    <option value="WARNING">
+                        <div class="mr-3">
+                            <div class="icon-circle bg-warning">
+                                <i class="fas fa-donate text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="small text-gray-500">WARNING</div>
+                        </div>
+                    </option>
+                    <option value="TEXT">
+                        <div class="mr-3">
+                            <div class="icon-circle bg-success">
+                                <i class="fas fa-donate text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="small text-gray-500">TEXT</div>
+                        </div>
+                    </option>
+                </select>
+                -->
+            </div>
+
+            <button class="btn btn-primary" onclick="myFun()" type="button">Wyślij</button>
         </div>
     </div>
 

@@ -1,17 +1,17 @@
 package com.JanCode.SKPplus.model.InfoModel;
 
-public class WykresKołowyData {
+public class WykresKolowyData {
     private int osobowe;
     private int ciezarowe;
     private int inne;
 
-    public WykresKołowyData(int osobowe, int ciezarowe, int inne) {
+    public WykresKolowyData(int osobowe, int ciezarowe, int inne) {
         this.osobowe = osobowe;
         this.ciezarowe = ciezarowe;
         this.inne = inne;
     }
 
-    public WykresKołowyData() {
+    public WykresKolowyData() {
     }
 
     public int getOsobowe() {

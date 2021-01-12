@@ -429,14 +429,27 @@
 <script src="/js/demo/chart-pie-demo.js"></script>
 <script>
 function myFun() {
-	var tempTitle = document.getElementById("floatingInput").value;
-  var tempText = document.getElementById("floatingTextarea").value;
+	var tempTitle = document.getElementById("tytul").value;
+    var tempText = document.getElementById("tresc").value;
+
+    var tempIcon;
+    var radios = document.getElementsByName('ikona');
+    for (var i = 0, length = radios.length; i < length; i++) {
+        if (radios[i].checked) {
+            // do whatever you want with the checked radio
+            tempIcon = radios[i].value;
+
+            // only one radio can be logically checked, don't check the rest
+            break;
+  }
+}
 	$.ajax({
   type: "POST",
   url: "/dispatchEvent",
   data: {
     title: tempTitle,
-    text: tempText
+    text: tempText,
+    icon: tempIcon
   },
   timeout: 100000,
   success: function() {
@@ -449,6 +462,9 @@ function myFun() {
     console.log("DONE");
   }
 });
+}
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
 }
 </script>
 </body>
