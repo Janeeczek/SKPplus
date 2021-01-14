@@ -1,13 +1,17 @@
 package com.JanCode.SKPplus.controller;
 
+import com.JanCode.SKPplus.model.Alert;
 import com.JanCode.SKPplus.model.IconType;
+import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.service.AlertService;
 import com.JanCode.SKPplus.service.EmitterService;
+import com.JanCode.SKPplus.service.UserService;
 import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -28,19 +32,23 @@ public class NewsController {
     @Autowired
     private EmitterService emitterService;
 
-
+    @Autowired
+    private UserService userService;
 
     @CrossOrigin
     @RequestMapping(value = "/subscribe",consumes = MediaType.ALL_VALUE)
-    public SseEmitter subscribe() {
+    public SseEmitter subscribe(Authentication authentication) {
         SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
-        try {
-            sseEmitter.send(SseEmitter.event().name("INIT"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (authentication != null) {
+            MyUserPrincipal principal = (MyUserPrincipal) authentication.getPrincipal();
+            emitterService.sendInitEvent(sseEmitter);
+            emitterService.getEmitters().put(principal.getId(),sseEmitter);
+            sseEmitter.onCompletion(()->emitterService.getEmitters().remove(sseEmitter));
+            sseEmitter.onError((e)->emitterService.getEmitters().remove(sseEmitter));
+            sseEmitter.onTimeout(()->emitterService.getEmitters().remove(sseEmitter));
+            alertService.sendAlertsOnSubscribe(userService.findByUsername(principal.getUsername()));
         }
-        sseEmitter.onCompletion(()->emitterService.getEmitters().remove(sseEmitter));
-        emitterService.getEmitters().add(sseEmitter);
+
         return sseEmitter;
     }
     @PostMapping(value = "/dispatchEvent")
@@ -56,7 +64,19 @@ public class NewsController {
             iconType = IconType.EXCLAMATION_TRIANGLE;
         }
         System.out.println(iconType);
-        alertService.sendToAll(title,text,iconType);
+        List<Alert> alertList =  alertService.createNewAlertForAll(title,text,iconType);
+        alertService.sendAlertToAll(alertList,"newAlert");
+    }
+    @PostMapping(value = "/updateViewed")
+    public void updateViewed (@RequestParam Long id) {
+        Alert alert = alertService.getAlertById(id);
+        if (alert != null) {
+            alert.setViewed(true);
+            alertService.save(alert);
+            alertService.updateCounter(alert.getUser());
+        } else {
+            System.out.println("updateViewed: nie znaleziono alertu!");
+        }
 
     }
 }

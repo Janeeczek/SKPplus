@@ -18,8 +18,6 @@ public class LogoutListener implements ApplicationListener<SessionDestroyedEvent
 
     @Autowired
     private ActiveUserService activeUserService;
-    @Autowired
-    private UserService userService;
 
     @Override
     public void onApplicationEvent(SessionDestroyedEvent event)
@@ -32,7 +30,6 @@ public class LogoutListener implements ApplicationListener<SessionDestroyedEvent
             if(activeUserService.findByUsername(principal.getUsername())!=null) {
                 System.out.println("Usunięto uzytkownika: " + principal.getUsername() + ", z bazy danych aktywnych użytkowników!");
                 activeUserService.delete(principal);
-                userService.updateLastActiveTime(principal.getUsername());
                 System.out.println("Wylogowano uzytkownika: " + principal.getUsername());
             }
         }

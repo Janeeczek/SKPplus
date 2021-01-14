@@ -1,5 +1,11 @@
 package com.JanCode.SKPplus.handler;
 
+import com.JanCode.SKPplus.model.MyUserPrincipal;
+import com.JanCode.SKPplus.model.User;
+import com.JanCode.SKPplus.service.ActiveUserService;
+import com.JanCode.SKPplus.service.UserService;
+import com.JanCode.SKPplus.service.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 
@@ -19,6 +25,7 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler
         cookie.setPath(request.getContextPath());
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+
 
         if(request.getParameter("expired") != null)
         {

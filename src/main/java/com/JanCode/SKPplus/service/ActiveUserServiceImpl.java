@@ -12,6 +12,11 @@ import org.springframework.stereotype.Service;
 public class ActiveUserServiceImpl implements ActiveUserService {
     @Autowired
     private ActiveUsersRepository activeUsersRepository;
+    @Autowired
+    private UserService userService;
+
+
+
 
     @Override
     public ActiveUsers findByEmail(String email) {
@@ -24,22 +29,41 @@ public class ActiveUserServiceImpl implements ActiveUserService {
     @Override
     public ActiveUsers save(User user) {
         ActiveUsers activeUsers = new ActiveUsers(user);
-
+        userService.updateLastActiveTime(user.getUsername());
+        return activeUsersRepository.save(activeUsers);
+    }
+    @Override
+    public ActiveUsers save(MyUserPrincipal myUserPrincipal) {
+        ActiveUsers activeUsers = new ActiveUsers(myUserPrincipal);
+        userService.updateLastActiveTime(myUserPrincipal.getUsername());
         return activeUsersRepository.save(activeUsers);
     }
 
     @Override
     public void delete(User user) {
-        activeUsersRepository.deleteeByEmail(user.getEmail());
+        userService.updateLastActiveTime(user.getUsername());
+        activeUsersRepository.deleteByUsername(user.getUsername());
     }
     @Override
     public void delete(MyUserPrincipal principal) {
-        activeUsersRepository.deleteeByEmail(principal.getEmail());
+        userService.updateLastActiveTime(principal.getUsername());
+        activeUsersRepository.deleteByUsername(principal.getUsername());
     }
 
     @Override
-    public boolean isActive(String email) {
-        if (activeUsersRepository.findByEmail(email) == null) {
+    public void delete(String username) {
+        userService.updateLastActiveTime(username);
+        activeUsersRepository.deleteByUsername(username);
+    }
+
+    @Override
+    public void deleteOnInit() {
+        activeUsersRepository.deleteAll();
+    }
+
+    @Override
+    public boolean isActive(String username) {
+        if (activeUsersRepository.findByUsername(username) == null) {
             return false;
         } else {
             return true;

@@ -6,10 +6,13 @@ import com.JanCode.SKPplus.model.User;
 import org.springframework.security.core.Authentication;
 
 public interface ActiveUserService {
-    ActiveUsers findByEmail(String email);
     ActiveUsers findByUsername(String username);
+    ActiveUsers findByEmail(String email);
     ActiveUsers save(User user);
+    ActiveUsers save(MyUserPrincipal myUserPrincipal);
     void delete(User user);
     void delete(MyUserPrincipal principal);
-    boolean isActive(String email);
+    void delete(String username);
+    void deleteOnInit();
+    boolean isActive(String username);
 }

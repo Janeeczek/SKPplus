@@ -4,47 +4,28 @@ package com.JanCode.SKPplus.service;
 import com.JanCode.SKPplus.model.FileDB;
 import com.JanCode.SKPplus.model.Raport;
 import com.JanCode.SKPplus.model.User;
-import com.JanCode.SKPplus.model.raportModel.Kontrahent;
 import com.JanCode.SKPplus.repository.PlatnoscRepository;
-import com.JanCode.SKPplus.repository.RaporRepository;
+import com.JanCode.SKPplus.repository.RaportRepository;
 import com.JanCode.SKPplus.web.dto.DaneRaportuDto;
-import com.JanCode.SKPplus.web.dto.RaportDto;
-import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahenciDto;
-import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahentDto;
-import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
-import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import com.sun.xml.txw2.output.CharacterEscapeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.*;
-import javax.xml.bind.annotation.XmlSchema;
-import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.sax.SAXSource;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class RaportServiceImpl{
     @Autowired
-    private RaporRepository raporRepository;
+    private RaportRepository raportRepository;
     @Autowired
     private PlatnoscRepository platnoscRepository;
     @Autowired
@@ -86,7 +67,7 @@ public class RaportServiceImpl{
             e.printStackTrace();
         }
 
-        raporRepository.save(raport);
+        raportRepository.save(raport);
         return raport;
     }
     //DB -> daneRaportuDto -> Marshal -> FileDb ->storeFile
@@ -95,15 +76,12 @@ public class RaportServiceImpl{
         ByteArrayOutputStream byteArrayOutputStream =  new ByteArrayOutputStream();
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(DaneRaportuDto.class);
-            Raport raport = raporRepository.myFindById(id);
+            Raport raport = raportRepository.myFindById(id);
             DaneRaportuDto daneRaportuDto = new DaneRaportuDto(raport);
 
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,false);
-            //marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "windows-1250");
-           // marshaller.setProperty("com.sun.xml.bind.xmlDeclaration", false);
-            //marshaller.setProperty("com.sun.xml.bind.xmlHeaders", "<?xml version=\"1.0\" encoding=\"windows-1250\"?>");
             marshaller.setProperty("com.sun.xml.bind.marshaller.CharacterEscapeHandler", new CharacterEscapeHandler() {
                 @Override
                 public void escape(char[] ac, int i, int j, boolean flag, Writer writer) throws IOException {
@@ -125,7 +103,7 @@ public class RaportServiceImpl{
         ByteArrayOutputStream byteArrayOutputStream =  new ByteArrayOutputStream();
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(DaneRaportuDto.class);
-            Raport raport = raporRepository.myFindById(id);
+            Raport raport = raportRepository.myFindById(id);
             DaneRaportuDto daneRaportuDto = new DaneRaportuDto(raport);
             daneRaportuDto.getKONTRAHENCI().setBAZA_DOC_ID("STACJ");
             daneRaportuDto.getKONTRAHENCI().setBAZA_ZRD_ID("STACJ");
@@ -133,10 +111,7 @@ public class RaportServiceImpl{
             daneRaportuDto.getREJESTRY_SPRZEDAZY_VAT().setBAZA_ZRD_ID("STACJ");
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,false);
-            //marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "windows-1250");
-            // marshaller.setProperty("com.sun.xml.bind.xmlDeclaration", false);
-            //marshaller.setProperty("com.sun.xml.bind.xmlHeaders", "<?xml version=\"1.0\" encoding=\"windows-1250\"?>");
             marshaller.setProperty("com.sun.xml.bind.marshaller.CharacterEscapeHandler", new CharacterEscapeHandler() {
                 @Override
                 public void escape(char[] ac, int i, int j, boolean flag, Writer writer) throws IOException {
@@ -160,8 +135,8 @@ public class RaportServiceImpl{
 
 
     public void removeById(long id) {
-       raporRepository.deleteById(id);
-       if(raporRepository.existsById(id))
+       raportRepository.deleteById(id);
+       if(raportRepository.existsById(id))
             System.out.println("Błąd! Nie usunięto raportu o id: "+ id);
        else
            System.out.println("Sukces! Usunięto raport o id: "+ id);
@@ -169,7 +144,7 @@ public class RaportServiceImpl{
 
 
     public void removeAll() {
-        raporRepository.deleteAll();
+        raportRepository.deleteAll();
     }
 
 
@@ -181,11 +156,13 @@ public class RaportServiceImpl{
     }
 
     public List<Raport> getAllRaports() {
-        return raporRepository.findAll();
+        List<Raport> raports = raportRepository.myFindAll();
+        return raports;
     }
 
     public List<Double> getAllIncomeList() {
-        return platnoscRepository.getAllIncomeList();
+        List<Double> wplywy = platnoscRepository.getAllIncomeList();
+        return wplywy;
         //return null;
     }
 }

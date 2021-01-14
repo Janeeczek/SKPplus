@@ -20,6 +20,7 @@
 
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="/css/myCss.css" rel="stylesheet">
 
 
 </head>
@@ -58,7 +59,7 @@
             Interfejs
         </div>
 
-        <!-- Nav Item - Pages Collapse Menu -->
+        <!-- Nav Item - Pages Collapse Menu
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
@@ -73,7 +74,7 @@
                 </div>
             </div>
         </li>
-
+        -->
         <!-- Nav Item - Utilities Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
@@ -84,11 +85,8 @@
             <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Niestandardowe:</h6>
-                    <a class="collapse-item" href="/" th:href="@{/utilities-color}">Kolory</a>
-                    <a class="collapse-item" href="/" th:href="@{/utilities-border}">Granice</a>
-                    <a class="collapse-item" href="/" th:href="@{/utilities-animation}">Animacje</a>
-                    <a class="collapse-item" href="/" th:href="@{/utilities-other}">Inne</a>
+                    <h6 class="collapse-header">Domyślne:</h6>
+                    <a class="collapse-item" href="/" th:href="@{/pliki/upload}">Dodaj plik</a>
                 </div>
             </div>
         </li>
@@ -101,7 +99,7 @@
             Dodatki
         </div>
 
-        <!-- Nav Item - Pages Collapse Menu -->
+        <!-- Nav Item - Pages Collapse Menu
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                aria-expanded="true" aria-controls="collapsePages">
@@ -115,14 +113,12 @@
 
                     <h6 class="collapse-header">Inne strony:</h6>
                     <a class="collapse-item" href="/" th:href="@{/blank}">Pusta strona</a>
-                    <a class="collapse-item" href="/" th:href="@{/}">Strona Usera</a>
-                    <a class="collapse-item" href="/" th:href="@{/admin?main}">Strona Admina</a>
                     <a class="collapse-item" href="/" th:href="@{/admin?active}">Strona Active</a>
 
                 </div>
             </div>
         </li>
-
+-->
         <!-- Nav Item - Charts -->
         <li class="nav-item">
             <a class="nav-link" href="/" th:href="@{/charts}">
@@ -167,7 +163,7 @@
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column" style="height=100%;">
 
         <!-- Main Content -->
         <div id="content">
@@ -181,8 +177,7 @@
                 </button>
 
                 <!-- Topbar Search -->
-                <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
                         <input type="text" class="form-control bg-light border-0 small" placeholder="Wpisz aby wyszukać"
                                aria-label="Search" aria-describedby="basic-addon2">
@@ -220,9 +215,18 @@
                             </form>
                         </div>
                     </li>
+                    <li class="nav-item my-3" >
+                        <a href="#" th:href="@{/admin?main}" class="btn btn-danger btn-icon-split">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-user-shield"></i>
+                                        </span>
+                            <span class="text">Admin mode</span>
+                        </a>
 
+                    </li>
                     <!-- Nav Item - Alerts -->
                     <li sec:authorize="isAuthenticated()" class="nav-item dropdown no-arrow mx-1">
+
                         <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-bell fa-fw"></i>
@@ -236,43 +240,7 @@
                                 Centrum powiadomień
                             </h6>
                             <div id="pack">
-
                             </div>
-                            <!--
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="mr-3">
-                                    <div class="icon-circle bg-primary">
-                                        <i class="fas fa-file-alt text-white"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="small text-gray-500">December 12, 2019</div>
-                                    <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="mr-3">
-                                    <div class="icon-circle bg-success">
-                                        <i class="fas fa-donate text-white"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="small text-gray-500">December 7, 2019</div>
-                                    $290.29 has been deposited into your account!
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="mr-3">
-                                    <div class="icon-circle bg-warning">
-                                        <i class="fas fa-exclamation-triangle text-white"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="small text-gray-500">December 2, 2019</div>
-                                    Spending Alert: We've noticed unusually high spending for your account.
-                                </div>
-                            </a>
-                            -->
                             <a class="dropdown-item text-center small text-gray-500" href="/" th:href="@{/pokazAlerty}">Pokaż wszystkie powiadomienia</a>
                         </div>
                     </li>
@@ -384,7 +352,7 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid" layout:fragment="content">
-                <h1 class="h3 mb-1 text-gray-800">Domyślna strona admina</h1>
+                <h1 class="h3 mb-1 text-gray-800">Domyślna strona</h1>
             </div>
             <!-- End of Main Content -->
 
@@ -392,7 +360,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; PTHW 2020</span>
+                        <span>Copyright &copy; PTHW 2021</span>
                     </div>
                 </div>
             </footer>
@@ -440,81 +408,104 @@
 <script src="/js/sb-admin-2.min.js"></script>
 
 <!-- Page level plugins -->
-<!--<script src="/vendor/chart.js/Chart.min.js"></script>-->
+<script src="/vendor/chart.js/Chart.min.js"></script>
 
 <!-- Page level custom scripts-->
-<!--<script src="/js/demo/chart-area-demo.js"></script>-->
-<!--<script th:inline="javascript" src="/js/demo/chart-pie-demo.js"></script>-->
+<script src="/js/demo/chart-area-demo.js"></script>
+<script th:inline="javascript" src="/js/demo/chart-pie-demo.js"></script>
 
 </body>
 <script>
         $(document).ready(function() {
             var urlEndPoint = "http://localhost:8080/subscribe";
             var eventSource = new EventSource(urlEndPoint);
-            console.log("test");
-            eventSource.addEventListener("latest", function (event) {
+            console.log("Działa subskrybcja");
+            eventSource.addEventListener("newAlert", function (event) {
                 var articleData = JSON.parse(event.data);
-                addBlock(articleData.title,articleData.text,articleData.date, articleData.iconTypeName,articleData.iconTypeBack,articleData.counter);
-            })
-        })
-        function addBlock(title,text,date,iconTypeName,iconTypeBack,counter) {
-var a = document.createElement("a");
-var divMR = document.createElement("div");
-var divIC = document.createElement("div");
-var div = document.createElement("div");
-var divSM = document.createElement("div");
-var i = document.createElement("i");
-var span = document.createElement("span");
+                addBlock(articleData.title,articleData.text,articleData.date, articleData.iconTypeName,articleData.iconTypeBack, articleData.id);
+            });
+            eventSourceCounter.addEventListener("counter", function (event) {
+                var eventData = JSON.parse(event.data);
+                changeCounter(eventData.counter);
+            });
+            });
+            evtSource.addEventListener("error", function (event) {
+                console.log("Error :" + event.currentTarget.readyState);
+                if(event.currentTarget.readyState == EventSource.CLOSED) {
+                }
+                else {
+                    evtSource.close();
 
-a.setAttribute('class',"dropdown-item d-flex align-items-center");
-a.setAttribute('href',"#");
-divMR.setAttribute('class',"mr-3");
-divIC.setAttribute('class',"icon-circle " + iconTypeBack);
-divSM.setAttribute('class',"small text-gray-500");
-i.setAttribute('class',"fas "+iconTypeName+" text-white");
-span.setAttribute('class',"font-weight-bold");
-span.innerHTML = title;
-divSM.innerHTML = date;
-divIC.appendChild(i);
-divMR.appendChild(divIC);
-a.appendChild(divMR);
-div.appendChild(divSM);
-div.appendChild(span);
-a.appendChild(div);
-var list = document.getElementById("pack");
-list.insertBefore(a, list.childNodes[0]);
-counter++;
-var counterHTML = document.getElementById("counter");
+                }
+            });
 
-counterHTML.innerHTML = counter;
+
+
+        window.onbeforeunload = function () {
+            evtSource.close();
         }
+        function addBlock(title,text,date,iconTypeName,iconTypeBack, id) {
+            var a = document.createElement("a");
+            var divMR = document.createElement("div");
+            var divIC = document.createElement("div");
+            var div = document.createElement("div");
+            var divSM = document.createElement("div");
+            var i = document.createElement("i");
+            var span = document.createElement("span");
+
+            a.setAttribute('class',"dropdown-item d-flex align-items-center ");
+            a.setAttribute('href',"#");
+            divMR.setAttribute('class',"mr-3");
+            divIC.setAttribute('class',"icon-circle " + iconTypeBack);
+            divSM.setAttribute('class',"small text-gray-500");
+            i.setAttribute('class',"fas "+iconTypeName+" text-white");
+            span.setAttribute('class',"font-weight-bold");
+            span.innerHTML = title;
+            divSM.innerHTML = date;
+            divIC.appendChild(i);
+            divMR.appendChild(divIC);
+            a.appendChild(divMR);
+            div.appendChild(divSM);
+            div.appendChild(span);
+            a.appendChild(div);
+            a.setAttribute('id',id);
+            var list = document.getElementById("pack");
+            list.insertBefore(a, list.childNodes[0]);
+            var myEl = document.getElementById(id);
+            myEl.addEventListener('click', function() {
+                //alert('Hello world');
+                //console.log("Kliknieto o id: " + id);
+                updateViewed(id);
+                myEl.remove();
+            }, false);
+        }
+        function changeCounter(counter) {
+            var counterHTML = document.getElementById("counter");
+            counterHTML.innerHTML = counter;
+            if(counter >=1) counterHTML.innerHTML = counter;
+            else counter = "";
+        }
+        function updateViewed(id) {
+            $.ajax({
+                type: "POST",
+                url: "/updateViewed",
+                data: {
+                    id: id
+                },
+                timeout: 100000,
+                success: function() {
+                    console.log("SUCCESS: ");
+                },
+                error: function(e) {
+                    console.log("ERROR");
+                },
+                done: function(e) {
+                    console.log("DONE");
+                }
+            });
+        }
+
+
+
     </script>
 </html>
-<!--
-function addBlock(title,text) {
-var a = document.createElement("a");
-var divMR = document.createElement("div");
-var divIC = document.createElement("div");
-var div = document.createElement("div");
-var divSM = document.createElement("div");
-var i = document.createElement("i");
-var span = document.createElement("span");
-
-a.setAttribute('class',"dropdown-item d-flex align-items-center");
-a.setAttribute('href',"#");
-divMR.setAttribute('class',"mr-3");
-divIC.setAttribute('class',"icon-circle bg-primary");
-divSM.setAttribute('class',"small text-gray-500");
-i.setAttribute('class',"fas fa-file-alt text-white");
-span.setAttribute('class',"font-weight-bold");
-divSM.innerHTML = title;
-
-divIC.appendChild(i);
-divMR.appendChild(divIC);
-a.appendChild(divMR);
-div.appendChild(divIC);
-div.appendChild(span);
-a.appendChild(div);
-document.getElementById("pack").appendChild(a);
-}
--->

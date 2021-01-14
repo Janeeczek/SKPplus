@@ -22,6 +22,7 @@
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
 
 
+
 </head>
 
 <body id="page-top">
@@ -63,13 +64,17 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-cog"></i>
-                <span>Komponenty</span>
+                <span>Dane</span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Niestandardowe:</h6>
-                    <a class="collapse-item" href="/" th:href="@{/buttons}">Przyciski</a>
-                    <a class="collapse-item" href="/" th:href="@{/cards}">Karty</a>
+                    <h6 class="collapse-header">Użytkownicy:</h6>
+                    <a class="collapse-item" href="/" th:href="@{/admin?active}">Aktywni użytkownicy</a>
+                    <a class="collapse-item" href="/" th:href="@{/users/pokazWszystkie}">Wszyscy użytkownicy</a>
+                    <h6 class="collapse-header">Pliki:</h6>
+                    <a class="collapse-item" href="/" th:href="@{/pliki/pokazWszystkie}">Pliki</a>
+                    <a class="collapse-item" href="/" th:href="@{/raport/pokazWszystkie}">Raporty</a>
+
                 </div>
             </div>
         </li>
@@ -84,11 +89,10 @@
             <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Niestandardowe:</h6>
-                    <a class="collapse-item" href="/" th:href="@{/utilities-color}">Kolory</a>
-                    <a class="collapse-item" href="/" th:href="@{/utilities-border}">Granice</a>
-                    <a class="collapse-item" href="/" th:href="@{/utilities-animation}">Animacje</a>
-                    <a class="collapse-item" href="/" th:href="@{/utilities-other}">Inne</a>
+                    <h6 class="collapse-header">Domyślne:</h6>
+                    <a class="collapse-item" href="/" th:href="@{/}">Stwórz użytkownika</a>
+                    <a class="collapse-item" href="/" th:href="@{/pliki/upload}">Wgraj plik</a>
+                    <a class="collapse-item" href="/" th:href="@{/admin?generateAlert}">Generuj alert</a>
                 </div>
             </div>
         </li>
@@ -112,30 +116,29 @@
                 <div class="bg-white py-2 collapse-inner rounded">
 
                     <div class="collapse-divider"></div>
-
-                    <h6 class="collapse-header">Inne strony:</h6>
-                    <a class="collapse-item" href="/" th:href="@{/blank}">Pusta strona</a>
-                    <a class="collapse-item" href="/" th:href="@{/}">Strona Usera</a>
+                    <h6 class="collapse-header">Strony:</h6>
+                    <a class="collapse-item" href="/" th:href="@{/}">Strona Diagnosty</a>
+                    <a class="collapse-item" href="/" th:href="@{/}">Strona księgowej</a>
+                    <a class="collapse-item" href="/" th:href="@{/}">Strona Właściciela</a>
                     <a class="collapse-item" href="/" th:href="@{/admin?main}">Strona Admina</a>
-                    <a class="collapse-item" href="/" th:href="@{/admin?active}">Strona Active</a>
                 </div>
             </div>
         </li>
 
-        <!-- Nav Item - Charts -->
+        <!-- Nav Item - Charts
         <li class="nav-item">
             <a class="nav-link" href="/" th:href="@{/charts}">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Wykresy</span></a>
         </li>
 
-        <!-- Nav Item - Tables -->
+         Nav Item - Tables
         <li class="nav-item">
             <a class="nav-link" href="/" th:href="@{/tables}">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Tablice</span></a>
         </li>
-
+        -->
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
@@ -144,13 +147,13 @@
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
 
-        <!-- Sidebar Message -->
+        <!-- Sidebar Message
         <div class="sidebar-card">
             <img class="sidebar-card-illustration mb-2" src="" alt="">
             <p class="text-center mb-2"><strong>Dodawanie pliku</strong> szybkie narzędzie do wgrywania pliku</p>
             <a class="btn btn-success btn-sm" href="/" th:href="@{/dodajPlik}">Dodaj plik!</a>
         </div>
-
+-->
     </ul>
     <!-- End of Sidebar -->
 
@@ -441,27 +444,27 @@ function myFun() {
 
             // only one radio can be logically checked, don't check the rest
             break;
-  }
-}
+        }
+    }
 	$.ajax({
-  type: "POST",
-  url: "/dispatchEvent",
-  data: {
-    title: tempTitle,
-    text: tempText,
-    icon: tempIcon
-  },
-  timeout: 100000,
-  success: function() {
-    console.log("SUCCESS: ");
-  },
-  error: function(e) {
-    console.log("ERROR");
-  },
-  done: function(e) {
-    console.log("DONE");
-  }
-});
+    type: "POST",
+    url: "/dispatchEvent",
+    data: {
+        title: tempTitle,
+        text: tempText,
+        icon: tempIcon
+    },
+    timeout: 100000,
+    success: function() {
+        console.log("SUCCESS: ");
+    },
+    error: function(e) {
+        console.log("ERROR");
+    },
+    done: function(e) {
+        console.log("DONE");
+    }
+    });
 }
 function isBlank(str) {
     return (!str || /^\s*$/.test(str));

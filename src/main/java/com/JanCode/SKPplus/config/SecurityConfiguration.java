@@ -5,6 +5,8 @@ import com.JanCode.SKPplus.handler.CustomAuthenticationFailureHandler;
 import com.JanCode.SKPplus.handler.CustomLogoutSuccessHandler;
 import com.JanCode.SKPplus.listener.LogoutListener;
 import com.JanCode.SKPplus.listener.MyHttpSessionEventPublisher;
+import com.JanCode.SKPplus.service.ActiveUserService;
+import com.JanCode.SKPplus.service.ActiveUserServiceImpl;
 import com.JanCode.SKPplus.service.EmitterService;
 import com.JanCode.SKPplus.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
     @Autowired
     private MyUserDetailsService userDetailsService;
-
+    @Autowired
+    private ActiveUserService activeUserService;
     @Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {
         return new MyHttpSessionEventPublisher();
@@ -44,7 +47,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
     @Bean
     public SessionRegistry sessionRegistry() { return new SessionRegistryImpl(); }
-
     @Bean
     public EmitterService emitterService() {return new EmitterService();}
     @Override
@@ -97,6 +99,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         provider.setHideUserNotFoundExceptions(false);
+        activeUserService.deleteOnInit();
         return provider;
     }
     @Bean

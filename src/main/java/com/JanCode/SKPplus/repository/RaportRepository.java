@@ -7,10 +7,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public interface RaporRepository extends JpaRepository<Raport, Long> {
+@Transactional
+public interface RaportRepository extends JpaRepository<Raport, Long> {
     @Query(value= "SELECT * FROM raport WHERE id = ?1",nativeQuery = true)
     Raport myFindById(long id);
+    @Query(value= "SELECT * FROM raport",nativeQuery = true)
+    List<Raport>  myFindAll();
+
 }

@@ -16,6 +16,11 @@
         <h1 class="h3 mb-2 text-gray-800">Aktywni użytkownicy:</h1>
         <div th:insert="fragments/adminFragments :: wyswietlZalogowanych"></div>
     </div>
+    <div th:if="${param.generateAlert}">
+        <h1 class="h3 mb-2 text-gray-800">Generowanie alertu:</h1>
+        <div th:insert="fragments/adminFragments :: wyswietlGenerujAlert"></div>
+
+    </div>
 
 </div>
 </body>

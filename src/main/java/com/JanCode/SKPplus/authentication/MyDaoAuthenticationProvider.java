@@ -28,7 +28,6 @@ public class MyDaoAuthenticationProvider extends DaoAuthenticationProvider {
             if(activeUserService.findByUsername(user.getUsername())==null) {
                 System.out.println("Dodano uzytkownika: " + user.getUsername() + ", do bazy danych aktywnych użytkowników!");
                 activeUserService.save(user);
-                userService.updateLastActiveTime(user.getUsername());
             }
             System.out.println("Zalogowano uzytkownika: " + user.getUsername());
         }
