@@ -7,6 +7,7 @@ import com.JanCode.SKPplus.repository.RoleRepository;
 import com.JanCode.SKPplus.repository.UserRepository;
 import com.JanCode.SKPplus.repository.VerificationTokenRepository;
 import com.JanCode.SKPplus.token.VerificationToken;
+import com.JanCode.SKPplus.web.dto.AdminRegistrationDto;
 import com.JanCode.SKPplus.web.dto.UserRegistrationDto;
 import com.JanCode.SKPplus.web.dto.UserUpdateProfileDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,32 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.save(user);
     }
+    @Override
+    public User registerNewUserAccount(AdminRegistrationDto registration) throws UserAlreadyExistException {
+        if (emailExist(registration.getEmail())) {
+            throw new UserAlreadyExistException("Ten adres email jest już w użyciu!");
+        }
+        User user = new User();
+        user.setUsername(registration.getUsername());
+        user.setFirstName(registration.getFirstName());
+        user.setLastName(registration.getLastName());
+        user.setEmail(registration.getEmail());
+        user.setPassword(passwordEncoder.encode(registration.getPassword()));
+        user.setLastActiveDate(LocalDateTime.now());
+        user.setRegistrationDate(LocalDateTime.now());
+        user.setEnabled(registration.isActive());
+        user.setRoles(Arrays.asList(new Role("ROLE_"+registration.getRole())));
+        try{
+            Resource resource = new ClassPathResource("avatar1.png");
+            InputStream input = resource.getInputStream();
+            File file = resource.getFile();
+            user.setImage(Files.readAllBytes(file.toPath()));
+        } catch (IOException e) {
+            System.out.println("BLAD! NIE ZNALEZIONO PLIKU" + e);
+        }
+
+        return userRepository.save(user);
+    }
 
     //używane gdy user aktualizuje swoje dane
     @Override
@@ -117,7 +144,7 @@ public class UserServiceImpl implements UserService {
             user.setLastActiveDate(LocalDateTime.now());
             return userRepository.save(user);
         }
-        System.out.println("Nie można zaktualizować czasu ostatniej dla użytkownika: "+username+ " ponieważ on nie istnieje w bazie danych!");
+        System.out.println("Nie można zaktualizować czasu ostatniej aktywności dla użytkownika: "+username+ " ponieważ on nie istnieje w bazie danych!");
         return user;
     }
 
@@ -149,11 +176,29 @@ public class UserServiceImpl implements UserService {
         tokenRepository.save(myToken);
         userRepository.save(user);
     }
+    @Override
+    public void saveRegisteredUser(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user != null) {
+            saveRegisteredUser(user);
+        }
+        else System.out.println("Nie można aktywować użytkownika: "+username+ " ponieważ on nie istnieje w bazie danych!");
+    }
 
     @Override
     public List<User> findAllUsers() {
         List<User> userList = new ArrayList<>();
         userList = userRepository.findAll();
         return userList;
+    }
+
+    @Override
+    public void delete(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user != null) {
+            userRepository.delete(user);
+        }
+        System.out.println("Nie można usunąć użytkownika: "+username+ " ponieważ on nie istnieje w bazie danych!");
+
     }
 }

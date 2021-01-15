@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
 </head>
 <body>
@@ -9,6 +9,9 @@
                 <h6 class="m-0 font-weight-bold text-primary"></h6>
             </div>
             <div class="card-body">
+                <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center" onautocomplete=""></div>
+
+                <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
@@ -40,7 +43,7 @@
                             <td th:text="${acc.getFirstName()}"></td>
                             <td th:text="${acc.getLastName()}"></td>
                             <td th:text="${acc.getRoles()}"></td>
-                            <td>DO ZROBIENIA</td>
+                            <td th:text="${#temporals.format(acc.getLastActiveDate(), 'HH:mm dd-MM-yyyy')}">01/23/2018 (14 dni temu)</td>
                             <td>
                                 <div class="btn-group btn-block">
                                     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -62,6 +65,228 @@
             </div>
         </div>
     </div>
+    <div th:fragment="wyswietlWszystkich">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary"></h6>
+            </div>
+            <div class="card-body">
+                <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center" onautocomplete=""></div>
+
+                <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Nazwa użytkownika</th>
+                            <th>Email</th>
+                            <th>Imię</th>
+                            <th>Nazwisko</th>
+                            <th>Rola</th>
+                            <th>Aktywowany</th>
+                            <th>Data rejestracji</th>
+                            <th>Akcja</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>Nazwa użytkownika</th>
+                            <th>Email</th>
+                            <th>Imię</th>
+                            <th>Nazwisko</th>
+                            <th>Rola</th>
+                            <th>Aktywowany</th>
+                            <th>Data rejestracji</th>
+                            <th>Akcja</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr th:each="all, iterStat: ${allUsers}">
+                            <td th:text="${all.getUsername()}"></td>
+                            <td th:text="${all.getEmail()}"></td>
+                            <td th:text="${all.getFirstName()}"></td>
+                            <td th:text="${all.getLastName()}"></td>
+                            <td  th:text="${all.getRoles()}"></td>
+                            <div th:if="${all.isEnabled() == true}">
+                                <td>Tak</td>
+                            </div>
+                            <div th:unless="${all.isEnabled() == true}">
+                                <td>Nie</td>
+                            </div>
+                            <td th:text="${all.getRegistrationDate()}"></td>
+                            <td>
+                                <div class="btn-group btn-block">
+                                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Akcja
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/" th:href="@{/profile/{u} (u=${all.getUsername()})}">Pokaż profil</a>
+
+                                        <a class="dropdown-item" href="#">Wyślij wiadomość</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="/" th:href="@{/admin/delete/{username} (username=${all.getUsername()})}">Usuń</a>
+                                        <a th:unless="${all.isEnabled()}" class="dropdown-item" href="/" th:href="@{/admin/activate/{username} (username=${all.getUsername()})}">Aktywuj</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:fragment="stworzUzytkownika">
+        <div class="container-flex mx-5">
+            <form  class="needs-validation" novalidate th:action="@{/admin/createUser}" th:object="${userDto}" th:method="POST">
+                <div class="row no-gutters">
+                    <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
+                        <div id="collapse1" class="card border-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">To narzędzie </h5>
+                                <p class="card-text">pozwala stworzyć nowego użytkownika i przypisać mu role.</p>
+                            </div>
+                        </div>
+
+                        <div id="collapse2" class="card border-success mb-3 ">
+                            <div class="card-body">
+                                <h5 class="card-title">Stworzony tak użytkownik</h5>
+                                <p class="card-text">będzie aktywny dopiero wtedy, kiedy potwierdzi swój email chyba, że będzie wybrana opcja 'Czy ma być aktywne?'.</p>
+                            </div>
+                        </div>
+                        <div id="collapse3" class="card border-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Potwierdzenie adresu e-mail</h5>
+                                <p class="card-text">znajdzie się na jego skrzynce e-mail.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card col-lg-6 o-hidden border-2 shadow-lg py-1 my-5">
+                        <div class="card-body p-0">
+                            <!-- Nested Row within Card Body -->
+                            <div class="col-lg">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Wpisz dane</h1>
+                                    </div>
+                                    <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center"></div>
+                                    <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-lg-2"></div>
+                                            <div class="col-lg-8">
+                                                <div class="input-group">
+                                                    <input th:field="*{username}" class="form-control text-center form-control-user" id="username" placeholder="Nazwa użytkownika" required>
+                                                </div><!-- /input-group -->
+                                            </div><!-- /.col-lg-4 -->
+                                            <div class="col-lg-2"></div>
+                                        </div><!-- /.row -->
+                                    </div>
+                                    <hr>
+                                    <div class="form-group " >
+                                        <div class="row" >
+                                            <div class="col-lg-1"></div>
+                                            <div class="col-lg-10">
+                                                <div class="input-group">
+                                                    <input th:field="*{email}"  class="form-control text-center form-control-user" id="email" placeholder="Adres E-mail"required>
+                                                </div><!-- /input-group -->
+                                            </div><!-- /.col-lg-4 -->
+                                            <div class="col-lg-1"></div>
+                                        </div><!-- /.row -->
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row" >
+                                        <div class="col-sm-6 mb-3 mb-sm-0" >
+                                            <input th:field="*{firstName}" class="form-control form-control-user" id="firstName" placeholder="Imię" required>
+
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input th:field="*{lastName}" class="form-control form-control-user" id="lastName" placeholder="Nazwisko" required>
+
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="password" th:field="*{password}"  class="form-control form-control-user" id="password" placeholder="Hasło"required>
+
+                                        </div>
+                                        <div class="col-sm-6" >
+                                            <input type="password" th:field="*{confirmPassword}"  class="form-control form-control-user" id="confirmPassword" placeholder="Powtórz hasło" required>
+
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 pl-5 py-2 mb-sm-0 custom-control custom-checkbox">
+                                            <input id="active" class="custom-control-input" type="checkbox" th:field="*{active}"/>
+                                            <label class="custom-control-label" for="active">Czy ma być aktywne?</label>
+                                        </div>
+                                        <div class="col-sm-6" >
+                                            <select class="form-control" id="role" name="role">
+                                                <option th:each="role : ${T(com.JanCode.SKPplus.web.dto.RoleDto).values()}"
+                                                        th:value="${role}" th:text="${role.roleName}" ></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <hr>
+                                    <input type="submit" class="btn btn-primary btn-user btn-block" value="Stwórz użytkownika">
+                                    <!--<button type="submit" class="btn btn-success">Zarejestruj</button>-->
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card col-lg-3 o-hidden border-0 my-5 " th:if="${#fields.hasErrors()}" style="background-color: rgba(245, 245, 245, 0.0); " >
+                        <div class="d-flex-auto px-1">
+                            <div class="mb-auto pl-1 ">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('username')}"
+                                     th:each="error : ${#fields.errors('username')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('email')}"
+                                     th:each="error : ${#fields.errors('email')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('firstName')}"
+                                     th:each="error : ${#fields.errors('firstName')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('lastName')}"
+                                     th:each="error : ${#fields.errors('lastName')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('password')}"
+                                     th:each="error : ${#fields.errors('password')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('confirmPassword')}"
+                                     th:each="error : ${#fields.errors('confirmPassword')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('global') && #fields.errors('confirmPassword') != null && #fields.errors('password') != null  }"
+                                     th:each="error : ${#fields.errors('global')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('role')}"
+                                     th:each="error : ${#fields.errors('role')}" th:text="${error}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div th:fragment="wyswietlDomyslne">
 
     </div>

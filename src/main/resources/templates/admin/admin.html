@@ -7,18 +7,29 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div th:if="${param.main}">
+    <div th:if="${tryb == 'showMain'}">
         <h1 class="h3 mb-2 text-gray-800">Strona głowna Admina:</h1>
         <div th:insert="fragments/adminFragments :: wyswietlDomyslne"></div>
 
     </div>
-    <div th:if="${param.active}">
+    <div th:if="${tryb == 'showActive'}">
         <h1 class="h3 mb-2 text-gray-800">Aktywni użytkownicy:</h1>
         <div th:insert="fragments/adminFragments :: wyswietlZalogowanych"></div>
     </div>
-    <div th:if="${param.generateAlert}">
+
+    <div th:if="${tryb == 'generateAlert'}">
         <h1 class="h3 mb-2 text-gray-800">Generowanie alertu:</h1>
         <div th:insert="fragments/adminFragments :: wyswietlGenerujAlert"></div>
+
+    </div>
+    <div th:if="${tryb == 'showAll'}">
+        <h1 class="h3 mb-2 text-gray-800">Wszyscy użytkownicy:</h1>
+        <div th:insert="fragments/adminFragments :: wyswietlWszystkich"></div>
+
+    </div>
+    <div th:if="${tryb == 'createUser'}">
+        <h1 class="h3 mb-2 text-gray-800"></h1>
+        <div th:insert="fragments/adminFragments :: stworzUzytkownika"></div>
 
     </div>
 

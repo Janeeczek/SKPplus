@@ -5,6 +5,7 @@ import com.JanCode.SKPplus.model.InfoModel.WykresKolowyData;
 import com.JanCode.SKPplus.model.InfoModel.WykresLiniowyData;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.model.Raport;
+import com.JanCode.SKPplus.model.User;
 import com.JanCode.SKPplus.repository.ActiveUsersRepository;
 import com.JanCode.SKPplus.service.ActiveUserService;
 import com.JanCode.SKPplus.service.RaportServiceImpl;
@@ -20,9 +21,6 @@ import java.util.List;
 
 @ControllerAdvice("com.JanCode.SKPplus.controller")
 public class AnnotationAdvice {
-
-    @Autowired
-    private ActiveUsersRepository activeUsersRepository;
     @Autowired
     private ActiveUserService activeUserService;
     @Autowired
@@ -40,11 +38,6 @@ public class AnnotationAdvice {
             return principal;
         }
     }
-    @ModelAttribute("activeUsers")
-    public List<ActiveUsers> getActiveUsers() {
-        List<ActiveUsers> a = activeUsersRepository.getAllActiveUsers();
-        return (a == null) ? null : a;
-    }
     @ModelAttribute("image")
     public String getCurrentUserPhoto(Authentication authentication) {
         if (authentication == null)
@@ -61,7 +54,7 @@ public class AnnotationAdvice {
         {
             System.out.println("Lista INCOME != null");
             Double income = raportService.getAllIncome();
-            if (income == null) {
+            if (income == null || income <1.0) {
                 return "Brak dochodu";
             } else if (income < 1000.0 ) {
                 if(income % 1 ==0)

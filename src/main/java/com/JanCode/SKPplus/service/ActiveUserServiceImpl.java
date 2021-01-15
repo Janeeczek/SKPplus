@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Component
 public class ActiveUserServiceImpl implements ActiveUserService {
     @Autowired
@@ -32,6 +34,12 @@ public class ActiveUserServiceImpl implements ActiveUserService {
         userService.updateLastActiveTime(user.getUsername());
         return activeUsersRepository.save(activeUsers);
     }
+
+    @Override
+    public List<ActiveUsers> findAll() {
+        return activeUsersRepository.findAll();
+    }
+
     @Override
     public ActiveUsers save(MyUserPrincipal myUserPrincipal) {
         ActiveUsers activeUsers = new ActiveUsers(myUserPrincipal);

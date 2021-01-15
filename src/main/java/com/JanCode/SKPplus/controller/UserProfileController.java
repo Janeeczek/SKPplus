@@ -48,6 +48,7 @@ public class UserProfileController {
     @GetMapping("/profile")
     public ModelAndView showProfileDefaultWithoutParam(Authentication authentication) {
         MyUserPrincipal principal;
+
         ModelAndView model = new ModelAndView("/user/profile");
         principal = (MyUserPrincipal) authentication.getPrincipal();
         model.addObject("activeService",activeUserService);

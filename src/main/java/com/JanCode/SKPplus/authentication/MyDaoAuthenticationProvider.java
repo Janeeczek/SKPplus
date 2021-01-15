@@ -19,18 +19,23 @@ public class MyDaoAuthenticationProvider extends DaoAuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        User user = userService.findByUsername(authentication.getPrincipal().toString());
-        if (user != null) {
-            if(user.isEnabled() == false) {
-                System.out.println("Ten użytkownik nie jest aktywowany: " + user.getUsername());
-            }
+        if(authentication.getPrincipal().toString() != null && !authentication.getPrincipal().toString().equals("")) {
+            User user = userService.findByUsername(authentication.getPrincipal().toString());
+            if (user != null) {
+                if(user.isEnabled() == false) {
+                    System.out.println("Ten użytkownik nie jest aktywowany: " + user.getUsername());
+                }
 
-            if(activeUserService.findByUsername(user.getUsername())==null) {
-                System.out.println("Dodano uzytkownika: " + user.getUsername() + ", do bazy danych aktywnych użytkowników!");
-                activeUserService.save(user);
+                if(activeUserService.findByUsername(user.getUsername())==null) {
+                    System.out.println("Dodano uzytkownika: " + user.getUsername() + ", do bazy danych aktywnych użytkowników!");
+                    activeUserService.save(user);
+                }
+                System.out.println("Zalogowano uzytkownika: " + user.getUsername());
             }
-            System.out.println("Zalogowano uzytkownika: " + user.getUsername());
+        } else {
+            System.out.println("DAO! Błąd! Nie znaleziono użytkownika: " + authentication.getPrincipal().toString());
         }
+
 
         return super.authenticate(authentication);
     }

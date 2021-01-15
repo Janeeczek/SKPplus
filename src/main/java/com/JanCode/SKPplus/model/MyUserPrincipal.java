@@ -21,11 +21,7 @@ public class MyUserPrincipal implements UserDetails {
     private User user;
 
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
-    }
+
 
     public MyUserPrincipal(User user) {
         this.user = user;
@@ -33,8 +29,6 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-
         return mapRolesToAuthorities(user.getRoles());
     }
 
@@ -89,6 +83,12 @@ public class MyUserPrincipal implements UserDetails {
             return true;
         } else return false;
     }
+    public String getPrimaryRole() {
+        String formattedAuthorities;
+        List<GrantedAuthority> grantedAuthorities =new ArrayList<>(this.getAuthorities()) ;
+        formattedAuthorities = grantedAuthorities.get(0).getAuthority();
+        return formattedAuthorities;
+    }
 
 
     @Override
@@ -109,5 +109,11 @@ public class MyUserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return user.isEnabled();
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 }

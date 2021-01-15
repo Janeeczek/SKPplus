@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
 
     <meta charset="utf-8">
@@ -46,7 +46,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="/" th:href="@{/admin?main}">
+            <a class="nav-link" href="/" th:href="@{/admin?param=showMain}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Główna strona</span></a>
         </li>
@@ -69,8 +69,8 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Użytkownicy:</h6>
-                    <a class="collapse-item" href="/" th:href="@{/admin?active}">Aktywni użytkownicy</a>
-                    <a class="collapse-item" href="/" th:href="@{/users/pokazWszystkie}">Wszyscy użytkownicy</a>
+                    <a class="collapse-item" href="/" th:href="@{/admin?param=showActive}">Aktywni użytkownicy</a>
+                    <a class="collapse-item" href="/" th:href="@{/admin?param=showAll}">Wszyscy użytkownicy</a>
                     <h6 class="collapse-header">Pliki:</h6>
                     <a class="collapse-item" href="/" th:href="@{/pliki/pokazWszystkie}">Pliki</a>
                     <a class="collapse-item" href="/" th:href="@{/raport/pokazWszystkie}">Raporty</a>
@@ -90,9 +90,9 @@
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Domyślne:</h6>
-                    <a class="collapse-item" href="/" th:href="@{/}">Stwórz użytkownika</a>
+                    <a class="collapse-item" href="/" th:href="@{/admin?param=createUser}">Stwórz użytkownika</a>
                     <a class="collapse-item" href="/" th:href="@{/pliki/upload}">Wgraj plik</a>
-                    <a class="collapse-item" href="/" th:href="@{/admin?generateAlert}">Generuj alert</a>
+                    <a class="collapse-item" href="/" th:href="@{/admin?param=generateAlert}">Generuj alert</a>
                 </div>
             </div>
         </li>
@@ -120,7 +120,7 @@
                     <a class="collapse-item" href="/" th:href="@{/}">Strona Diagnosty</a>
                     <a class="collapse-item" href="/" th:href="@{/}">Strona księgowej</a>
                     <a class="collapse-item" href="/" th:href="@{/}">Strona Właściciela</a>
-                    <a class="collapse-item" href="/" th:href="@{/admin?main}">Strona Admina</a>
+                    <a class="collapse-item" href="/" th:href="@{/admin?showMain}">Strona Admina</a>
                 </div>
             </div>
         </li>
@@ -269,7 +269,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-envelope fa-fw"></i>
                             <!-- Counter - Messages -->
-                            <span class="badge badge-danger badge-counter">7</span>
+                            <span class="badge badge-danger badge-counter">soon</span>
                         </a>
                         <!-- Dropdown - Messages -->
                         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -284,9 +284,8 @@
                                     <div class="status-indicator bg-success"></div>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                        problem I've been having.</div>
-                                    <div class="small text-gray-500">Emily Fowler · 58m</div>
+                                    <div class="text-truncate">Cześć co tam?.</div>
+                                    <div class="small text-gray-500">Jan Mazurek · 58m temu</div>
                                 </div>
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="#">
@@ -296,9 +295,8 @@
                                     <div class="status-indicator"></div>
                                 </div>
                                 <div>
-                                    <div class="text-truncate">I have the photos that you ordered last month, how
-                                        would you like them sent to you?</div>
-                                    <div class="small text-gray-500">Jae Chun · 1d</div>
+                                    <div class="text-truncate">Słyszałem, że dostałeś dobrą ocenę za projekt?</div>
+                                    <div class="small text-gray-500">Ktoś nieznany · 1 dzień temu</div>
                                 </div>
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="#">
@@ -308,21 +306,8 @@
                                     <div class="status-indicator bg-warning"></div>
                                 </div>
                                 <div>
-                                    <div class="text-truncate">Last month's report looks great, I am very happy with
-                                        the progress so far, keep up the good work!</div>
-                                    <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                         alt="">
-                                    <div class="status-indicator bg-success"></div>
-                                </div>
-                                <div>
-                                    <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                        told me that people say this to all dogs, even if they aren't good...</div>
-                                    <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                                    <div class="text-truncate">W Lublinie brakuje sanek! Wiesz może gdzie je kupię?</div>
+                                    <div class="small text-gray-500">Ania Lama · 2 dni temu</div>
                                 </div>
                             </a>
                             <a class="dropdown-item text-center small text-gray-500" href="/" th:href="@{/pokazWiadomosci}">Pokaż wszystkie wiadomości</a>
@@ -431,6 +416,31 @@
 <script src="/js/demo/chart-area-demo.js"></script>
 <script src="/js/demo/chart-pie-demo.js"></script>
 <script>
+            $(document).ready(function() {
+                $('#collapse1').hide();
+                $('#collapse2').hide();
+                $('#collapse3').hide();
+                $('#collapse1').slideToggle("slow","linear",function(){$('#collapse2').slideToggle("slow","linear",function(){$('#collapse3').slideToggle("slow","linear");});});
+                setTimeout(function() {
+                    $(".alert").slideUp(900);
+                }, 2000);
+                console.log( "ready!" );
+            });
+            (function() {
+                'use strict';
+                window.addEventListener('load', function() {
+                    var forms = document.getElementsByClassName('needs-validation');
+                    var validation = Array.prototype.filter.call(forms, function(form) {
+                        form.addEventListener('submit', function(event) {
+                            if (form.checkValidity() === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
+                }, false);
+            })();
 function myFun() {
 	var tempTitle = document.getElementById("tytul").value;
     var tempText = document.getElementById("tresc").value;

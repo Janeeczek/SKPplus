@@ -42,15 +42,15 @@
                     </tr>
                     <tr>
                         <td>Rola:</td>
-                        <td>User</td>
+                        <td th:text="${user.getPrimaryRole()}"></td>
                     </tr>
                     <tr>
                         <td>Status:</td>
                         <td>
-                            <div th:if="${activeService.isActive(user.getEmail())}">
+                            <div th:if="${activeService.isActive(user.getUsername())}">
                                 <span class="font-weight-bold text-success">Aktywny</span>
                             </div>
-                            <div th:unless="${activeService.isActive(user.getEmail())}">
+                            <div th:unless="${activeService.isActive(user.getUsername())}">
                                 <span class="font-weight-bold text-danger">Nie aktywny</span>
                             </div>
                         </td>

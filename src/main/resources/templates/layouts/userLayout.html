@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
 
     <meta charset="utf-8">
@@ -147,18 +147,18 @@
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
 
-        <!-- Sidebar Message -->
+        <!-- Sidebar Message
         <div class="sidebar-card">
-            <img class="sidebar-card-illustration mb-2" src="" alt=""> <!--DODAJ TUTAJ ZDJECIE PLIKU-->
+            <img class="sidebar-card-illustration mb-2" src="" alt="">
             <p class="text-center mb-2"><strong>Dodawanie pliku</strong> szybkie narzędzie do wgrywania pliku</p>
             <a class="btn btn-success btn-sm" href="/" th:href="@{/pliki/upload}">Dodaj plik!</a>
         </div>
         <div class="sidebar-card">
-            <img class="sidebar-card-illustration mb-2" src="" alt=""> <!--DODAJ TUTAJ ZDJECIE PLIKU-->
+            <img class="sidebar-card-illustration mb-2" src="" alt="">
             <p class="text-center mb-2"><strong>Dodawanie pliku</strong> szybkie narzędzie do wgrywania pliku</p>
             <a class="btn btn-success btn-sm" href="/" th:href="@{/delete}">usun wszystko?</a>
         </div>
-
+-->
     </ul>
     <!-- End of Sidebar -->
 
@@ -215,15 +215,17 @@
                             </form>
                         </div>
                     </li>
-                    <li class="nav-item my-3" >
-                        <a href="#" th:href="@{/admin?main}" class="btn btn-danger btn-icon-split">
+
+
+                        <li th:if="${currentUser.isAdmin()}" class="nav-item my-3" >
+                            <a href="#" th:href="@{/admin?param=showMain}" class="btn btn-danger btn-icon-split">
                                         <span class="icon text-white-50">
                                             <i class="fas fa-user-shield"></i>
                                         </span>
-                            <span class="text">Admin mode</span>
-                        </a>
+                                <span class="text">Admin mode</span>
+                            </a>
 
-                    </li>
+                        </li>
                     <!-- Nav Item - Alerts -->
                     <li sec:authorize="isAuthenticated()" class="nav-item dropdown no-arrow mx-1">
 
@@ -251,7 +253,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-envelope fa-fw"></i>
                             <!-- Counter - Messages -->
-                            <span class="badge badge-danger badge-counter">7</span>
+                            <span class="badge badge-danger badge-counter">soon</span>
                         </a>
                         <!-- Dropdown - Messages -->
                         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -266,9 +268,8 @@
                                     <div class="status-indicator bg-success"></div>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                        problem I've been having.</div>
-                                    <div class="small text-gray-500">Emily Fowler · 58m</div>
+                                    <div class="text-truncate">Cześć co tam?.</div>
+                                    <div class="small text-gray-500">Jan Mazurek · 58m temu</div>
                                 </div>
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="#">
@@ -278,9 +279,8 @@
                                     <div class="status-indicator"></div>
                                 </div>
                                 <div>
-                                    <div class="text-truncate">I have the photos that you ordered last month, how
-                                        would you like them sent to you?</div>
-                                    <div class="small text-gray-500">Jae Chun · 1d</div>
+                                    <div class="text-truncate">Słyszałem, że dostałeś dobrą ocenę za projekt?</div>
+                                    <div class="small text-gray-500">Ktoś nieznany · 1 dzień temu</div>
                                 </div>
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="#">
@@ -290,21 +290,8 @@
                                     <div class="status-indicator bg-warning"></div>
                                 </div>
                                 <div>
-                                    <div class="text-truncate">Last month's report looks great, I am very happy with
-                                        the progress so far, keep up the good work!</div>
-                                    <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                         alt="">
-                                    <div class="status-indicator bg-success"></div>
-                                </div>
-                                <div>
-                                    <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                        told me that people say this to all dogs, even if they aren't good...</div>
-                                    <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                                    <div class="text-truncate">W Lublinie brakuje sanek! Wiesz może gdzie je kupię?</div>
+                                    <div class="small text-gray-500">Ania Lama · 2 dni temu</div>
                                 </div>
                             </a>
                             <a class="dropdown-item text-center small text-gray-500" href="/" th:href="@{/pokazWiadomosci}">Pokaż wszystkie wiadomości</a>

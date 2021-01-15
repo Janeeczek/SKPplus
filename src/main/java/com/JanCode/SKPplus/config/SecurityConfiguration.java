@@ -26,6 +26,15 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.thymeleaf.IEngineConfiguration;
+import org.thymeleaf.cache.ICacheEntryValidity;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.AbstractTemplateResolver;
+import org.thymeleaf.templateresource.ITemplateResource;
+
+import java.util.Map;
 
 
 @Configuration
@@ -51,7 +60,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public EmitterService emitterService() {return new EmitterService();}
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.sessionManagement().maximumSessions(1)
+        http.sessionManagement().maximumSessions(-1).sessionRegistry(sessionRegistry())
                 .expiredUrl("/login?expired");
                 //.invalidSessionUrl("/invalidSession.html");
         http.csrf().disable().authorizeRequests()

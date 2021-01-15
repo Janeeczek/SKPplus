@@ -33,74 +33,74 @@
                         <div class="row">
                             <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
                             <div class="col-lg-7">
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Stwórz konto!</h1>
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Stwórz konto!</h1>
+                                    </div>
+                                    <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center"></div>
+                                    <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-lg-2"></div>
+                                            <div class="col-lg-8">
+                                                <div class="input-group">
+                                                    <input th:field="*{username}" class="form-control text-center form-control-user" id="username" placeholder="Nazwa użytkownika"required>
+                                                </div><!-- /input-group -->
+                                            </div><!-- /.col-lg-4 -->
+                                            <div class="col-lg-2"></div>
+                                        </div><!-- /.row -->
+                                    </div>
+                                    <div class="form-group " >
+                                        <div class="row" >
+                                            <div class="col-lg-1"></div>
+                                            <div class="col-lg-10">
+                                                <div class="input-group">
+                                                    <input th:field="*{email}"  class="form-control text-center form-control-user" id="email" placeholder="Adres E-mail"required>
+                                                </div><!-- /input-group -->
+                                            </div><!-- /.col-lg-4 -->
+                                            <div class="col-lg-1"></div>
+                                        </div><!-- /.row -->
+                                    </div>
+                                    <div class="form-group row" >
+                                        <div class="col-sm-6 mb-3 mb-sm-0" >
+                                            <input th:field="*{firstName}" class="form-control form-control-user" id="firstName" placeholder="Imię" required>
+
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input th:field="*{lastName}" class="form-control form-control-user" id="lastName" placeholder="Nazwisko"required>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="password" th:field="*{password}"  class="form-control form-control-user" id="Hasło" placeholder="Hasło"required>
+
+                                        </div>
+                                        <div class="col-sm-6" >
+                                            <input type="password" th:field="*{confirmPassword}"  class="form-control form-control-user" id="confirmPassword" placeholder="Powtórz hasło" required>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input id="terms" type="checkbox" th:field="*{terms}" required/>
+                                        <label class="control-label" for="terms"> Zgadzam sie z <a href="#">warunkami serwisu</a>.</label>
+                                    </div>
+                                    <input type="submit" class="btn btn-primary btn-user btn-block" value="Zarejestruj się">
+                                    <!--<button type="submit" class="btn btn-success">Zarejestruj</button>-->
+                                    </a>
+                                    <hr>
+
+
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="/" th:href="@{/reset}">Zapomniałeś hasła?</a>
+                                    </div>
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="/" th:href="@{/login}">Jeśli posiadasz konto, kliknij tutaj!</a>
+                                    </div>
+                                </div>
                             </div>
-                            <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center"></div>
-                            <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
-                            <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-lg-2"></div>
-                                        <div class="col-lg-8">
-                                            <div class="input-group">
-                                                <input th:field="*{username}" class="form-control text-center form-control-user" id="username" placeholder="Nazwa użytkownika"required>
-                                            </div><!-- /input-group -->
-                                        </div><!-- /.col-lg-4 -->
-                                        <div class="col-lg-2"></div>
-                                    </div><!-- /.row -->
-                                </div>
-                            <div class="form-group " >
-                                    <div class="row" >
-                                        <div class="col-lg-1"></div>
-                                        <div class="col-lg-10">
-                                            <div class="input-group">
-                                                <input th:field="*{email}"  class="form-control text-center form-control-user" id="email" placeholder="Adres E-mail"required>
-                                            </div><!-- /input-group -->
-                                        </div><!-- /.col-lg-4 -->
-                                        <div class="col-lg-1"></div>
-                                    </div><!-- /.row -->
-                                </div>
-                            <div class="form-group row" >
-                                    <div class="col-sm-6 mb-3 mb-sm-0" >
-                                        <input th:field="*{firstName}" class="form-control form-control-user" id="firstName" placeholder="Imię" required>
-
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input th:field="*{lastName}" class="form-control form-control-user" id="lastName" placeholder="Nazwisko"required>
-
-                                    </div>
-                                </div>
-                            <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" th:field="*{password}"  class="form-control form-control-user" id="Hasło" placeholder="Hasło"required>
-
-                                    </div>
-                                    <div class="col-sm-6" >
-                                        <input type="password" th:field="*{confirmPassword}"  class="form-control form-control-user" id="confirmPassword" placeholder="Powtórz hasło" required>
-
-                                    </div>
-                                </div>
-                            <div class="form-group">
-                                    <input id="terms" type="checkbox" th:field="*{terms}" required/>
-                                    <label class="control-label" for="terms"> Zgadzam sie z <a href="#">warunkami serwisu</a>.</label>
-                                </div>
-                            <input type="submit" class="btn btn-primary btn-user btn-block" value="Zarejestruj się">
-                            <!--<button type="submit" class="btn btn-success">Zarejestruj</button>-->
-                            </a>
-                            <hr>
-
-
-                            <hr>
-                            <div class="text-center">
-                                <a class="small" href="/" th:href="@{/reset}">Zapomniałeś hasła?</a>
-                            </div>
-                            <hr>
-                            <div class="text-center">
-                                <a class="small" href="/" th:href="@{/login}">Jeśli posiadasz konto, kliknij tutaj!</a>
-                            </div>
-                        </div>
-                    </div>
                         </div>
                     </div>
                 </div>
@@ -113,22 +113,22 @@
                         </div>
                         <div class="mb-auto pl-2">
                             <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('email')}"
-                                th:each="error : ${#fields.errors('email')}" th:text="${error}">
+                                 th:each="error : ${#fields.errors('email')}" th:text="${error}">
                             </div>
                         </div>
                         <div class="mb-auto pl-2">
                             <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('firstName')}"
-                                th:each="error : ${#fields.errors('firstName')}" th:text="${error}">
+                                 th:each="error : ${#fields.errors('firstName')}" th:text="${error}">
                             </div>
                         </div>
                         <div class="mb-auto pl-2">
                             <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('lastName')}"
-                                th:each="error : ${#fields.errors('lastName')}" th:text="${error}">
+                                 th:each="error : ${#fields.errors('lastName')}" th:text="${error}">
                             </div>
                         </div>
                         <div class="mb-auto pl-2">
                             <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('password')}"
-                                th:each="error : ${#fields.errors('password')}" th:text="${error}">
+                                 th:each="error : ${#fields.errors('password')}" th:text="${error}">
                             </div>
                         </div>
                         <div class="mb-auto pl-2">
