@@ -3,6 +3,7 @@ package com.JanCode.SKPplus.model.raportModel;
 import com.JanCode.SKPplus.util.AdapterCDATA;
 import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.KwotyDodatkoweDto;
 import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.PozycjaKdDto;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Proxy(lazy = false)
 public class KwotyDodatkowe {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

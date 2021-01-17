@@ -2,11 +2,13 @@ package com.JanCode.SKPplus.model.raportModel;
 
 import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahenciDto;
 import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahentDto;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
+@Proxy(lazy = false)
 public class Kontrahenci {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,7 +16,7 @@ public class Kontrahenci {
     private String wersja;
     private String bazaZrdId;
     private String bazaDocId ;
-    @ManyToMany(fetch = FetchType.LAZY,cascade =CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER,cascade =CascadeType.ALL)
     @JoinTable(
             name = "kontrahenci_w_raporcie",
             joinColumns = @JoinColumn(

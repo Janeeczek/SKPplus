@@ -11,7 +11,6 @@ import javax.xml.bind.annotation.*;
 
 @XmlRootElement(name = "ROOT")
 @XmlType(propOrder={"KONTRAHENCI","REJESTRY_SPRZEDAZY_VAT"})
-
 public class DaneRaportuDto {
     @XmlAttribute(name="xmlns")
     String xmlns; //= "http://www.comarch.pl/cdn/optima/offline";
@@ -27,12 +26,12 @@ public class DaneRaportuDto {
         this.REJESTRY_SPRZEDAZY_VAT = REJESTRY_SPRZEDAZY_VAT;
     }
     public DaneRaportuDto(Raport raport) {
-        this.xmlns = "http://www.comarch.pl/cdn/optima/offline";
+       this.xmlns = "http://www.comarch.pl/cdn/optima/offline";
         this.KONTRAHENCI = new KontrahenciDto(raport.getKontrahenci());
         this.REJESTRY_SPRZEDAZY_VAT = new RejestrySprzedazyVatDto(raport.getRejestrySprzedazyVat());
 
     }
-
+    @XmlElement(name="KONTRAHENCI")
     public KontrahenciDto getKONTRAHENCI() {
         return KONTRAHENCI;
     }
@@ -40,7 +39,7 @@ public class DaneRaportuDto {
     public void setKONTRAHENCI(KontrahenciDto KONTRAHENCI) {
         this.KONTRAHENCI = KONTRAHENCI;
     }
-
+    @XmlElement(name="REJESTRY_SPRZEDAZY_VAT")
     public RejestrySprzedazyVatDto getREJESTRY_SPRZEDAZY_VAT() {
         return REJESTRY_SPRZEDAZY_VAT;
     }

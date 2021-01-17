@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Controller
 public class RaportController {
     @Autowired
@@ -54,9 +58,11 @@ public class RaportController {
     public String createFileFromRaport(Authentication authentication, @PathVariable long id, RedirectAttributes atts) {
 
         MyUserPrincipal principal = (MyUserPrincipal) authentication.getPrincipal();
+        String name =  reportService.getRaportById(id).getNazwa();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
         User user = userService.findByUsername(principal.getUsername());
         byte[] file = reportService.createFileFromRaport(id,principal.getUsername());
-        FileDB fileDB = storageService.store(new FileDB("RaportZdba","text/xml",file,user));
+        FileDB fileDB = storageService.store(new FileDB("Wygenerowany "+ name +" " + LocalDateTime.now().format(formatter),"text/xml",file,user));
         if (fileDB != null) {
             atts.addFlashAttribute("successMsg", "Poprawnie utworzono plik z Bazy Danych o id: " + id +" ");
         } else {

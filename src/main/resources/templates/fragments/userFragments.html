@@ -640,6 +640,7 @@
                         <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Nazwa</th>
                             <th>Data Utworzenia</th>
                             <th>ID kontrahentów</th>
                             <th>ID rejestrów sprzedaży</th>
@@ -649,6 +650,7 @@
                         <tfoot>
                         <tr>
                             <th>ID</th>
+                            <th>Nazwa</th>
                             <th>Data Utworzenia</th>
                             <th>ID kontrahentów</th>
                             <th>ID rejestrów sprzedaży</th>
@@ -658,6 +660,7 @@
                         <tbody>
                         <tr th:each="rap, iterStat: ${raporty}">
                             <td th:text="${rap.getId()}"></td>
+                            <td th:text="${rap.getNazwa()}"></td>
                             <td th:text="${rap.getDataUtworzenia()}"></td>
                             <td th:text="${rap.getKontrahenci().getId()}"></td>
                             <td th:text="${rap.getRejestrySprzedazyVat().getId()}"></td>

@@ -413,6 +413,7 @@ public class RejestrSprzedazyVatDto {
     public void setDATA_KURSU_2(String DATA_KURSU_2) {
         this.DATA_KURSU_2 = DATA_KURSU_2;
     }
+
     public PozycjeDto getPOZYCJE() {
         return POZYCJE;
     }
@@ -428,6 +429,7 @@ public class RejestrSprzedazyVatDto {
     public void setKWOTY_DODATKOWE(KwotyDodatkoweDto KWOTY_DODATKOWE) {
         this.KWOTY_DODATKOWE = KWOTY_DODATKOWE;
     }
+
     public PlatnosciDto getPLATNOSCI() {
         return PLATNOSCI;
     }

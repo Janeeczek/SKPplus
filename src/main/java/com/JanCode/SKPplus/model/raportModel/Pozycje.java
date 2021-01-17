@@ -2,17 +2,19 @@ package com.JanCode.SKPplus.model.raportModel;
 
 import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.PozycjaDto;
 import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.PozycjeDto;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
+@Proxy(lazy = false)
 public class Pozycje {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "pozycje_id",referencedColumnName = "id")
     private List<Pozycja> pozycja;
 

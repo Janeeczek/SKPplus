@@ -2,18 +2,20 @@ package com.JanCode.SKPplus.model.raportModel;
 
 import com.JanCode.SKPplus.web.dto.kontrahenci.AdresDto;
 import com.JanCode.SKPplus.web.dto.kontrahenci.AdresyDto;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Proxy(lazy = false)
 public class Adresy {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "adres_id",referencedColumnName = "id")
     private List<Adres> adres;
 

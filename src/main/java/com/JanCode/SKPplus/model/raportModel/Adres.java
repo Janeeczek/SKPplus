@@ -1,12 +1,14 @@
 package com.JanCode.SKPplus.model.raportModel;
 
 import com.JanCode.SKPplus.web.dto.kontrahenci.AdresDto;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 @Entity
+@Proxy(lazy = false)
 public class Adres {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
