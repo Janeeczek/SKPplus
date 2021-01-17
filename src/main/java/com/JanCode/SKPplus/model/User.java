@@ -135,6 +135,13 @@ public class User {
     public Collection<Role> getRoles() {
         return roles;
     }
+    public String getFormattedRoles() {
+        return this.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toList()).stream()
+                .map(n -> String.valueOf(n).substring(5))
+                .collect(Collectors.joining(" ", " ", " "));
+    }
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;

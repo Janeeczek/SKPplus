@@ -1,6 +1,7 @@
 package com.JanCode.SKPplus.service;
 
 import com.JanCode.SKPplus.exeception.UserAlreadyExistException;
+import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.model.Role;
 import com.JanCode.SKPplus.model.User;
 import com.JanCode.SKPplus.repository.RoleRepository;
@@ -83,10 +84,15 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.save(user);
     }
+
+    //używane gdy user zostaje tworzony przez admina
     @Override
     public User registerNewUserAccount(AdminRegistrationDto registration) throws UserAlreadyExistException {
         if (emailExist(registration.getEmail())) {
             throw new UserAlreadyExistException("Ten adres email jest już w użyciu!");
+        }
+        if (usernameExist(registration.getUsername())) {
+            throw new UserAlreadyExistException("Ta nazwa użytkownika jest już w użyciu!");
         }
         User user = new User();
         user.setUsername(registration.getUsername());
@@ -112,21 +118,26 @@ public class UserServiceImpl implements UserService {
 
     //używane gdy user aktualizuje swoje dane
     @Override
-    public User saveUpdatedUser(UserUpdateProfileDto userdto,String username) {
-        if (emailExist(userdto.getEmail())) {
-            throw new UserAlreadyExistException("Ten adres email jest już w użyciu!");
+    public User saveUpdatedUser( UserUpdateProfileDto userdto, String username) {
+        if(!userdto.getUsername().equals(username)) {
+            if (usernameExist(userdto.getUsername())) {
+                throw new UserAlreadyExistException("Ta nazwa użytkownika jest już w użyciu!");
+            }
         }
+
+
         User user = userRepository.findByUsername(username);
         user.setUsername(userdto.getUsername());
         user.setFirstName(userdto.getFirstName());
         user.setLastName(userdto.getLastName());
-        user.setEmail(userdto.getEmail());
+        //user.setEmail(userdto.getEmail());
         user.setBirthDate(userdto.getBirthDate());
-        System.out.println(userdto.getBirthDate());
+        System.out.println("DATA : " + userdto.getBirthDate());
         user.setTelNumber(userdto.getTelNumber());
         user.setLastActiveDate(LocalDateTime.now());
 
-        if (userdto.getImage() != null) {
+        if (userdto.getByteImage().length > 0) {
+            //System.out.println("userdto.getByteImage() != null " + userdto.getByteImage().length);
             user.setImage(userdto.getByteImage());
         }
         if (userdto.getNewPassword() != null && userdto.getCurrentPassword() != null && userdto.getRepeatNewPassword() != null) {
@@ -150,6 +161,9 @@ public class UserServiceImpl implements UserService {
 
     private boolean emailExist(String email) {
         return userRepository.findByEmail(email) != null;
+    }
+    private boolean usernameExist(String username) {
+        return userRepository.findByUsername(username) != null;
     }
 
     @Override

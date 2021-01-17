@@ -6,14 +6,16 @@
 </head>
 <body>
 <div th:fragment="wyswietlInfo">
-    <div class="container  flex-grow-1 container-p-y">
 
+    <div class="container  flex-grow-1 container-p-y">
+        <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
+        <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center" onautocomplete=""></div>
         <div class="media align-items-center py-3 mb-3">
             <img th:src="*{'data:image/png;base64,'+currentUser.getByte64Image()}" alt="" class="d-block ui-w-100 rounded-circle" style="width: 30%" >
             <div class="media-body ml-4">
                 <h4 class="font-weight-bold mb-0"th:text="${user.getFirstname() + ' ' + user.getLastname()}">aaa<span class="text-muted font-weight-normal">@nick</span></h4>
-                <div class="text-muted mb-2"th:text="${currentUser.getUsername()}">ID: 3425433</div>
-                <a th:if="${currentUser.getUsername() == user.getUsername() or currentUser.isAdmin()}" href="/" th:href="@{/profile/{u}/edit (u=${user.getUsername()})}" class="btn btn-primary btn-sm">Edytuj</a>&nbsp;
+                <div class="text-muted mb-2"th:text="${'ID: '+user.getId()}">ID: 3425433</div>
+                <a th:if="${currentUser.getUsername() == user.getUsername() or currentUser.isAdmin()}" href="/" th:href="@{/profile/edit?{u} (u=${user.getUsername()})}" class="btn btn-primary btn-sm">Edytuj</a>&nbsp;
                 <a  class="btn btn-default btn-sm icon-btn"><i class="fa fa-mail"></i></a>
             </div>
         </div>
@@ -22,6 +24,7 @@
             <div class="card-body">
                 <table class="table user-view-table m-0">
                     <tbody>
+
                     <tr>
                         <td>Data rejestracji:</td>
                         <td th:text="${#temporals.format(user.getRegistrationDate(), 'HH:mm dd-MM-yyyy')}">>01/23/2017</td>
@@ -37,12 +40,12 @@
                             <td><span class="fa fa-check text-primary"></span>&nbsp; Tak</td>
                         </div>
                         <div th:unless="${user.isEnabled()}">
-                            <td><span class="fa fa-check text-primary"></span>&nbsp; Nie</td>
+                            <td><span class="fa fa-times-circle text-primary"></span>&nbsp; Nie</td>
                         </div>
                     </tr>
                     <tr>
                         <td>Rola:</td>
-                        <td th:text="${user.getPrimaryRole()}"></td>
+                        <td th:text="${user.getFormattedRoles()}"></td>
                     </tr>
                     <tr>
                         <td>Status:</td>
@@ -381,11 +384,11 @@
 </div>
 <div th:fragment="edytuj">
     <div class="container light-style flex-grow-1 container-p-y">
-        <form  th:action="@{/save-profile/{u} (u=${user.getUsername()})}" th:object="${userDto}" th:method="POST" enctype="multipart/form-data" multiple="multiple" >
+        <form  th:action="@{/save-profile/{u} (u=${user.getUsername()})}" th:object="${userDto}" th:method="POST" enctype="multipart/form-data" multiple="multiple" class="needs-validation" novalidate >
         <h4 class="font-weight-bold py-3 mb-4">
             Ustawienia użytkownika
         </h4>
-
+            <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center" onautocomplete=""></div>
         <div class="card overflow-hidden">
             <div class="row no-gutters row-bordered row-border-light">
                 <div class="col-md-3 pt-0">
@@ -436,27 +439,41 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label class="form-label">Nazwa użytkownika</label>
-                                    <input type="text" class="form-control mb-1" th:field="*{username}">
+                                    <input type="text" class="form-control mb-1" th:field="*{username}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Imię</label>
-                                    <input type="text" class="form-control" th:field="*{firstName}" >
+                                    <input type="text" class="form-control" th:field="*{firstName}" required>
+                                    <div class="valid-feedback">
+                                        Imię wygląda dobrze!
+                                    </div>
+                                    <div  class="invalid-feedback">
+                                        To nie wygląda mi na imię.
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Nazwisko</label>
-                                    <input type="text" class="form-control"th:field="*{lastName}"  >
+                                    <input type="text" class="form-control"th:field="*{lastName}"  required>
+                                    <div class="valid-feedback">
+                                        Nazwisko wygląda dobrze!
+                                    </div>
+                                    <div  class="invalid-feedback">
+                                        To nie wygląda mi na nazwisko.
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">E-mail</label>
-                                    <input type="text" class="form-control mb-1"th:field="*{email}" >
+                                    <input type="text" class="form-control mb-1"th:field="*{email}" readonly>
+                                    <!--
                                     <div class="alert alert-warning mt-3">
                                         Twój adres e-mail nie jest potwierdzony! Sprawdź pocztę<br>
                                         <a href="javascript:void(0)">Wyślij ponownie potwiedzenie</a>
                                     </div>
+                                    -->
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Firma</label>
-                                    <input type="text" class="form-control" value="PTHW sp. z o.o.">
+                                    <input type="text" class="form-control" value="PTHW sp. z o.o." readonly>
                                 </div>
                             </div>
 
@@ -490,7 +507,13 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Urodziny</label>
-                                    <input type="text" class="form-control" th:field="*{birthDate}" >
+                                    <input type="date" class="form-control" th:field="*{birthDate}" >
+                                    <div class="valid-feedback">
+                                        Data urodzin wygląda dobrze!
+                                    </div>
+                                    <div  class="invalid-feedback">
+                                        Wpisz poprawną datę urodzin.
+                                    </div>
                                 </div>
                             </div>
                             <hr class="border-light m-0">
@@ -499,7 +522,13 @@
                                 <h6 class="mb-4">Dane kontatkowe</h6>
                                 <div class="form-group">
                                     <label class="form-label">Telefon</label>
-                                    <input type="text" class="form-control"th:field="*{telNumber}">
+                                    <input id="phone-number" type="text" class="form-control" th:field="*{telNumber}" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}">
+                                    <div class="valid-feedback">
+                                        Numer telefonu poprawny!
+                                    </div>
+                                    <div  class="invalid-feedback">
+                                        Wpisz poprawny numer telefonu.
+                                    </div>
                                 </div>
 
                             </div>
@@ -517,7 +546,7 @@
                                             <span class="switcher-yes"></span>
                                             <span class="switcher-no"></span>
                                         </span>
-                                        <span class="switcher-label">Email me when someone comments on my article</span>
+                                        <span class="switcher-label">Wyślij mi e-mail, gdy ktoś wyśle mi wiadomość</span>
                                     </label>
                                 </div>
                                 <div class="form-group">
@@ -527,7 +556,7 @@
                                             <span class="switcher-yes"></span>
                                             <span class="switcher-no"></span>
                                         </span>
-                                        <span class="switcher-label">Email me when someone answers on my forum thread</span>
+                                        <span class="switcher-label">Wyślij mi e-mail, gdy otrzymam alert</span>
                                     </label>
                                 </div>
                                 <div class="form-group">
@@ -537,14 +566,14 @@
                                             <span class="switcher-yes"></span>
                                                 <span class="switcher-no"></span>
                                             </span>
-                                        <span class="switcher-label">Email me when someone follows me</span>
+                                        <span class="switcher-label">Wyślij mi e-mail, gdy zostanie dodany nowy raport</span>
                                     </label>
                                 </div>
                             </div>
                             <hr class="border-light m-0">
                             <div class="card-body pb-2">
 
-                                <h6 class="mb-4">Application</h6>
+                                <h6 class="mb-4">System</h6>
 
                                 <div class="form-group">
                                     <label class="switcher">
@@ -553,7 +582,7 @@
                                             <span class="switcher-yes"></span>
                                             <span class="switcher-no"></span>
                                         </span>
-                                        <span class="switcher-label">News and announcements</span>
+                                        <span class="switcher-label">Alert, gdy nie dodano żadnego raportu od 20 dni</span>
                                     </label>
                                 </div>
                                 <div class="form-group">
@@ -563,7 +592,7 @@
                                             <span class="switcher-yes"></span>
                                             <span class="switcher-no"></span>
                                         </span>
-                                        <span class="switcher-label">Weekly product updates</span>
+                                        <span class="switcher-label">Alert, gdy nie ......</span>
                                     </label>
                                 </div>
                                 <div class="form-group">
@@ -573,7 +602,7 @@
                                             <span class="switcher-yes"></span>
                                             <span class="switcher-no"></span>
                                         </span>
-                                        <span class="switcher-label">Weekly blog digest</span>
+                                        <span class="switcher-label">Alert, gdy nie ......</span>
                                     </label>
                                 </div>
                             </div>
@@ -589,6 +618,26 @@
         </div>
         </form>
     </div>
+    <script>
+
+    (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+    form.addEventListener('submit', function(event) {
+    if (form.checkValidity() === false) {
+    event.preventDefault();
+    event.stopPropagation();
+    }
+    form.classList.add('was-validated');
+    }, false);
+    });
+    }, false);
+    })();
+    </script>
 
 </div>
 <div th:fragment="upload">

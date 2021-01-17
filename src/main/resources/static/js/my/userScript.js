@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    $('#phone-number').mask('000-000-000');
     var urlEndPoint = "http://localhost:8080/subscribe";
     var eventSource = new EventSource(urlEndPoint);
     console.log("Działa subskrybcja");

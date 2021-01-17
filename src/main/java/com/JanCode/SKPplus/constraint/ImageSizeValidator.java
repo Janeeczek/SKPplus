@@ -15,23 +15,31 @@ public class ImageSizeValidator implements ConstraintValidator<ImageSize, Multip
     @Override
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext constraintValidatorContext) {
         byte[] bity = null;
+
         try {
             bity = multipartFile.getBytes();
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
-        }
-        InputStream is = new ByteArrayInputStream(bity);
-        BufferedImage image = null; //ImageIO.read(is);
-        try {
-            image = ImageIO.read(is);;
-        } catch (IOException e) {
+            return false;
+        }catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
+            return false;
         }
-        Integer width = image.getWidth();
-        Integer height = image.getHeight();
-        System.out.println("IMAGE ROZMIAR: " + width + "x"+height);
-        if (width <= 400 && height <= 400 ) return true;
-        else return false;
+        if(bity.length > 0 && bity != null) {
+            InputStream is = new ByteArrayInputStream(bity);
+            BufferedImage image = null; //ImageIO.read(is);
+            try {
+                image = ImageIO.read(is);;
+            } catch (IOException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+            Integer width = image.getWidth();
+            Integer height = image.getHeight();
+            System.out.println("IMAGE ROZMIAR: " + width + "x"+height);
+            if (width <= 1280 && height <= 720 ) return true;
+            else return false;
+        } else return true;
+
 
     }
 }

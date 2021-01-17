@@ -106,21 +106,21 @@
                             <td th:text="${all.getEmail()}"></td>
                             <td th:text="${all.getFirstName()}"></td>
                             <td th:text="${all.getLastName()}"></td>
-                            <td  th:text="${all.getRoles()}"></td>
+                            <td  th:text="${all.getFormattedRoles()}"></td>
                             <div th:if="${all.isEnabled() == true}">
                                 <td>Tak</td>
                             </div>
                             <div th:unless="${all.isEnabled() == true}">
                                 <td>Nie</td>
                             </div>
-                            <td th:text="${all.getRegistrationDate()}"></td>
+                            <td  th:text="${#temporals.format(all.getRegistrationDate(), 'HH:mm dd-MM-yyyy')}"></td>
                             <td>
                                 <div class="btn-group btn-block">
                                     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Akcja
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="/" th:href="@{/profile/{u} (u=${all.getUsername()})}">Pokaż profil</a>
+                                        <a class="dropdown-item" href="/" th:href="@{/profile?{u} (u=${all.getUsername()})}">Pokaż profil</a>
 
                                         <a class="dropdown-item" href="#">Wyślij wiadomość</a>
                                         <div class="dropdown-divider"></div>

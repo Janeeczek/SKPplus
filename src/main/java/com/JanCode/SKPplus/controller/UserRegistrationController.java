@@ -22,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 @Controller
-@RequestMapping("/register*")
+@RequestMapping("/register")
 public class UserRegistrationController {
 
     @Autowired

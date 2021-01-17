@@ -52,7 +52,7 @@ public class AnnotationAdvice {
         List<Raport> raports = raportService.getAllRaports();
         if (raports.size() > 0)
         {
-            System.out.println("Lista INCOME != null");
+            //System.out.println("Lista INCOME != null");
             Double income = raportService.getAllIncome();
             if (income == null || income <1.0) {
                 return "Brak dochodu";
@@ -97,7 +97,7 @@ public class AnnotationAdvice {
         List<Raport> raports = raportService.getAllRaports();
         if ( raports.isEmpty() == false && raports != null  )
         {
-            System.out.println("Lista wykresu != null");
+            //System.out.println("Lista wykresu != null");
             List<Double> lista = raportService.getAllIncomeList();
             int osobowe = 0;
             int ciezarowe = 0;
@@ -107,7 +107,7 @@ public class AnnotationAdvice {
                 else if(a == 177.0 || a == 154.0 || a== 200.0 || a == 178.0 || a == 162.0 || a == 79) ciezarowe++;
                 else inne++;
             }
-            System.out.println("ILE= "+lista.size()+"  Osobowe= "+osobowe+" Ciezarowe= "+ciezarowe+" Inne= "+inne);
+            //System.out.println("ILE= "+lista.size()+"  Osobowe= "+osobowe+" Ciezarowe= "+ciezarowe+" Inne= "+inne);
             return new WykresKolowyData(osobowe,ciezarowe,inne);
         }
         else return new WykresKolowyData(2,1,4);

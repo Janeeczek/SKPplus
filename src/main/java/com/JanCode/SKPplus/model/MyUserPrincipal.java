@@ -1,6 +1,8 @@
 package com.JanCode.SKPplus.model;
 
 import com.JanCode.SKPplus.service.ActiveUserService;
+import jdk.jfr.ContentType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,6 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,6 +45,7 @@ public class MyUserPrincipal implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
+    public User getUser(){ return user;}
     public LocalDateTime getLastActiveDate() {
         return user.getLastActiveDate();
     }
@@ -51,7 +56,9 @@ public class MyUserPrincipal implements UserDetails {
     public String getTelNumber() { return user.getTelNumber();}
     public byte[] getImage() { return user.getImage();}
     public MultipartFile getMultiPartImage() {
-        return (MultipartFile) new MockMultipartFile("Zdjecie", user.getImage());
+        InputStream inputStream = new ByteArrayInputStream(user.getImage());
+        return new MockMultipartFile("Zdjecie", user.getImage());
+        //return new MockMultipartFile("new file name","Original file name", ContentType.APPLICATION_OCTET_STREAM.toString(), inputStream);
     }
     public String getByte64Image() {
         if (user == null) {
@@ -76,6 +83,13 @@ public class MyUserPrincipal implements UserDetails {
     }
     public Collection<Role> getRoles() {
         return user.getRoles();
+    }
+    public String getFormattedRoles() {
+       return user.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toList()).stream()
+                .map(n -> String.valueOf(n).substring(5))
+                .collect(Collectors.joining(" ", " ", " "));
     }
     public boolean isAdmin() {
         if (this.getAuthorities().stream()

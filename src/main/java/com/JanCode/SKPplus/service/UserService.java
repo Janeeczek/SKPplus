@@ -2,6 +2,7 @@ package com.JanCode.SKPplus.service;
 
 
 import com.JanCode.SKPplus.exeception.UserAlreadyExistException;
+import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.model.User;
 import com.JanCode.SKPplus.token.VerificationToken;
 import com.JanCode.SKPplus.web.dto.AdminRegistrationDto;
@@ -17,7 +18,7 @@ public interface UserService{
     User findByUsername(String username);
     User registerNewUserAccount(UserRegistrationDto registration) throws UserAlreadyExistException;
     User registerNewUserAccount(AdminRegistrationDto registration) throws UserAlreadyExistException;
-    User saveUpdatedUser(UserUpdateProfileDto userdto,String username);
+    User saveUpdatedUser( UserUpdateProfileDto userdto, String username);
     User updateLastActiveTime(String username);
     void createVerificationToken(User user, String token);
     VerificationToken getVerificationToken(String VerificationToken);
