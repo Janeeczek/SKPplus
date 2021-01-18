@@ -57,6 +57,17 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
+    @Override
+    public List<User> findAllUsersNotActivated() {
+        List<User> userList = new ArrayList<>();
+        List<User> notActiveList = new ArrayList<>();
+        userList = userRepository.findAll();
+        for(User user : userList) {
+            if (!user.isEnabled()) notActiveList.add(user);
+        }
+        return notActiveList;
+    }
+
 
     //używane gdy user zostaje tworzony podczas rejestracji
     @Override

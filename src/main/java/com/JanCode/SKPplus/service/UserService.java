@@ -16,6 +16,7 @@ public interface UserService{
 
     User findByEmail(String email);
     User findByUsername(String username);
+    List<User> findAllUsersNotActivated();
     User registerNewUserAccount(UserRegistrationDto registration) throws UserAlreadyExistException;
     User registerNewUserAccount(AdminRegistrationDto registration) throws UserAlreadyExistException;
     User saveUpdatedUser( UserUpdateProfileDto userdto, String username);

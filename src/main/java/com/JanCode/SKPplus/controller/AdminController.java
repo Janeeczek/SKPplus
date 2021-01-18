@@ -6,6 +6,8 @@ import com.JanCode.SKPplus.model.ActiveUsers;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.model.User;
 import com.JanCode.SKPplus.service.ActiveUserService;
+import com.JanCode.SKPplus.service.FileStorageService;
+import com.JanCode.SKPplus.service.RaportServiceImpl;
 import com.JanCode.SKPplus.service.UserService;
 import com.JanCode.SKPplus.web.dto.AdminRegistrationDto;
 import com.JanCode.SKPplus.web.dto.UserRegistrationDto;
@@ -40,11 +42,28 @@ public class AdminController extends MainController{
     private ApplicationEventPublisher eventPublisher;
     @Autowired
     private ActiveUserService activeUserService;
+    @Autowired
+    private RaportServiceImpl raportService;
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @GetMapping
     public ModelAndView showAdmin(@RequestParam String param) {
         ModelAndView modelAndView = new ModelAndView("/admin/admin","tryb",param);
-        if (param.equals("createUser")) {
+        if (param.equals("showMain")) {
+            if(userService.findAllUsers() == null) modelAndView.addObject("countUsers", 0);
+            else modelAndView.addObject("countUsers", userService.findAllUsers().size());
+            if(activeUserService.findAll() == null) modelAndView.addObject("countActiveUsers", 0);
+            else modelAndView.addObject("countActiveUsers", activeUserService.findAll().size());
+
+            modelAndView.addObject("countFeedback", 0);
+            if(raportService.getAllRaports() == null) modelAndView.addObject("countAllRaports", 0);
+            else modelAndView.addObject("countAllRaports", raportService.getAllRaports().size());
+            if(fileStorageService.getAllFiles() == null) modelAndView.addObject("countAllFiles", 0);
+            else modelAndView.addObject("countAllFiles", fileStorageService.getAllFiles().size());
+            if(userService.findAllUsersNotActivated() == null) modelAndView.addObject("countNotActivatedUsers", 0);
+            else modelAndView.addObject("countNotActivatedUsers", userService.findAllUsersNotActivated().size());
+        } else if (param.equals("createUser")) {
             modelAndView.addObject("userDto",new AdminRegistrationDto());
         } else if(param.equals("showAll")) {
             List<User> a = userService.findAllUsers();
