@@ -79,8 +79,8 @@ public class AdminController extends MainController{
     }
     @GetMapping("/terminate/{username}")
     public ModelAndView terminate(@PathVariable(required = false) String username, RedirectAttributes redirectAttributes) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/admin");
-        redirectAttributes.addFlashAttribute("tryb", "showActive");
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin","tryb", "showActive");
+        //redirectAttributes.addFlashAttribute("tryb", "showActive");
         for (Object principal : sessionRegistry.getAllPrincipals()) {
             if (principal instanceof UserDetails) {
                 UserDetails userDetails = (UserDetails) principal;
@@ -99,8 +99,8 @@ public class AdminController extends MainController{
     }
     @GetMapping("/delete/{username}")
     public ModelAndView delete(@PathVariable(required = false) String username, RedirectAttributes redirectAttributes) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/admin");
-        redirectAttributes.addFlashAttribute("tryb", "showAll");
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin","tryb", "showAll");
+        //redirectAttributes.addFlashAttribute("tryb", "showAll");
         if (username != null && !username.isBlank()) {
             userService.delete(username);
             redirectAttributes.addFlashAttribute("SuccessMessage", "Użytkownik usunięty!");

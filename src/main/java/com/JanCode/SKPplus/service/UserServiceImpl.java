@@ -70,6 +70,9 @@ public class UserServiceImpl implements UserService {
         if (emailExist(registration.getEmail())) {
             throw new UserAlreadyExistException("Ten adres email jest już w użyciu!");
         }
+        if (usernameExist(registration.getUsername())) {
+            throw new UserAlreadyExistException("Ta nazwa użytkownika jest już w użyciu!");
+        }
         User user = new User();
         user.setUsername(registration.getUsername());
         user.setFirstName(registration.getFirstName());
@@ -216,7 +219,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(String username) {
         User user = userRepository.findByUsername(username);
-        if(user != null) {
+        VerificationToken myToken = tokenRepository.findByUser(user);
+        if (myToken!= null) {
+            tokenRepository.delete(myToken);
+        }
+
+        if (user != null) {
             userRepository.delete(user);
         }
         System.out.println("Nie można usunąć użytkownika: "+username+ " ponieważ on nie istnieje w bazie danych!");

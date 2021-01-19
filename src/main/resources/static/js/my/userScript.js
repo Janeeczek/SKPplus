@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    setTimeout(function() {
+        $(".alert").slideUp(900);
+    }, 10000);
     $('#phone-number').mask('000-000-000');
     var urlEndPoint = "http://localhost:8080/subscribe";
     var eventSource = new EventSource(urlEndPoint);

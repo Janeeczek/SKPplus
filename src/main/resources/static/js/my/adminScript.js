@@ -9,7 +9,7 @@ $(document).ready(function() {
     });
     setTimeout(function() {
         $(".alert").slideUp(900);
-    }, 2000);
+    }, 10000);
 
     var urlEndPoint = "http://localhost:8080/subscribe";
     var eventSource = new EventSource(urlEndPoint);
