@@ -2,6 +2,8 @@ package com.JanCode.SKPplus.service;
 
 import com.JanCode.SKPplus.model.Alert;
 import com.JanCode.SKPplus.model.IconType;
+import com.JanCode.SKPplus.model.InfoModel.WykresKolowyData;
+import com.JanCode.SKPplus.model.InfoModel.WykresLiniowyData;
 import com.JanCode.SKPplus.model.User;
 
 import java.time.LocalDateTime;
@@ -20,4 +22,11 @@ public interface AlertService {
     Alert getAlertById(Long id);
     Alert save(Alert alert);
 
+    void sendDaneWykresuKolowego(WykresKolowyData wykresKolowyData);
+
+    void sendDaneWykresuLiniowego(WykresLiniowyData wykresLiniowyData, String eventName);
+
+    String produceDaneWykresuKolowego(WykresKolowyData wykresKolowyData);
+
+    String produceDaneWykresuLiniowego(WykresLiniowyData wykresLiniowyData);
 }

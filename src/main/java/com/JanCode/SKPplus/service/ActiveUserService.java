@@ -12,6 +12,7 @@ public interface ActiveUserService {
     ActiveUsers findByEmail(String email);
     ActiveUsers save(User user);
     List<ActiveUsers> findAll();
+    int findAllEmployees();
     ActiveUsers save(MyUserPrincipal myUserPrincipal);
     void delete(User user);
     void delete(MyUserPrincipal principal);

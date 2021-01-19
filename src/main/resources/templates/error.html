@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-      <!--xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/userLayout.html}"-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/userLayout.html}">
 <head>
     <title>PTHW+</title>
 </head>
 <body>
 
-<!--<div layout:fragment="content">-->
+<div layout:fragment="content">
     <!-- 404 Error Text -->
     <div class="text-center">
-        <div class="error mx-auto" data-text="404">ELOO</div>
-        <p class="lead text-gray-800 mb-5">Domyślny błąd</p>
-        <p class="text-gray-500 mb-0">Coś się chyba popsuło....</p>
+        <div class="error mx-auto" data-text="404">404</div>
+        <p  th:if="${#ctx.containsVariable('errorMsg')}" th:text="${errorMsg}" class="lead text-gray-800 mb-5">Domyślny błąd</p>
+        <p th:unless="${#ctx.containsVariable('errorMsg')}" class="lead text-gray-800 mb-5">Domyślny błąd</p>
+        <p class="text-gray-500 mb-0">Błędy się zdażają....</p>
         <a href="/" th:href="@{/}">&larr; Wróc na stronę główną</a>
     </div>
-<!--</div>-->
+</div>
 
 </body>
 </html>

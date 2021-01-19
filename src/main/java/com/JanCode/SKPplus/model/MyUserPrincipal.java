@@ -91,6 +91,22 @@ public class MyUserPrincipal implements UserDetails {
                 .map(n -> String.valueOf(n).substring(5))
                 .collect(Collectors.joining(" ", " ", " "));
     }
+    public AccountType getAccountType() {
+        String role =  getFormattedRoles();
+        AccountType type;
+        if (role.equals(" "+AccountType.ADMIN.name()+" ")) {
+
+            type = AccountType.ADMIN;
+        } else if (role.equals(" "+AccountType.KSIEGOWOSC.name()+" ")) {
+            type = AccountType.KSIEGOWOSC;
+        } else if (role.equals(" "+AccountType.DIAGNOSTYKA.name()+" ")) {
+            type = AccountType.DIAGNOSTYKA;
+        } else {
+            type = AccountType.USER;
+        }
+        return type;
+
+    }
     public boolean isAdmin() {
         if (this.getAuthorities().stream()
                 .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {

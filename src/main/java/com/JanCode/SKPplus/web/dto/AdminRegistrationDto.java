@@ -2,6 +2,7 @@ package com.JanCode.SKPplus.web.dto;
 import com.JanCode.SKPplus.constraint.FieldMatch;
 import com.JanCode.SKPplus.constraint.MyNotNull;
 import com.JanCode.SKPplus.constraint.OnlyLatin;
+import com.JanCode.SKPplus.model.AccountType;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
@@ -35,7 +36,7 @@ public class AdminRegistrationDto {
     @NotEmpty(message = "Email jest wymagany!")
     private String email;
 
-    private RoleDto role;
+    private AccountType role;
 
     private boolean active;
 
@@ -89,11 +90,11 @@ public class AdminRegistrationDto {
         this.email = email;
     }
 
-    public RoleDto getRole() {
+    public AccountType getRole() {
         return role;
     }
 
-    public void setRole(RoleDto role) {
+    public void setRole(AccountType role) {
         this.role = role;
     }
 

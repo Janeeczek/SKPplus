@@ -224,7 +224,7 @@
                                         </div>
                                         <div class="col-sm-6" >
                                             <select class="form-control" id="role" name="role">
-                                                <option th:each="role : ${T(com.JanCode.SKPplus.web.dto.RoleDto).values()}"
+                                                <option th:each="role : ${T(com.JanCode.SKPplus.model.AccountType).values()}"
                                                         th:value="${role}" th:text="${role.roleName}" ></option>
                                             </select>
                                         </div>

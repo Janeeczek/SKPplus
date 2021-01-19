@@ -1,6 +1,7 @@
 package com.JanCode.SKPplus.controller;
 
 import com.JanCode.SKPplus.authentication.MyDaoAuthenticationProvider;
+import com.JanCode.SKPplus.model.AccountType;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.service.ActiveUserService;
 import com.JanCode.SKPplus.service.UserService;
@@ -38,31 +39,40 @@ public class UserProfileController {
     private MyDaoAuthenticationProvider authenticationProvider;
 
     @GetMapping("/profile")
-    public ModelAndView showProfileDefaultWithoutParam(@RequestParam Map<String,String> allParams, Authentication authentication) {
-        MyUserPrincipal principal = null;
+    public ModelAndView showProfile(@RequestParam Map<String,String> allParams, Authentication authentication) {
+        MyUserPrincipal requestPrincipal = null;
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView model = new ModelAndView("/user/profile");
-        if (allParams.isEmpty()) {
-            principal = (MyUserPrincipal) authentication.getPrincipal();
-            model.addObject("activeService",activeUserService);
-            model.addObject("user",principal);
-            return model;
-        } else {
-            for(String username : allParams.keySet()) {
-                principal = new MyUserPrincipal(userService.findByUsername(username));
-                break;
-            }
-            if(principal.getUser() != null ) {
-                model.addObject("activeService",activeUserService);
-                model.addObject("user",principal);
+        if(sourcePrincipal.getUser() != null) { //Jeśli użytkownik zleceniający jest uwierzytelniony
+            AccountType mode = sourcePrincipal.getAccountType();
+            model.addObject("mode",mode.name());
 
-                return model;
-            } else {
-                principal = (MyUserPrincipal) authentication.getPrincipal();
+            if (allParams.isEmpty()) { //Jeśli nie ma parametrów
+                requestPrincipal = sourcePrincipal;
+
                 model.addObject("activeService",activeUserService);
-                model.addObject("user",principal);
-                model.addObject("ErrorMessage", "Wyszukany użytkownik nie istnieje!\n Wyświetlam profil aktywnego użytkownika.");
+                model.addObject("user",requestPrincipal);
                 return model;
+            } else { //Jeśli są parametry
+                for(String username : allParams.keySet()) { //Przeszukaj parametry i wybierz pierwszego znalezionego uzytkownika do parametru
+                    requestPrincipal = new MyUserPrincipal(userService.findByUsername(username));
+                    break;
+                }
+                if(requestPrincipal.getUser() != null ) { // jeśli znaleziono użytkownika z parametru
+                    model.addObject("activeService",activeUserService);
+                    model.addObject("user",requestPrincipal);
+                    return model;
+                } else {
+                    requestPrincipal = sourcePrincipal; // jeśli nie znaleziono użytkownika z parametru
+                    model.addObject("activeService",activeUserService);
+                    model.addObject("user",requestPrincipal);
+                    model.addObject("ErrorMessage", "Wyszukany użytkownik nie istnieje!\n Wyświetlam profil aktywnego użytkownika.");
+                    return model;
+                }
             }
+        } else { //Jeśli użytkownik zleceniający NIE jest uwierzytelniony
+        throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "NIE MASZ TAKICH UPRAWNIEN!");
         }
     }
 
@@ -72,6 +82,8 @@ public class UserProfileController {
         MyUserPrincipal requestPrincipal = null;
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         if(sourcePrincipal.getUser() != null) { //Jeśli użytkownik zleceniający jest uwierzytelniony
+            AccountType mode = sourcePrincipal.getAccountType();
+            model.addObject("mode",mode.name());
             if (allParams.isEmpty()) { //Jeśli nie ma parametrów
                 requestPrincipal = sourcePrincipal;
                 model.addObject("user",requestPrincipal);
@@ -83,7 +95,7 @@ public class UserProfileController {
                     break;
                 }
                 if(requestPrincipal.getUser() != null ) { //Jeśli znaleziono uzytkownika z parametru
-                    if(requestPrincipal.getUsername() == sourcePrincipal.getUsername()) {  //Jeśli użytkownik z parametru to uwierzytelniony uzytkownik
+                    if(requestPrincipal.getUsername().equals(sourcePrincipal.getUsername())) {  //Jeśli użytkownik z parametru to uwierzytelniony uzytkownik
                         requestPrincipal = sourcePrincipal;
                         model.addObject("user",requestPrincipal);
                         model.addObject("userDto", new UserUpdateProfileDto(requestPrincipal));
@@ -117,17 +129,31 @@ public class UserProfileController {
     @PostMapping("/save-profile/{u}")
     public ModelAndView getProfileUpdate(@ModelAttribute @Valid UserUpdateProfileDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,@PathVariable String u, @RequestParam(value="action", required=true) String action,  HttpServletRequest request, Authentication authentication ) {
         ModelAndView model;
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         if (action.equals("save")) {
             if (bindingResult.hasErrors()) {
                 model = new ModelAndView("redirect:/profile?"+u);
                 redirectAttributes.addFlashAttribute("ErrorMessage", "Błąd podczas aktualizowania profilu! Spróbuj jeszcze raz");
                 return model;
             }
-            redirectAttributes.addFlashAttribute("SuccessMessage", "Pomyślnie aktualizowano profil!");
-            model = new ModelAndView("redirect:/profile?"+u);
-            userService.saveUpdatedUser(userDto,u);
-            MyUserPrincipal principal = (MyUserPrincipal)userDetailsService.loadUserByUsername(userDto.getUsername());
-            authWithAuthManager(request,principal);
+            if(sourcePrincipal.getUsername().equals(u)) {
+                redirectAttributes.addFlashAttribute("SuccessMessage", "Pomyślnie aktualizowano własny profil!");
+                model = new ModelAndView("redirect:/profile?"+u);
+
+                userService.saveUpdatedUser(userDto,u);
+                MyUserPrincipal principal = (MyUserPrincipal)userDetailsService.loadUserByUsername(userDto.getUsername());
+                authWithAuthManager(request,principal);
+
+            } else if(sourcePrincipal.isAdmin()) {
+                redirectAttributes.addFlashAttribute("SuccessMessage", "Pomyślnie aktualizowano profil użytkownika "+u+"!");
+                model = new ModelAndView("redirect:/profile?"+u);
+
+                userService.saveUpdatedUser(userDto,u);
+
+            }else {
+                model = new ModelAndView("redirect:/profile?"+u);
+                redirectAttributes.addFlashAttribute("ErrorMessage", "Nie masz uprawnień, aby edytować profil użytkownika "+u+"!");
+            }
             return model;
         }
 

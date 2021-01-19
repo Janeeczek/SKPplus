@@ -1,10 +1,12 @@
 package com.JanCode.SKPplus.controller;
 
+import com.JanCode.SKPplus.model.AccountType;
 import com.JanCode.SKPplus.model.Alert;
 import com.JanCode.SKPplus.model.IconType;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.service.AlertService;
 import com.JanCode.SKPplus.service.EmitterService;
+import com.JanCode.SKPplus.service.RaportServiceImpl;
 import com.JanCode.SKPplus.service.UserService;
 import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ public class NewsController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private RaportServiceImpl raportService;
 
     @CrossOrigin
     @RequestMapping(value = "/subscribe",consumes = MediaType.ALL_VALUE)
@@ -47,6 +51,12 @@ public class NewsController {
             sseEmitter.onError((e)->emitterService.getEmitters().remove(sseEmitter));
             sseEmitter.onTimeout(()->emitterService.getEmitters().remove(sseEmitter));
             alertService.sendAlertsOnSubscribe(userService.findByUsername(principal.getUsername()));
+            if(principal.getAccountType() == AccountType.USER) {
+                alertService.sendDaneWykresuKolowego(raportService.getDaneWykresuKolowego());
+                alertService.sendDaneWykresuLiniowego(raportService.getDaneWykresuLiniowego100days(),"wykresLiniowyData1");
+                alertService.sendDaneWykresuLiniowego(raportService.getDaneWykresuLiniowego12months(),"wykresLiniowyData2");
+
+            }
         }
 
         return sseEmitter;
@@ -63,7 +73,6 @@ public class NewsController {
         else {
             iconType = IconType.EXCLAMATION_TRIANGLE;
         }
-        System.out.println(iconType);
         List<Alert> alertList =  alertService.createNewAlertForAll(title,text,iconType);
         alertService.sendAlertToAll(alertList,"newAlert");
     }

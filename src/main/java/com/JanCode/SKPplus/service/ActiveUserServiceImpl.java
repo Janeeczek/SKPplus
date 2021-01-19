@@ -1,5 +1,6 @@
 package com.JanCode.SKPplus.service;
 
+import com.JanCode.SKPplus.model.AccountType;
 import com.JanCode.SKPplus.model.ActiveUsers;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.model.User;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -38,6 +40,23 @@ public class ActiveUserServiceImpl implements ActiveUserService {
     @Override
     public List<ActiveUsers> findAll() {
         return activeUsersRepository.findAll();
+    }
+
+    @Override
+    public int findAllEmployees() {
+        List<ActiveUsers> activeUsersList = activeUsersRepository.findAll();
+        List<ActiveUsers> activeEmp = new ArrayList<>();
+        if(activeUsersList.size() > 0)
+        {
+            for(ActiveUsers activeUsers : activeUsersList) {
+                User user = userService.findByUsername(activeUsers.getUsername());
+                if(user != null) {
+                    if(user.getAccountType() == AccountType.DIAGNOSTYKA || user.getAccountType() == AccountType.KSIEGOWOSC) activeEmp.add(activeUsers);
+                }
+            }
+            return activeEmp.size();
+        }
+        return 0;
     }
 
     @Override

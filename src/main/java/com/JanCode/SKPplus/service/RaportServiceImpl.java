@@ -2,6 +2,8 @@
 package com.JanCode.SKPplus.service;
 
 import com.JanCode.SKPplus.model.FileDB;
+import com.JanCode.SKPplus.model.InfoModel.WykresKolowyData;
+import com.JanCode.SKPplus.model.InfoModel.WykresLiniowyData;
 import com.JanCode.SKPplus.model.Raport;
 import com.JanCode.SKPplus.model.User;
 import com.JanCode.SKPplus.repository.PlatnoscRepository;
@@ -22,7 +24,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.sax.SAXSource;
 import java.io.*;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class RaportServiceImpl{
@@ -192,5 +194,94 @@ public class RaportServiceImpl{
         List<Double> wplywy = platnoscRepository.getAllIncomeList();
         return wplywy;
         //return null;
+    }
+
+
+
+    public String getAllIncomeString() {
+        List<Raport> raports = getAllRaports();
+        if (raports.size() > 0)
+        {
+            //System.out.println("Lista INCOME != null");
+            Double income = getAllIncome();
+            if (income == null || income <1.0) {
+                return "Brak dochodu";
+            } else if (income < 1000.0 ) {
+                if(income % 1 ==0)
+                    return String.format("%d",income.longValue())+ " zł";
+                else
+                    return String.format("%s",income) + " zł";
+            } else if (income < 10000.0 ) {
+                if(income % 1 ==0){
+                    String value = Double.toString(income);
+                    value = value.substring(0,2) + " " + value.substring(2,value.length())+ " zł";
+                    return value;
+                }
+                else {
+                    String value = Double.toString(income);
+                    value = value.substring(0,2) + " " + value.substring(2,value.length())+ " zł";
+                    return value;
+                }
+
+            } else if (income < 100000.0 ) {
+                if(income % 1 ==0){
+                    String value = Double.toString(income);
+                    value = value.substring(0,2) + " " + value.substring(2,value.length()-2 )+ " zł";
+                    return value;
+                }
+                else {
+                    String value = Double.toString(income);
+                    value = value.substring(0,2) + " " + value.substring(2,value.length())+ " zł";
+                    return value;
+                }
+
+            }
+
+        }
+        return "Brak dochodu";
+    }
+    public WykresKolowyData getDaneWykresuKolowego() {
+        List<Raport> raports = getAllRaports();
+        if ( raports.isEmpty() == false && raports != null  )
+        {
+            List<Double> lista = getAllIncomeList();
+            int osobowe = 0;
+            int ciezarowe = 0;
+            int inne = 0;
+            for (Double a : lista) {
+                if(a == 99.0) osobowe++;
+                else if(a == 177.0 || a == 154.0 || a== 200.0 || a == 178.0 || a == 162.0 || a == 79) ciezarowe++;
+                else inne++;
+            }
+
+            return new WykresKolowyData(osobowe,ciezarowe,inne);
+        }
+        else return new WykresKolowyData(2,1,4);
+
+    }
+    public WykresLiniowyData getDaneWykresuLiniowego100days() {
+
+        List<String> keys = platnoscRepository.getIncomeForLast100DaysKey();
+        List<Double> values = platnoscRepository.getIncomeForLast100DaysValue();
+        List<String> nkeys = new ArrayList<>();
+        List<Double> nvalues = new ArrayList<>();
+        Map<String, Double> map = new HashMap<>();
+        for(int i =0 ;i< keys.size();i++){
+            map.put(keys.get(i),values.get(i) );
+        }
+        Map<String, Double> treeMap = new TreeMap<>(map);
+        for(String s : treeMap.keySet()){
+            nkeys.add(s);
+            nvalues.add(treeMap.get(s));
+        }
+
+        return new WykresLiniowyData(nkeys,nvalues);
+    }
+    public WykresLiniowyData getDaneWykresuLiniowego12months() {
+
+        List<String> keys = platnoscRepository.getIncomeForLast12MonthsKey();
+        List<Double> values = platnoscRepository.getIncomeForLast12MonthsValue();
+
+        return new WykresLiniowyData(keys,values);
     }
 }

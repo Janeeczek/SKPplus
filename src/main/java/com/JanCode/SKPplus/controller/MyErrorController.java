@@ -1,5 +1,10 @@
 package com.JanCode.SKPplus.controller;
 
+import com.JanCode.SKPplus.model.MyUserPrincipal;
+import com.JanCode.SKPplus.service.ActiveUserService;
+import com.JanCode.SKPplus.service.RaportServiceImpl;
+import com.JanCode.SKPplus.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.core.Authentication;
@@ -29,6 +34,26 @@ public class MyErrorController implements ErrorController {
  */
 @ControllerAdvice
 class MyErrorController {
+
+    @Autowired
+    private ActiveUserService activeUserService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RaportServiceImpl raportService;
+    @ModelAttribute("currentUser")
+    public UserDetails getCurrentUser(Authentication authentication) {
+
+        if (authentication == null) {
+            return null;
+        } else {
+            MyUserPrincipal principal = (MyUserPrincipal) authentication.getPrincipal();
+            //userService.updateLastActiveTime(principal.getEmail()); //Chyba to niszczylo error page
+            return principal;
+        }
+    }
+
+
     public static final String DEFAULT_ERROR_VIEW = "error";
 
     @ExceptionHandler(value = Exception.class)

@@ -142,6 +142,22 @@ public class User {
                 .map(n -> String.valueOf(n).substring(5))
                 .collect(Collectors.joining(" ", " ", " "));
     }
+    public AccountType getAccountType() {
+        String role =  getFormattedRoles();
+        AccountType type;
+        if (role.equals(" "+AccountType.ADMIN.name()+" ")) {
+
+            type = AccountType.ADMIN;
+        } else if (role.equals(" "+AccountType.KSIEGOWOSC.name()+" ")) {
+            type = AccountType.KSIEGOWOSC;
+        } else if (role.equals(" "+AccountType.DIAGNOSTYKA.name()+" ")) {
+            type = AccountType.DIAGNOSTYKA;
+        } else {
+            type = AccountType.USER;
+        }
+        return type;
+
+    }
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;

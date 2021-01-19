@@ -7,8 +7,16 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <div th:replace="fragments/userFragments :: default"></div>
-    </div>
+        <div th:if="${mode == 'USER'}">
+            <div th:replace="fragments/userFragments :: defaultuser"></div>
+        </div>
 
+        <div th:if="${mode == 'KSIEGOWOSC'}">
+            <div th:replace="fragments/userFragments :: defaultksiegowosc"></div>
+        </div>
+        <div th:if="${mode == 'DIAGNOSTYKA'}">
+            <div th:replace="fragments/userFragments :: defaultdiagnostyka"></div>
+        </div>
+    </div>
 </body>
 </html>

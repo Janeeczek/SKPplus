@@ -1,10 +1,8 @@
 package com.JanCode.SKPplus.service;
 
 import com.JanCode.SKPplus.exeception.UserAlreadyExistException;
-import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.model.Role;
 import com.JanCode.SKPplus.model.User;
-import com.JanCode.SKPplus.repository.RoleRepository;
 import com.JanCode.SKPplus.repository.UserRepository;
 import com.JanCode.SKPplus.repository.VerificationTokenRepository;
 import com.JanCode.SKPplus.token.VerificationToken;
@@ -14,25 +12,15 @@ import com.JanCode.SKPplus.web.dto.UserUpdateProfileDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -52,6 +40,13 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(String email){
         return userRepository.findByEmail(email);
     }
+
+    @Override
+    public User myFindById(long id) {
+
+        return userRepository.myfindById(id);
+    }
+
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -204,6 +199,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveRegisteredUser(String username) {
         User user = userRepository.findByUsername(username);
+        user.setEnabled(true);
         if(user != null) {
             saveRegisteredUser(user);
         }

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,9 +49,9 @@ public class AdminController extends MainController{
     private FileStorageService fileStorageService;
 
     @GetMapping
-    public ModelAndView showAdmin(@RequestParam String param) {
-        ModelAndView modelAndView = new ModelAndView("/admin/admin","tryb",param);
-        if (param.equals("showMain")) {
+    public ModelAndView showAdmin(@RequestParam String tryb) {
+        ModelAndView modelAndView = new ModelAndView("/admin/admin","tryb",tryb);
+        if (tryb.equals("showMain")) {
             if(userService.findAllUsers() == null) modelAndView.addObject("countUsers", 0);
             else modelAndView.addObject("countUsers", userService.findAllUsers().size());
             if(activeUserService.findAll() == null) modelAndView.addObject("countActiveUsers", 0);
@@ -63,13 +64,13 @@ public class AdminController extends MainController{
             else modelAndView.addObject("countAllFiles", fileStorageService.getAllFiles().size());
             if(userService.findAllUsersNotActivated() == null) modelAndView.addObject("countNotActivatedUsers", 0);
             else modelAndView.addObject("countNotActivatedUsers", userService.findAllUsersNotActivated().size());
-        } else if (param.equals("createUser")) {
+        } else if (tryb.equals("createUser")) {
             modelAndView.addObject("userDto",new AdminRegistrationDto());
-        } else if(param.equals("showAll")) {
+        } else if(tryb.equals("showAll")) {
             List<User> a = userService.findAllUsers();
 
             modelAndView.addObject("allUsers",a);
-        } else if(param.equals("showActive")) {
+        } else if(tryb.equals("showActive")) {
             List<ActiveUsers> a = activeUserService.findAll();
             modelAndView.addObject("activeUsers",a);
         }
@@ -77,9 +78,9 @@ public class AdminController extends MainController{
 
     }
     @GetMapping("/terminate/{username}")
-    public ModelAndView terminate(@PathVariable(required = false) String username) {
-        ModelAndView modelAndView = new ModelAndView("/admin/admin","tryb","showActive");
-
+    public ModelAndView terminate(@PathVariable(required = false) String username, RedirectAttributes redirectAttributes) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin");
+        redirectAttributes.addFlashAttribute("tryb", "showActive");
         for (Object principal : sessionRegistry.getAllPrincipals()) {
             if (principal instanceof UserDetails) {
                 UserDetails userDetails = (UserDetails) principal;
@@ -87,39 +88,38 @@ public class AdminController extends MainController{
                     for (SessionInformation information : sessionRegistry.getAllSessions(userDetails, true)) {
                         information.expireNow();
                     }
-                    modelAndView.addObject("SuccessMessage", "Użytkownik został wylogowany!");
-                    List<ActiveUsers> a = activeUserService.findAll();
-                    modelAndView.addObject("activeUsers",a);
+                    redirectAttributes.addFlashAttribute("SuccessMessage", "Użytkownik został wylogowany!");
+
                     return modelAndView;
                 }
             }
         }
-        modelAndView.addObject("ErrorMessage", "Nie można wylogować użytkownika!");
-        List<ActiveUsers> a = activeUserService.findAll();
-        modelAndView.addObject("activeUsers",a);
+        redirectAttributes.addFlashAttribute("ErrorMessage", "Nie można wylogować użytkownika!");
         return modelAndView;
     }
     @GetMapping("/delete/{username}")
-    public ModelAndView delete(@PathVariable(required = false) String username) {
-        ModelAndView modelAndView = new ModelAndView("/admin/admin","tryb","showAll");
+    public ModelAndView delete(@PathVariable(required = false) String username, RedirectAttributes redirectAttributes) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin");
+        redirectAttributes.addFlashAttribute("tryb", "showAll");
         if (username != null && !username.isBlank()) {
             userService.delete(username);
-            modelAndView.addObject("SuccessMessage", "Użytkownik usunięty!");
+            redirectAttributes.addFlashAttribute("SuccessMessage", "Użytkownik usunięty!");
             return modelAndView;
         }
-        modelAndView.addObject("ErrorMessage", "Nie można usunąć użytkownika!");
+        redirectAttributes.addFlashAttribute("ErrorMessage", "Nie można usunąć użytkownika!");
 
         return modelAndView;
     }
     @GetMapping("/activate/{username}")
-    public ModelAndView forceActivate(@PathVariable(required = false) String username) {
-        ModelAndView modelAndView = new ModelAndView("/admin/admin","tryb","showAll");
+    public ModelAndView forceActivate(@PathVariable(required = false) String username, RedirectAttributes redirectAttributes) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin","tryb","showAll");
+        //redirectAttributes.addFlashAttribute("tryb", "showAll");
         if (username != null && !username.isBlank()) {
             userService.saveRegisteredUser(username);
-            modelAndView.addObject("SuccessMessage", "Użytkownik został aktywowany!");
+            redirectAttributes.addFlashAttribute("SuccessMessage", "Użytkownik został aktywowany!");
             return modelAndView;
         }
-        modelAndView.addObject("ErrorMessage", "Nie można aktywować użytkownika!");
+        redirectAttributes.addFlashAttribute("ErrorMessage", "Nie można aktywować użytkownika!");
 
         return modelAndView;
     }
