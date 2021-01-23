@@ -10,6 +10,8 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -21,7 +23,9 @@ import java.util.Date;
 public class UserUpdateProfileDto {
     @MyNotNull(message = "Nazwa użytkownika musi mieć conajmniej 4 znaki!")
     private String username;
+    @NotEmpty(message = "Nazwa użytkownika musi mieć conajmniej 4 znaki!")
     private String firstName;
+    @NotBlank(message = "Nazwa użytkownika musi mieć conajmniej 4 znaki!")
     private String lastName;
     @Email(message = "Nieprawidłowy e-mail!")
     private String email;
@@ -31,7 +35,7 @@ public class UserUpdateProfileDto {
     @ImageSize(message = "Nieprawidłowy rozmiar zdjęcia!")
     private MultipartFile image;
     private String telNumber;
-    @DateTimeFormat(pattern = "dd/mm/yyyy")
+   //@DateTimeFormat(pattern = "dd/mm/yyyy")
     private String birthDate;
 
     public UserUpdateProfileDto() {
@@ -110,18 +114,18 @@ public class UserUpdateProfileDto {
     public byte[] getByteImage() {
         byte[] bity = null;
         try {
-            bity = image.getBytes();
+            bity = this.image.getBytes();
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
         return bity;
     }
     public String getByte64Image() {
-        if (image == null)
+        if (this.image == null)
             return null;
         else {
-            String encodedString = new String(java.util.Base64.getEncoder().encodeToString(getByteImage()));
-            System.out.println("Przetworzylem obraz w DTO: ");
+            String encodedString = new String(java.util.Base64.getEncoder().encodeToString(this.getByteImage()));
+            //System.out.println("Przetworzylem obraz w DTO na byte64: ");
             return encodedString;
         }
     }

@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface PlatnoscRepository extends JpaRepository<Platnosc, Long> {
@@ -17,8 +18,15 @@ public interface PlatnoscRepository extends JpaRepository<Platnosc, Long> {
     double getAllIncome();
     @Query(value= "SELECT platnosc.kwota_plat FROM platnosc",nativeQuery = true)
     List<Double> getAllIncomeList();
-    @Query(value= " SELECT SUM(platnosc.kwota_plat) FROM platnosc WHERE YEAR(data_kursu_plat) = :year AND MONTH(data_kursu_plat) = :month",nativeQuery = true)
-    double getIncomeByMonth(@Param("month")int month,@Param("year")int year);
-    @Query(value= "SELECT SUM(platnosc.kwota_plat) FROM platnosc WHERE YEAR(data_kursu_plat) = :year AND MONTH(data_kursu_plat) = :month AND DAY(data_kursu_plat) BETWEEN :fromDay AND :untilDay",nativeQuery = true)
-    double getAllIncomeByDate(@Param("fromDay")int fromDay,@Param("untilDay")int untilDay,@Param("month")int month,@Param("year")int year);
+    @Query(value= "select extract(MONTH from data_kursu_plat) as month,sum(kwota_pln_plat) as total_value from platnosc group by month",nativeQuery = true)
+    Map<String,Double> getIncomeForLastTwelveMonths();
+    @Query(value= "SELECT DATE(data_kursu_plat)  FROM platnosc WHERE data_kursu_plat >=  CURRENT_DATE - INTERVAL 100 DAY GROUP BY DAY(data_kursu_plat)",nativeQuery = true)
+    List<String> getIncomeForLast100DaysKey();
+    @Query(value= "SELECT SUM(kwota_plat)  FROM platnosc WHERE data_kursu_plat >=  CURRENT_DATE - INTERVAL 100 DAY GROUP BY DAY(data_kursu_plat)",nativeQuery = true)
+    List<Double> getIncomeForLast100DaysValue();
+    @Query(value= "SELECT DATE(data_kursu_plat) FROM platnosc WHERE data_kursu_plat >=  CURRENT_DATE - INTERVAL 12 MONTH GROUP BY MONTH(data_kursu_plat) ",nativeQuery = true)
+    List<String> getIncomeForLast12MonthsKey();
+    @Query(value= "SELECT  SUM(kwota_plat) FROM platnosc WHERE data_kursu_plat >=  CURRENT_DATE - INTERVAL 12 MONTH GROUP BY MONTH(data_kursu_plat) ",nativeQuery = true)
+    List<Double> getIncomeForLast12MonthsValue();
+
 }

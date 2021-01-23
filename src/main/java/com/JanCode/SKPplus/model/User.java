@@ -2,11 +2,15 @@ package com.JanCode.SKPplus.model;
 
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -43,6 +47,9 @@ public class User {
     private List<FileDB> fileList;
     @OneToMany(mappedBy="user")
     private List<Raport> raportList;
+
+
+
     public User() {
         super();
         this.enabled=false;
@@ -128,6 +135,29 @@ public class User {
     public Collection<Role> getRoles() {
         return roles;
     }
+    public String getFormattedRoles() {
+        return this.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toList()).stream()
+                .map(n -> String.valueOf(n).substring(5))
+                .collect(Collectors.joining(" ", " ", " "));
+    }
+    public AccountType getAccountType() {
+        String role =  getFormattedRoles();
+        AccountType type;
+        if (role.equals(" "+AccountType.ADMIN.name()+" ")) {
+
+            type = AccountType.ADMIN;
+        } else if (role.equals(" "+AccountType.KSIEGOWOSC.name()+" ")) {
+            type = AccountType.KSIEGOWOSC;
+        } else if (role.equals(" "+AccountType.DIAGNOSTYKA.name()+" ")) {
+            type = AccountType.DIAGNOSTYKA;
+        } else {
+            type = AccountType.USER;
+        }
+        return type;
+
+    }
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
@@ -204,7 +234,24 @@ public class User {
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
+    /*
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return mapRolesToAuthorities(this.getRoles());
+    }
+    public String getPrimaryRole() {
+        String formattedAuthorities;
+        List<GrantedAuthority> grantedAuthorities =new ArrayList<>(this.getAuthorities()) ;
+        formattedAuthorities = grantedAuthorities.get(1).getAuthority();
+        return formattedAuthorities;
+    }
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+    }
 
+
+     */
     @Override
     public String toString() {
         return "User{" +
@@ -216,4 +263,5 @@ public class User {
                 ", roles=" + roles +
                 '}';
     }
+
 }

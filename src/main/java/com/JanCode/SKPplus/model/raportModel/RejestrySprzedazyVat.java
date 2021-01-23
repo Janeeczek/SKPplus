@@ -4,6 +4,7 @@ import com.JanCode.SKPplus.model.Raport;
 import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahentDto;
 import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.RejestrSprzedazyVatDto;
 import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.RejestrySprzedazyVatDto;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Proxy(lazy = false)
 public class RejestrySprzedazyVat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,7 +21,7 @@ public class RejestrySprzedazyVat {
     private String bazaZrdId;
     private String bazaDocId;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(
             name = "rejestry_w_raporcie",
             joinColumns = @JoinColumn(

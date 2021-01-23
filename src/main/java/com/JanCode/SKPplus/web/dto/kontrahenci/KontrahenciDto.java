@@ -60,7 +60,7 @@ public class KontrahenciDto {
     public void setBAZA_DOC_ID(String BAZA_DOC_ID) {
         this.BAZA_DOC_ID = BAZA_DOC_ID;
     }
-    @XmlElement(name="KONTRAHENT")
+
     public List<KontrahentDto> getKONTRAHENT() {
         return KONTRAHENT;
     }

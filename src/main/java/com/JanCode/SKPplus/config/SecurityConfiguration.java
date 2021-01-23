@@ -2,8 +2,12 @@ package com.JanCode.SKPplus.config;
 
 import com.JanCode.SKPplus.authentication.MyDaoAuthenticationProvider;
 import com.JanCode.SKPplus.handler.CustomAuthenticationFailureHandler;
+import com.JanCode.SKPplus.handler.CustomLogoutSuccessHandler;
 import com.JanCode.SKPplus.listener.LogoutListener;
 import com.JanCode.SKPplus.listener.MyHttpSessionEventPublisher;
+import com.JanCode.SKPplus.service.ActiveUserService;
+import com.JanCode.SKPplus.service.ActiveUserServiceImpl;
+import com.JanCode.SKPplus.service.EmitterService;
 import com.JanCode.SKPplus.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -22,6 +26,15 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.thymeleaf.IEngineConfiguration;
+import org.thymeleaf.cache.ICacheEntryValidity;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.AbstractTemplateResolver;
+import org.thymeleaf.templateresource.ITemplateResource;
+
+import java.util.Map;
 
 
 @Configuration
@@ -31,7 +44,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
     @Autowired
     private MyUserDetailsService userDetailsService;
-
+    @Autowired
+    private ActiveUserService activeUserService;
     @Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {
         return new MyHttpSessionEventPublisher();
@@ -42,12 +56,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
     @Bean
     public SessionRegistry sessionRegistry() { return new SessionRegistryImpl(); }
+    @Bean
+    public EmitterService emitterService() {return new EmitterService();}
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.sessionManagement().maximumSessions(-1).sessionRegistry(sessionRegistry())
+                .expiredUrl("/login?expired");
+                //.invalidSessionUrl("/invalidSession.html");
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/login*","/reset","/register*","/registrationConfirm","/css/**","/demo/**","/fonts/**", "/img/**", "/js/**", "/vendor/**", "/scss/**","/layouts/**","/fragments/**")
                 .permitAll();
-        http.sessionManagement().maximumSessions(-1).sessionRegistry(sessionRegistry());
+
         http.authorizeRequests()
                 .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
@@ -62,6 +81,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and().logout()
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
+                .logoutSuccessHandler(new CustomLogoutSuccessHandler())
                 .deleteCookies("JSESSIONID")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout");
@@ -88,6 +108,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         provider.setHideUserNotFoundExceptions(false);
+        activeUserService.deleteOnInit();
         return provider;
     }
     @Bean

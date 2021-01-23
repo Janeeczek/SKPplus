@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
 </head>
 <body>
     <div th:fragment="wyswietlZalogowanych">
-
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary"></h6>
             </div>
             <div class="card-body">
+                <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center" onautocomplete=""></div>
+
+                <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
@@ -41,7 +43,7 @@
                             <td th:text="${acc.getFirstName()}"></td>
                             <td th:text="${acc.getLastName()}"></td>
                             <td th:text="${acc.getRoles()}"></td>
-                            <td>DO ZROBIENIA</td>
+                            <td th:text="${#temporals.format(acc.getLastActiveDate(), 'HH:mm dd-MM-yyyy')}">01/23/2018 (14 dni temu)</td>
                             <td>
                                 <div class="btn-group btn-block">
                                     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -63,10 +65,457 @@
             </div>
         </div>
     </div>
-    <div th:fragment="wyswietlDomyslne">
-        <h1 class="h3 mb-2 text-gray-800">cs</h1>
+    <div th:fragment="wyswietlWszystkich">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary"></h6>
+            </div>
+            <div class="card-body">
+                <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center" onautocomplete=""></div>
+
+                <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Nazwa użytkownika</th>
+                            <th>Email</th>
+                            <th>Imię</th>
+                            <th>Nazwisko</th>
+                            <th>Rola</th>
+                            <th>Aktywowany</th>
+                            <th>Data rejestracji</th>
+                            <th>Akcja</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>Nazwa użytkownika</th>
+                            <th>Email</th>
+                            <th>Imię</th>
+                            <th>Nazwisko</th>
+                            <th>Rola</th>
+                            <th>Aktywowany</th>
+                            <th>Data rejestracji</th>
+                            <th>Akcja</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr th:each="all, iterStat: ${allUsers}">
+                            <td th:text="${all.getUsername()}"></td>
+                            <td th:text="${all.getEmail()}"></td>
+                            <td th:text="${all.getFirstName()}"></td>
+                            <td th:text="${all.getLastName()}"></td>
+                            <td  th:text="${all.getFormattedRoles()}"></td>
+                            <div th:if="${all.isEnabled() == true}">
+                                <td>Tak</td>
+                            </div>
+                            <div th:unless="${all.isEnabled() == true}">
+                                <td>Nie</td>
+                            </div>
+                            <td  th:text="${#temporals.format(all.getRegistrationDate(), 'HH:mm dd-MM-yyyy')}"></td>
+                            <td>
+                                <div class="btn-group btn-block">
+                                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Akcja
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/" th:href="@{/profile?{u} (u=${all.getUsername()})}">Pokaż profil</a>
+
+                                        <a class="dropdown-item" href="#">Wyślij wiadomość</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="/" th:href="@{/admin/delete/{username} (username=${all.getUsername()})}">Usuń</a>
+                                        <a th:unless="${all.isEnabled()}" class="dropdown-item" href="/" th:href="@{/admin/activate/{username} (username=${all.getUsername()})}">Aktywuj</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:fragment="stworzUzytkownika">
+        <div class="container-flex mx-5">
+            <form  class="needs-validation" novalidate th:action="@{/admin/createUser}" th:object="${userDto}" th:method="POST">
+                <div class="row no-gutters">
+                    <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
+                        <div id="collapse1" class="card border-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">To narzędzie </h5>
+                                <p class="card-text">pozwala stworzyć nowego użytkownika i przypisać mu role.</p>
+                            </div>
+                        </div>
+
+                        <div id="collapse2" class="card border-success mb-3 ">
+                            <div class="card-body">
+                                <h5 class="card-title">Stworzony tak użytkownik</h5>
+                                <p class="card-text">będzie aktywny dopiero wtedy, kiedy potwierdzi swój email chyba, że będzie wybrana opcja 'Czy ma być aktywne?'.</p>
+                            </div>
+                        </div>
+                        <div id="collapse3" class="card border-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Potwierdzenie adresu e-mail</h5>
+                                <p class="card-text">znajdzie się na jego skrzynce e-mail.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card col-lg-6 o-hidden border-2 shadow-lg py-1 my-5">
+                        <div class="card-body p-0">
+                            <!-- Nested Row within Card Body -->
+                            <div class="col-lg">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Wpisz dane</h1>
+                                    </div>
+                                    <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center"></div>
+                                    <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-lg-2"></div>
+                                            <div class="col-lg-8">
+                                                <div class="input-group">
+                                                    <input th:field="*{username}" class="form-control text-center form-control-user" id="username" placeholder="Nazwa użytkownika" required>
+                                                </div><!-- /input-group -->
+                                            </div><!-- /.col-lg-4 -->
+                                            <div class="col-lg-2"></div>
+                                        </div><!-- /.row -->
+                                    </div>
+                                    <hr>
+                                    <div class="form-group " >
+                                        <div class="row" >
+                                            <div class="col-lg-1"></div>
+                                            <div class="col-lg-10">
+                                                <div class="input-group">
+                                                    <input th:field="*{email}"  class="form-control text-center form-control-user" id="email" placeholder="Adres E-mail"required>
+                                                </div><!-- /input-group -->
+                                            </div><!-- /.col-lg-4 -->
+                                            <div class="col-lg-1"></div>
+                                        </div><!-- /.row -->
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row" >
+                                        <div class="col-sm-6 mb-3 mb-sm-0" >
+                                            <input th:field="*{firstName}" class="form-control form-control-user" id="firstName" placeholder="Imię" required>
+
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input th:field="*{lastName}" class="form-control form-control-user" id="lastName" placeholder="Nazwisko" required>
+
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="password" th:field="*{password}"  class="form-control form-control-user" id="password" placeholder="Hasło"required>
+
+                                        </div>
+                                        <div class="col-sm-6" >
+                                            <input type="password" th:field="*{confirmPassword}"  class="form-control form-control-user" id="confirmPassword" placeholder="Powtórz hasło" required>
+
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 pl-5 py-2 mb-sm-0 custom-control custom-checkbox">
+                                            <input id="active" class="custom-control-input" type="checkbox" th:field="*{active}"/>
+                                            <label class="custom-control-label" for="active">Czy ma być aktywne?</label>
+                                        </div>
+                                        <div class="col-sm-6" >
+                                            <select class="form-control" id="role" name="role">
+                                                <option th:each="role : ${T(com.JanCode.SKPplus.model.AccountType).values()}"
+                                                        th:value="${role}" th:text="${role.roleName}" ></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <hr>
+                                    <input type="submit" class="btn btn-primary btn-user btn-block" value="Stwórz użytkownika">
+                                    <!--<button type="submit" class="btn btn-success">Zarejestruj</button>-->
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card col-lg-3 o-hidden border-0 my-5 " th:if="${#fields.hasErrors()}" style="background-color: rgba(245, 245, 245, 0.0); " >
+                        <div class="d-flex-auto px-1">
+                            <div class="mb-auto pl-1 ">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('username')}"
+                                     th:each="error : ${#fields.errors('username')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('email')}"
+                                     th:each="error : ${#fields.errors('email')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('firstName')}"
+                                     th:each="error : ${#fields.errors('firstName')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('lastName')}"
+                                     th:each="error : ${#fields.errors('lastName')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('password')}"
+                                     th:each="error : ${#fields.errors('password')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('confirmPassword')}"
+                                     th:each="error : ${#fields.errors('confirmPassword')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('global') && #fields.errors('confirmPassword') != null && #fields.errors('password') != null  }"
+                                     th:each="error : ${#fields.errors('global')}" th:text="${error}">
+                                </div>
+                            </div>
+                            <div class="mb-auto pl-2">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('role')}"
+                                     th:each="error : ${#fields.errors('role')}" th:text="${error}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
+    <div th:fragment="wyswietlDomyslne">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Centrum administratora</h1>
+
+        </div>
+
+        <!-- Content Row -->
+        <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Liczba użytkowników</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${countUsers}" ></div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-house-user fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Liczba aktywnych użytkowników</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800 " th:text="${countActiveUsers}">0</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Stopień zaawansowania strony
+                                </div>
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">80%</div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="progress progress-sm mr-2">
+                                            <div class="progress-bar bg-info" role="progressbar"
+                                                 style="width: 50%" aria-valuenow="80" aria-valuemin="0"
+                                                 aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Liczba zgłoszonych uwag</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${countFeedback}">0</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-comment-medical fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Row -->
+
+        <div class="row">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-dark shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                    Liczba dodanych raportów</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${countAllRaports}" ></div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-word fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Liczba dodanych plików</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${countAllFiles}" ></div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-upload fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Liczba użytkowników nie aktywowanych</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${countNotActivatedUsers}" ></div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user-clock fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+
+            </div>
+
+
+
+        </div>
+
+        <!-- Content Row -->
+        <div class="row">
+
+            <!-- Content Column -->
+            <div class="col-lg-6 mb-4">
+
+                <!-- Project Card Example -->
+
+            </div>
+        </div>
+    </div>
+    <div th:fragment="wyswietlGenerujAlert">
+        <div class="container-flex mx-5">
+            <div class="row no-gutters">
+                <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
+                    <div id="collapse1" class="card border-alert mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Wygenerowany alert </h5>
+                            <p class="card-text">zostanie rozesłany do wszystkich użytkowników.</p>
+                        </div>
+                    </div>
+
+                    <div id="collapse2" class="card border-alert mb-3 ">
+                        <div class="card-body">
+                            <h5 class="card-title">Jeśli użytkownik</h5>
+                            <p class="card-text">będzie w tym momencie zalgowany, ikona alertu w prawym górnym rogu będzie wyświetlać ilość nieprzeczytanych wiadomości.</p>
+                        </div>
+                    </div>
+                    <div id="collapse3" class="">
+                        <!--
+                        <div class="card-body">
+                            <h5 class="card-title">Potwierdzenie adresu e-mail</h5>
+                            <p class="card-text">znajdzie się na jego skrzynce e-mail.</p>
+                        </div>
+                        -->
+                    </div>
+                </div>
+                <div class="card col-lg-6 o-hidden border-2 shadow-lg py-1 my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="col-lg">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Skonstruuj alert</h1>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="tytul" class="form-control" id="tytul" >
+                                    <label for="tytul">Tytuł</label>
+                                </div>
+                                <div class="form-floating">
+                                    <textarea class="form-control" rows="6" placeholder="Wpisz tutaj treść" id="tresc"></textarea>
+                                    <label for="tresc">Treść</label>
+                                </div>
+                                <div class="form-group px-2">
+                                    <a class="btn btn-primary btn-circle px-2">
+                                        <input class="form-check-input" type="radio" name="ikona" id="ikona1" value="FILE" >
+                                        <i class="fas fa-file-alt text-white"></i>
+                                    </a>
+                                    <a class="btn bg-success btn-circle">
+                                        <input class="form-check-input" type="radio" name="ikona" id="ikona2" value="DONATE">
+                                        <i class="fas fa-donate text-white"></i>
+                                    </a>
+                                    <a class="btn bg-warning btn-circle">
+                                        <input class="form-check-input" type="radio" name="ikona" id="ikona3" value="EXCLAMATION_TRIANGLE" >
+                                        <i class="fas fa-exclamation-triangle text-white"></i>
+                                    </a>
+                                </div>
+                                <button class="btn btn-primary" onclick="myFun()" type="button">Wyślij</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 
 

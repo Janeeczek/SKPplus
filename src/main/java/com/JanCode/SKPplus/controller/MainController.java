@@ -1,6 +1,10 @@
 package com.JanCode.SKPplus.controller;
 
-import com.JanCode.SKPplus.model.User;
+import com.JanCode.SKPplus.model.AccountType;
+import com.JanCode.SKPplus.model.MyUserPrincipal;
+import com.JanCode.SKPplus.service.ActiveUserService;
+import com.JanCode.SKPplus.service.RaportServiceImpl;
+import com.JanCode.SKPplus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,54 +13,65 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 
 @Controller
 public class MainController  {
 
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RaportServiceImpl raportService;
+    @Autowired
+    private ActiveUserService activeUserService;
+
     @GetMapping("/")
-    public String showRoot() {
+    public ModelAndView showUser(Authentication authentication) {
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
+        ModelAndView modelAndView;
+        if (sourcePrincipal != null) {
+            AccountType mode = sourcePrincipal.getAccountType();
+            if(mode == AccountType.ADMIN) {
+                modelAndView = new ModelAndView("redirect:/admin?tryb=showMain");
+                return modelAndView;
+            }
+            modelAndView = new ModelAndView("/user/user","mode",mode.name());
+            if( mode == AccountType.USER) {
+                modelAndView.addObject("allIncome",raportService.getAllIncomeString());
+                modelAndView.addObject("activeEmp",activeUserService.findAllEmployees());
+            }
 
-        return "/user/user";
-    }
-    @GetMapping("/test")
-    public String showTest() {
 
-        return "/test";
-    }
-    @GetMapping("/charts")
-    public String showCharts() {
+        } else {
+            modelAndView = new ModelAndView("/error");
+        }
+        return modelAndView;
 
-        return "/user/charts";
     }
-    @GetMapping("/tables")
-    public String showTables() {
+    @GetMapping("/wykresy")
+    public ModelAndView showUserWykresy(Authentication authentication) {
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
+        ModelAndView modelAndView;
+        if (sourcePrincipal != null) {
+            AccountType mode = sourcePrincipal.getAccountType();
 
-        return "/user/tables";
+            if( mode == AccountType.USER) {
+                modelAndView = new ModelAndView("/user/wykresy","mode",mode.name());
+                return modelAndView;
+            }
+            modelAndView = new ModelAndView("/user/user","mode",mode.name());
+
+
+        } else {
+            modelAndView = new ModelAndView("/error");
+        }
+        return modelAndView;
     }
-    @GetMapping("/utilities-color")
-    public String showUtilities_color() {
-        return "/user/utilities-color";
-    }
-    @GetMapping("/utilities-border")
-    public String showUtilities_border() {
-        return "/user/utilities-border";
-    }
-    @GetMapping("/utilities-animation")
-    public String showUtilities_animation() {
-        return "/user/utilities-animation";
-    }
-    @GetMapping("/utilities-other")
-    public String showUtilities_other() {
-        return "/user/utilities-other";
-    }
-    @GetMapping("/buttons")
-    public String showButtons() {
-        return "/user/buttons";
-    }
-    @GetMapping("/cards")
-    public String showCards() {
-        return "/user/cards";
-    }
+
+
+
+
+
 }

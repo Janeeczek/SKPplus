@@ -3,6 +3,7 @@ package com.JanCode.SKPplus.model.raportModel;
 import com.JanCode.SKPplus.util.AdapterCDATA;
 import com.JanCode.SKPplus.util.AdapterCDATADate;
 import com.JanCode.SKPplus.web.dto.rejestrySprzedazy.PozycjaKdDto;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 
 @Entity
+@Proxy(lazy = false)
 public class PozycjaKd {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

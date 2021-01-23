@@ -1,5 +1,6 @@
 package com.JanCode.SKPplus.controller;
 
+import com.JanCode.SKPplus.model.AccountType;
 import com.JanCode.SKPplus.model.FileDB;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.model.User;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,9 +19,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class FileController {
@@ -27,35 +32,66 @@ public class FileController {
     private FileStorageService storageService;
 
     @GetMapping("/pliki/upload")
-    public ModelAndView showUploadForm() {
-        ModelAndView modelAndView = new ModelAndView("/user/uploadXML");
-        modelAndView.addObject("raportDto", new RaportDto());
+    public ModelAndView showUploadForm(Authentication authentication) {
+
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
+        ModelAndView modelAndView;
+        if (sourcePrincipal != null) {
+            AccountType mode = sourcePrincipal.getAccountType();
+            System.err.println(mode);
+            if (mode == AccountType.KSIEGOWOSC || mode == AccountType.DIAGNOSTYKA || mode == AccountType.ADMIN) {
+                modelAndView = new ModelAndView("/user/uploadXML","mode",mode.name());
+                modelAndView.addObject("raportDto", new RaportDto());
+            } else {
+                modelAndView = new ModelAndView("/error","errorMsg","Brak uprawnień!");
+            }
+        } else modelAndView = new ModelAndView("/error","errorMsg","Brak uprawnień!");
         return modelAndView;
+
     }
 
     @PostMapping("/pliki/upload/post")
     public String getFilePost(RedirectAttributes atts, @ModelAttribute RaportDto raportDto, @RequestParam(value = "action", required = true) String action, Authentication authentication) {
-        MyUserPrincipal principal = (MyUserPrincipal) authentication.getPrincipal();
-        if (action.equals("save")) {
-            try {
-                storageService.store(raportDto, principal.getUsername());
-            } catch (Exception e) {
-                atts.addFlashAttribute("errorMsg", "Nieprawidłowy rodzaj pliku!");
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
+        if (sourcePrincipal != null) {
+            AccountType mode = sourcePrincipal.getAccountType();
+            if (mode == AccountType.KSIEGOWOSC || mode == AccountType.DIAGNOSTYKA || mode == AccountType.ADMIN) {
+                if (action.equals("save")) {
+                    try {
+                        storageService.store(raportDto, sourcePrincipal.getUsername());
+                    } catch (Exception e) {
+                        atts.addFlashAttribute("errorMsg", "Nieprawidłowy rodzaj pliku!");
+                        return "redirect:/pliki/upload";
+                    }
+                    atts.addFlashAttribute("successMsg", "Pomyslnie zapisano plik!");
+                } else {
+                    atts.addFlashAttribute("cancelMsg", "Anulowano wysyłanie pliku!");
+                }
                 return "redirect:/pliki/upload";
+
+            } else {
+                atts.addFlashAttribute("errorMsg", "Brak uprawnień, aby wysłać plik");
             }
-            atts.addFlashAttribute("successMsg", "Pomyslnie zapisano plik!");
-        } else {
-            atts.addFlashAttribute("cancelMsg", "Anulowano wysyłanie pliku!");
-        }
+        }else atts.addFlashAttribute("errorMsg", "Brak uprawnień, aby wysłać plik");
         return "redirect:/pliki/upload";
 
     }
 
     @GetMapping("/pliki/pokazWszystkie")
-    public ModelAndView showPlikiTable() {
-        ModelAndView modelAndView = new ModelAndView("/user/pliki");
-        List<FileDB> files = storageService.getAllFiles();
-        modelAndView.addObject("pliki", files);
+    public ModelAndView showPlikiTable(Authentication authentication) {
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
+        ModelAndView modelAndView;
+        if (sourcePrincipal != null) {
+            AccountType mode = sourcePrincipal.getAccountType();
+            System.err.println(mode);
+            if (mode == AccountType.KSIEGOWOSC ||mode == AccountType.ADMIN|| mode == AccountType.DIAGNOSTYKA) {
+                modelAndView = new ModelAndView("/user/pliki","mode",mode.name());
+                List<FileDB> files = storageService.getAllFiles();
+                modelAndView.addObject("pliki", files);
+            } else {
+                modelAndView = new ModelAndView("/error","errorMsg","Brak uprawnień!");
+            }
+        } else modelAndView = new ModelAndView("/error","errorMsg","Brak uprawnień!");
         return modelAndView;
     }
 
@@ -68,17 +104,57 @@ public class FileController {
     }
 
     @GetMapping("/pliki/usun/{id}")
-    public String usunPlik(RedirectAttributes atts, @PathVariable String id) {
-        storageService.deleteFileById(id);
-        atts.addFlashAttribute("successMsg", "Pomyslnie usunięto plik o id: " + id + " ");
-        return "redirect:/pliki/pokazWszystkie";
+    public ModelAndView usunPlik(RedirectAttributes atts, @PathVariable String id,Authentication authentication) {
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
+        ModelAndView modelAndView;
+        FileDB fileDB = storageService.getFile(id);
+        if (sourcePrincipal == null) {
+            modelAndView = new ModelAndView("/error","errorMsg","Brak uprawnień!");
+            return modelAndView;
+        }
+        if (fileDB == null) {
+            modelAndView = new ModelAndView("/error","errorMsg","Nie ma takiego pliku do usunięcia!");
+            return modelAndView;
+        }
+        AccountType mode = sourcePrincipal.getAccountType();
+        if( mode == AccountType.ADMIN || sourcePrincipal.getId()==fileDB.getUser().getId() || mode == AccountType.KSIEGOWOSC) {
+            storageService.deleteFileById(id);
+            atts.addFlashAttribute("successMsg", "Pomyslnie usunięto plik o id: " + id + " ");
+            modelAndView = new ModelAndView("redirect:/pliki/pokazWszystkie");
+            return modelAndView;
+        }else {
+            modelAndView = new ModelAndView("redirect:/pliki/pokazWszystkie");
+            atts.addFlashAttribute("errorMsg", "Brak uprawnień, aby usunąć plik o id: " + id + " ");
+            return modelAndView;
+        }
     }
 
     @GetMapping("/pliki/pobierz/{id}")
-    public ResponseEntity<Resource> showUploadForm(@PathVariable String id) {
-        FileDB file = storageService.getFile(id);
-        HttpHeaders headers = new HttpHeaders(); headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+file.getName()+".xml");
-        ByteArrayResource resource = new ByteArrayResource(file.getData());
-        return ResponseEntity.ok().headers(headers).contentLength(file.getData().length).contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
+    public ResponseEntity<Resource> showUploadForm(RedirectAttributes atts,@PathVariable String id,Authentication authentication) {
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
+        FileDB fileDB = storageService.getFile(id);
+        Map<String, Object> cos = new HashMap<>();
+        cos.put("errorMsg", "Brak uprawnień!");
+        if (sourcePrincipal == null) {
+            atts.addFlashAttribute("errorMsg", "Brak uprawnień!");
+            return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, "redirect:/pliki/pokazWszystkie").build();
+        }
+        if (fileDB == null) {
+            atts.addFlashAttribute("errorMsg", "Nie ma takiego pliku do usunięcia!");
+            return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, "redirect:/pliki/pokazWszystkie").build();
+        }
+        AccountType mode = sourcePrincipal.getAccountType();
+        if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
+            FileDB file = storageService.getFile(id);
+            HttpHeaders headers = new HttpHeaders(); headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+file.getName()+".xml");
+            ByteArrayResource resource = new ByteArrayResource(file.getData());
+            atts.addFlashAttribute("successMsg", "Plik jest gotowy do pobrania!");
+            return ResponseEntity.ok().headers(headers).contentLength(file.getData().length).contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
+        }else {
+            atts.addFlashAttribute("errorMsg", "Brak uprawnień, aby pobrać plik o id: " + id + " ");
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("errorMsg","Brak uprawnień, aby pobrać plik o id: " + id + " " );
+            return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, "redirect:/pliki/pokazWszystkie").headers(responseHeaders).build();
+        }
     }
 }

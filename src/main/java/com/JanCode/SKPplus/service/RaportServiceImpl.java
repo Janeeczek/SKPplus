@@ -2,49 +2,34 @@
 package com.JanCode.SKPplus.service;
 
 import com.JanCode.SKPplus.model.FileDB;
+import com.JanCode.SKPplus.model.InfoModel.WykresKolowyData;
+import com.JanCode.SKPplus.model.InfoModel.WykresLiniowyData;
 import com.JanCode.SKPplus.model.Raport;
 import com.JanCode.SKPplus.model.User;
-import com.JanCode.SKPplus.model.raportModel.Kontrahent;
 import com.JanCode.SKPplus.repository.PlatnoscRepository;
-import com.JanCode.SKPplus.repository.RaporRepository;
+import com.JanCode.SKPplus.repository.RaportRepository;
 import com.JanCode.SKPplus.web.dto.DaneRaportuDto;
-import com.JanCode.SKPplus.web.dto.RaportDto;
-import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahenciDto;
-import com.JanCode.SKPplus.web.dto.kontrahenci.KontrahentDto;
-import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
-import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.*;
-import javax.xml.bind.annotation.XmlSchema;
-import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.sax.SAXSource;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RaportServiceImpl{
     @Autowired
-    private RaporRepository raporRepository;
+    private RaportRepository raportRepository;
     @Autowired
     private PlatnoscRepository platnoscRepository;
     @Autowired
@@ -62,7 +47,7 @@ public class RaportServiceImpl{
 
             InputStream targetStream = new ByteArrayInputStream(fileDB.getData());
             InputSource is = new InputSource(targetStream);
-
+            if(is == null) System.out.println("INPUT SOURCE IS NULL");
             JAXBContext jc = JAXBContext.newInstance(DaneRaportuDto.class);
             Unmarshaller unmarshaller = jc.createUnmarshaller();
 
@@ -73,48 +58,61 @@ public class RaportServiceImpl{
             try {
                 reader = sax.newSAXParser().getXMLReader();
             } catch (SAXException | ParserConfigurationException e) {
+                 System.out.println("SAXException !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 throw new RuntimeException(e);
             }
             SAXSource source = new SAXSource(reader, is);
-
+            if(source == null) System.out.println("SAXSource SOURCE IS NULL");
 
             DaneRaportuDto daneRaportuDto = (DaneRaportuDto) unmarshaller.unmarshal(source);
-            raport = new Raport(daneRaportuDto,user,fileDB);
+            raport = new Raport(fileDB.getName(),daneRaportuDto,user,fileDB);
 
 
         } catch (JAXBException e) {
             e.printStackTrace();
         }
 
-        raporRepository.save(raport);
+        raportRepository.save(raport);
         return raport;
     }
     //DB -> daneRaportuDto -> Marshal -> FileDb ->storeFile
     public byte[] createFileFromRaport(long id, String username) {
         byte[] resoult = null;
         ByteArrayOutputStream byteArrayOutputStream =  new ByteArrayOutputStream();
+        XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
+        xmlOutputFactory.setProperty("escapeCharacters", false);
+
+
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(DaneRaportuDto.class);
-            Raport raport = raporRepository.myFindById(id);
+            Raport raport = raportRepository.myFindById(id);
             DaneRaportuDto daneRaportuDto = new DaneRaportuDto(raport);
 
             Marshaller marshaller = jaxbContext.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,false);
-            //marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "windows-1250");
-           // marshaller.setProperty("com.sun.xml.bind.xmlDeclaration", false);
-            //marshaller.setProperty("com.sun.xml.bind.xmlHeaders", "<?xml version=\"1.0\" encoding=\"windows-1250\"?>");
+            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+            /*
             marshaller.setProperty("com.sun.xml.bind.marshaller.CharacterEscapeHandler", new CharacterEscapeHandler() {
                 @Override
                 public void escape(char[] ac, int i, int j, boolean flag, Writer writer) throws IOException {
                     writer.write(ac, i, j);
                 }
             });
-            marshaller.marshal(daneRaportuDto,byteArrayOutputStream);
+
+             */
+            XMLStreamWriter xmlStreamWriter = xmlOutputFactory.createXMLStreamWriter(byteArrayOutputStream, (String) marshaller.getProperty(Marshaller.JAXB_ENCODING));
+            xmlStreamWriter.writeStartDocument((String) marshaller.getProperty(Marshaller.JAXB_ENCODING), "1.0");
+            marshaller.marshal(daneRaportuDto, xmlStreamWriter);
+            xmlStreamWriter.writeEndDocument();
+            xmlStreamWriter.close();
+
             resoult = byteArrayOutputStream.toByteArray();
 
 
+
         } catch (JAXBException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return resoult;
@@ -123,45 +121,52 @@ public class RaportServiceImpl{
     public byte[] createFileFromRaportExtra(long id, String username) {
         byte[] resoult = null;
         ByteArrayOutputStream byteArrayOutputStream =  new ByteArrayOutputStream();
+        XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
+        xmlOutputFactory.setProperty("escapeCharacters", false);
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(DaneRaportuDto.class);
-            Raport raport = raporRepository.myFindById(id);
+            Raport raport = raportRepository.myFindById(id);
             DaneRaportuDto daneRaportuDto = new DaneRaportuDto(raport);
             daneRaportuDto.getKONTRAHENCI().setBAZA_DOC_ID("STACJ");
             daneRaportuDto.getKONTRAHENCI().setBAZA_ZRD_ID("STACJ");
             daneRaportuDto.getREJESTRY_SPRZEDAZY_VAT().setBAZA_DOC_ID("STACJ");
             daneRaportuDto.getREJESTRY_SPRZEDAZY_VAT().setBAZA_ZRD_ID("STACJ");
             Marshaller marshaller = jaxbContext.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,false);
-            //marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "windows-1250");
-            // marshaller.setProperty("com.sun.xml.bind.xmlDeclaration", false);
-            //marshaller.setProperty("com.sun.xml.bind.xmlHeaders", "<?xml version=\"1.0\" encoding=\"windows-1250\"?>");
+            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+            /*
             marshaller.setProperty("com.sun.xml.bind.marshaller.CharacterEscapeHandler", new CharacterEscapeHandler() {
                 @Override
                 public void escape(char[] ac, int i, int j, boolean flag, Writer writer) throws IOException {
                     writer.write(ac, i, j);
                 }
             });
-            marshaller.marshal(daneRaportuDto,byteArrayOutputStream);
+
+             */
+            XMLStreamWriter xmlStreamWriter = xmlOutputFactory.createXMLStreamWriter(byteArrayOutputStream, (String) marshaller.getProperty(Marshaller.JAXB_ENCODING));
+            xmlStreamWriter.writeStartDocument((String) marshaller.getProperty(Marshaller.JAXB_ENCODING), "1.0");
+            marshaller.marshal(daneRaportuDto, xmlStreamWriter);
+            xmlStreamWriter.writeEndDocument();
+            xmlStreamWriter.close();
+
             resoult = byteArrayOutputStream.toByteArray();
 
 
-        } catch (JAXBException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return resoult;
 
     }
 
-    public Raport getRaportById() {
-        return null;
+    public Raport getRaportById(long id) {
+        return raportRepository.myFindById(id);
     }
 
 
     public void removeById(long id) {
-       raporRepository.deleteById(id);
-       if(raporRepository.existsById(id))
+       raportRepository.deleteById(id);
+       if(raportRepository.existsById(id))
             System.out.println("Błąd! Nie usunięto raportu o id: "+ id);
        else
            System.out.println("Sukces! Usunięto raport o id: "+ id);
@@ -169,7 +174,7 @@ public class RaportServiceImpl{
 
 
     public void removeAll() {
-        raporRepository.deleteAll();
+        raportRepository.deleteAll();
     }
 
 
@@ -181,11 +186,102 @@ public class RaportServiceImpl{
     }
 
     public List<Raport> getAllRaports() {
-        return raporRepository.findAll();
+        List<Raport> raports = raportRepository.myFindAll();
+        return raports;
     }
 
     public List<Double> getAllIncomeList() {
-        return platnoscRepository.getAllIncomeList();
+        List<Double> wplywy = platnoscRepository.getAllIncomeList();
+        return wplywy;
         //return null;
+    }
+
+
+
+    public String getAllIncomeString() {
+        List<Raport> raports = getAllRaports();
+        if (raports.size() > 0)
+        {
+            //System.out.println("Lista INCOME != null");
+            Double income = getAllIncome();
+            if (income == null || income <1.0) {
+                return "Brak dochodu";
+            } else if (income < 1000.0 ) {
+                if(income % 1 ==0)
+                    return String.format("%d",income.longValue())+ " zł";
+                else
+                    return String.format("%s",income) + " zł";
+            } else if (income < 10000.0 ) {
+                if(income % 1 ==0){
+                    String value = Double.toString(income);
+                    value = value.substring(0,2) + " " + value.substring(2,value.length())+ " zł";
+                    return value;
+                }
+                else {
+                    String value = Double.toString(income);
+                    value = value.substring(0,2) + " " + value.substring(2,value.length())+ " zł";
+                    return value;
+                }
+
+            } else if (income < 100000.0 ) {
+                if(income % 1 ==0){
+                    String value = Double.toString(income);
+                    value = value.substring(0,2) + " " + value.substring(2,value.length()-2 )+ " zł";
+                    return value;
+                }
+                else {
+                    String value = Double.toString(income);
+                    value = value.substring(0,2) + " " + value.substring(2,value.length())+ " zł";
+                    return value;
+                }
+
+            }
+
+        }
+        return "Brak dochodu";
+    }
+    public WykresKolowyData getDaneWykresuKolowego() {
+        List<Raport> raports = getAllRaports();
+        if ( raports.isEmpty() == false && raports != null  )
+        {
+            List<Double> lista = getAllIncomeList();
+            int osobowe = 0;
+            int ciezarowe = 0;
+            int inne = 0;
+            for (Double a : lista) {
+                if(a == 99.0) osobowe++;
+                else if(a == 177.0 || a == 154.0 || a== 200.0 || a == 178.0 || a == 162.0 || a == 79) ciezarowe++;
+                else inne++;
+            }
+
+            return new WykresKolowyData(osobowe,ciezarowe,inne);
+        }
+        else return new WykresKolowyData(2,1,4);
+
+    }
+    public WykresLiniowyData getDaneWykresuLiniowego100days() {
+
+        List<String> keys = platnoscRepository.getIncomeForLast100DaysKey();
+        List<Double> values = platnoscRepository.getIncomeForLast100DaysValue();
+        List<String> nkeys = new ArrayList<>();
+        List<Double> nvalues = new ArrayList<>();
+        Map<String, Double> map = new HashMap<>();
+        for(int i =0 ;i< keys.size();i++){
+            map.put(keys.get(i),values.get(i) );
+        }
+        Map<String, Double> treeMap = new TreeMap<>(map);
+        for(String s : treeMap.keySet()){
+            nkeys.add(s);
+            nvalues.add(treeMap.get(s));
+        }
+
+        return new WykresLiniowyData(nkeys,nvalues);
+    }
+    public WykresLiniowyData getDaneWykresuLiniowego12months() {
+
+        List<String> keys = platnoscRepository.getIncomeForLast12MonthsKey();
+        List<Double> values = platnoscRepository.getIncomeForLast12MonthsValue();
+
+        return new WykresLiniowyData(keys,values);
     }
 }

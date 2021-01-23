@@ -16,11 +16,12 @@ public interface ActiveUsersRepository extends JpaRepository<ActiveUsers, Long> 
 
     @Query(value= "SELECT * FROM active_users WHERE email = ?1",nativeQuery = true)
     ActiveUsers findByEmail(String email);
-
+    @Query(value= "SELECT * FROM active_users WHERE username = ?1",nativeQuery = true)
+    ActiveUsers findByUsername(String username);
     @Query(value= "SELECT * FROM active_users",nativeQuery = true)
     List<ActiveUsers> getAllActiveUsers();
     @Modifying
-    @Query(value= "DELETE FROM active_users WHERE email =:em",nativeQuery = true)
-    void deleteeByEmail(@Param("em")String email);
+    @Query(value= "DELETE FROM active_users WHERE username =:em",nativeQuery = true)
+    void deleteByUsername(@Param("em")String username);
 
 }

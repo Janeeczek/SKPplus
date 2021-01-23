@@ -5,6 +5,7 @@ package com.JanCode.SKPplus.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ public class ActiveUsers implements Serializable {
     private String lastName;
     @NotNull
     public String roles;
+    private LocalDateTime lastActiveDate;
     public ActiveUsers() {
     }
     public ActiveUsers(User user) {
@@ -34,8 +36,9 @@ public class ActiveUsers implements Serializable {
         this.roles = user.getRoles().stream()
                 .map(Role::getName)
                 .collect(Collectors.toList()).stream()
-                .map(n -> String.valueOf(n))
-                .collect(Collectors.joining("-", "{", "}"));
+                .map(n -> String.valueOf(n).substring(5))
+                .collect(Collectors.joining(" ", " ", " "));
+        this.lastActiveDate = LocalDateTime.now();
     }
 
     public ActiveUsers(String email, String username, String firstName, String lastName, Collection<Role> roles ) {
@@ -46,8 +49,9 @@ public class ActiveUsers implements Serializable {
         this.roles = roles.stream()
                 .map(Role::getName)
                 .collect(Collectors.toList()).stream()
-                .map(n -> String.valueOf(n))
-                .collect(Collectors.joining("-", "{", "}"));
+                .map(n -> String.valueOf(n).substring(5))
+                .collect(Collectors.joining(" ", " ", " "));
+        this.lastActiveDate = LocalDateTime.now();
     }
 
     public ActiveUsers(MyUserPrincipal principal) {
@@ -58,8 +62,9 @@ public class ActiveUsers implements Serializable {
         this.roles = principal.getRoles().stream()
                 .map(Role::getName)
                 .collect(Collectors.toList()).stream()
-                .map(n -> String.valueOf(n))
-                .collect(Collectors.joining("-", "{", "}"));
+                .map(n -> String.valueOf(n).substring(5))
+                .collect(Collectors.joining(" ", " ", " "));
+        this.lastActiveDate = LocalDateTime.now();
     }
 
     public long getId() {
@@ -108,5 +113,13 @@ public class ActiveUsers implements Serializable {
 
     public void setRoles(String roles) {
         this.roles = roles;
+    }
+
+    public LocalDateTime getLastActiveDate() {
+        return lastActiveDate;
+    }
+
+    public void setLastActiveDate(LocalDateTime lastActiveDate) {
+        this.lastActiveDate = lastActiveDate;
     }
 }

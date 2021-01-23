@@ -14,7 +14,7 @@ public class MyNotNullValidator implements ConstraintValidator< MyNotNull, Strin
     @Override
     public boolean isValid(final String s, final ConstraintValidatorContext context) {
         try {
-            return s == null || s.length() > 3;
+            return !s.isBlank() || s != null || s.length() > 3 ;
         } catch (final Exception ignore) {}
         return true;
     }

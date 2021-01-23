@@ -3,13 +3,20 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layouts/userLayout.html}">
 <head>
-    <title>PTHW+</title>
+    <title>SKP+</title>
 </head>
 <body>
-<div layout:fragment="content">
-    <div th:replace="fragments/profileFragments :: default"></div>
+    <div layout:fragment="content">
+        <div th:if="${mode == 'USER'}">
+            <div th:replace="fragments/userFragments :: defaultuser"></div>
+        </div>
 
-</div>
-
+        <div th:if="${mode == 'KSIEGOWOSC'}">
+            <div th:replace="fragments/userFragments :: defaultksiegowosc"></div>
+        </div>
+        <div th:if="${mode == 'DIAGNOSTYKA'}">
+            <div th:replace="fragments/userFragments :: defaultdiagnostyka"></div>
+        </div>
+    </div>
 </body>
 </html>
