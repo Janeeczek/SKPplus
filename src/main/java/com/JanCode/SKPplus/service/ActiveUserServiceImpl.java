@@ -33,7 +33,7 @@ public class ActiveUserServiceImpl implements ActiveUserService {
     @Override
     public ActiveUsers save(User user) {
         ActiveUsers activeUsers = new ActiveUsers(user);
-        userService.updateLastActiveTime(user.getUsername());
+        userService.updateLastActiveTime(user.getUserName());
         return activeUsersRepository.save(activeUsers);
     }
 
@@ -68,8 +68,8 @@ public class ActiveUserServiceImpl implements ActiveUserService {
 
     @Override
     public void delete(User user) {
-        userService.updateLastActiveTime(user.getUsername());
-        activeUsersRepository.deleteByUsername(user.getUsername());
+        userService.updateLastActiveTime(user.getUserName());
+        activeUsersRepository.deleteByUsername(user.getUserName());
     }
     @Override
     public void delete(MyUserPrincipal principal) {
