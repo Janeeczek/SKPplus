@@ -1,5 +1,7 @@
 package com.JanCode.SKPplus.model;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -8,25 +10,32 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    //@UniqueElements(message = "Nazwa musi być unikalna!")
     private String name;
-    private String shortName;
+    //@UniqueElements(message = "Opis musi być unikalny!")
+    private String description;
+    //@UniqueElements(message = "TAG musi być unikalny!")
     private String tag;
     private LocalDateTime timeCreated;
     @ManyToOne
     @JoinColumn(name="creator_username",nullable = false,referencedColumnName = "userName")
     private User userCreator;
+    /*
     @OneToOne
     @JoinColumn(name="item_id",nullable = false)
     private ItemStorage itemStorage;
+
+     */
     @Lob
     private byte[] image;
 
     public Item() {
+
     }
 
-    public Item(String name, String shortName, String tag, LocalDateTime timeCreated, User userCreator, byte[] image) {
+    public Item(String name, String description, String tag, LocalDateTime timeCreated, User userCreator, byte[] image) {
         this.name = name;
-        this.shortName = shortName;
+        this.description = description;
         this.tag = tag;
         this.timeCreated = timeCreated;
         this.userCreator = userCreator;
@@ -51,12 +60,12 @@ public class Item {
         this.name = name;
     }
 
-    public String getShortName() {
-        return shortName;
+    public String getDescription() {
+        return description;
     }
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getTag() {

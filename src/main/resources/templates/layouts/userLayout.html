@@ -31,8 +31,7 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <div th:if="${mode == 'KSIEGOWOSC'}">
-        <ul class="navbar-nav  bg-gradient-warning sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul th:if="${mode == 'KSIEGOWOSC'}" class="navbar-nav  bg-gradient-warning sidebar sidebar-dark accordion" id="accordionSidebar">
 
 
             <!-- Sidebar - Brand -->
@@ -104,9 +103,9 @@
                 <button class="rounded-circle text-dark border-0" id="sidebarToggle"></button>
             </div>
         </ul>
-    </div>
-    <div th:if="${mode == 'ADMIN'}">
-        <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
+
+
+        <ul th:if="${mode == 'ADMIN'}" class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center">
@@ -168,6 +167,7 @@
                         <a class="collapse-item" href="/" th:href="@{/admin?tryb=createUser}">Stwórz użytkownika</a>
                         <a class="collapse-item" href="/" th:href="@{/pliki/upload}">Wgraj plik</a>
                         <a class="collapse-item" href="/" th:href="@{/admin?tryb=generateAlert}">Generuj alert</a>
+                        <a class="collapse-item" href="/" th:href="@{/dodajItem}">Dodaj nowy upominek</a>
                     </div>
                 </div>
             </li>
@@ -184,9 +184,8 @@
             </div>
 
         </ul>
-    </div>
-    <div th:if="${mode == 'DIAGNOSTYKA'}">
-        <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <ul th:if="${mode == 'DIAGNOSTYKA'}" class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
 
 
             <!-- Sidebar - Brand -->
@@ -255,9 +254,8 @@
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
         </ul>
-    </div>
-    <div th:if="${mode == 'USER'}">
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <ul th:if="${mode == 'USER'}" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
 
             <!-- Sidebar - Brand -->
@@ -318,7 +316,6 @@
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
         </ul>
-    </div>
 
 
 

@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistException("Ta nazwa użytkownika jest już w użyciu!");
         }
         User user = new User();
-        user.setUserName(registration.getUsername());
+        user.setUsername(registration.getUsername());
         user.setFirstName(registration.getFirstName());
         user.setLastName(registration.getLastName());
         user.setEmail(registration.getEmail());
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistException("Ta nazwa użytkownika jest już w użyciu!");
         }
         User user = new User();
-        user.setUserName(registration.getUsername());
+        user.setUsername(registration.getUsername());
         user.setFirstName(registration.getFirstName());
         user.setLastName(registration.getLastName());
         user.setEmail(registration.getEmail());
@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
 
 
         User user = userRepository.findByUsername(username);
-        user.setUserName(userdto.getUsername());
+        user.setUsername(userdto.getUsername());
         user.setFirstName(userdto.getFirstName());
         user.setLastName(userdto.getLastName());
         //user.setEmail(userdto.getEmail());

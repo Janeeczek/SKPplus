@@ -58,7 +58,7 @@ class MyErrorController {
 
     @ExceptionHandler(value = Exception.class)
     public ModelAndView
-    defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
+    defaultErrorHandler(HttpServletRequest req, Exception e,Authentication authentication) throws Exception {
         // If the exception is annotated with @ResponseStatus rethrow it and let
         // the framework handle it - like the OrderNotFoundException example
         // at the start of this post.
@@ -68,8 +68,10 @@ class MyErrorController {
             throw e;
 
         // Otherwise setup and send the user to a default error-view.
+        MyUserPrincipal principal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView mav = new ModelAndView();
         mav.addObject("exception", e);
+        mav.addObject("currentUser", principal);
         mav.addObject("url", req.getRequestURL());
         mav.setViewName(DEFAULT_ERROR_VIEW);
         return mav;

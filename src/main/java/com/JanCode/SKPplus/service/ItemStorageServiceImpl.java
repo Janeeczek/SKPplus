@@ -4,10 +4,11 @@ import com.JanCode.SKPplus.model.Item;
 import com.JanCode.SKPplus.model.ItemStorage;
 import com.JanCode.SKPplus.repository.ItemStorageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class ItemStorageServiceImpl implements ItemStorageService {
     @Autowired
     private ItemStorageRepository itemStorageRepository;
@@ -24,7 +25,9 @@ public class ItemStorageServiceImpl implements ItemStorageService {
 
     @Override
     public ItemStorage addItem(Item item, int quantity) {
-        return itemStorageRepository.save(new ItemStorage(item, quantity));
+        System.err.println("ZAPISUJE STORAGE");
+        ItemStorage itemStorage = new ItemStorage(item,quantity);
+        return itemStorageRepository.save(itemStorage);
     }
 
     @Override
@@ -35,7 +38,9 @@ public class ItemStorageServiceImpl implements ItemStorageService {
 
     @Override
     public int getItemQuantity(Item item) {
-        return itemStorageRepository.getItemQuantity(item.getId());
+        ItemStorage itemStorage = getItemStorage(item);
+
+        return itemStorage.getQuantity();
     }
 
     @Override
@@ -47,6 +52,6 @@ public class ItemStorageServiceImpl implements ItemStorageService {
 
     @Override
     public ItemStorage getItemStorage(Item item) {
-        return itemStorageRepository.getItemStorageByItemId(item.getId());
+        return itemStorageRepository.findItemStorageByItemId(item.getId());
     }
 }

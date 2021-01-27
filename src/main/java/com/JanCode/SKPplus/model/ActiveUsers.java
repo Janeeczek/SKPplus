@@ -30,7 +30,7 @@ public class ActiveUsers implements Serializable {
     }
     public ActiveUsers(User user) {
         this.email = user.getEmail();
-        this.username = user.getUserName();
+        this.username = user.getUsername();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.roles = user.getRoles().stream()

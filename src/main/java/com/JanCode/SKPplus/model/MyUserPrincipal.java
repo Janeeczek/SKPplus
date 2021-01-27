@@ -43,7 +43,7 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUserName();
+        return user.getUsername();
     }
     public User getUser(){ return user;}
     public LocalDateTime getLastActiveDate() {

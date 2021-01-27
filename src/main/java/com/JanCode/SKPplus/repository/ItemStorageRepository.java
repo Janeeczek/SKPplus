@@ -8,10 +8,9 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 
 @Repository
-@Transactional
+//@Transactional
 public interface ItemStorageRepository extends JpaRepository<ItemStorage, Long> {
-    @Query()
-    int getItemQuantity(long id);
-    @Query()
-    ItemStorage getItemStorageByItemId(long id);
+
+    @Query(value = "SELECT * FROM itemstorage where item_id = :id ",nativeQuery = true)
+    ItemStorage findItemStorageByItemId(long id);
 }

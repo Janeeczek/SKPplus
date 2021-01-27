@@ -31,7 +31,7 @@ public class ConfirmRegistrationController {
         }
 
         User user = verificationToken.getUser();
-        System.out.println(user.getUserName());
+        System.out.println(user.getUsername());
         Calendar cal = Calendar.getInstance();
         //Date date = java.util.Date.from(verificationToken.getExpiryDate().atZone(ZoneId.systemDefault()).toInstant());
         if ((java.util.Date.from(verificationToken.getExpiryDate().atZone(ZoneId.systemDefault()).toInstant()).getTime() - cal.getTime().getTime()) <= 0) {

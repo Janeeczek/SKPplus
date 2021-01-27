@@ -164,7 +164,7 @@ public class AlertServiceImpl implements AlertService {
             System.out.println("Sprawdzam Emitter!");
             if (emitter != null) {
                 User user = userService.myFindById(user_id);
-                System.out.println("User username: "+ user.getUserName());
+                System.out.println("User username: "+ user.getUsername());
                 if (user.getAccountType() == AccountType.USER) {
                     try {
                         emitter.send(SseEmitter.event().name("wykresKolowyData").data(produceDaneWykresuKolowego(wykresKolowyData)));

@@ -18,7 +18,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String userName;
+    private String username;
     private String firstName;
     private String lastName;
     private String email;
@@ -57,7 +57,7 @@ public class User {
 
     public User(User user) {
         this.id = user.id;
-        this.userName = user.userName;
+        this.username = user.username;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
         this.email = user.email;
@@ -65,15 +65,15 @@ public class User {
         this.roles = user.roles;
     }
 
-    public User(String userName, String firstName, String lastName, String email, String password) {
-        this.userName = userName;
+    public User(String username, String firstName, String lastName, String email, String password) {
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
     }
-    public User(String userName, String firstName, String lastName, String email, String password, Collection<Role> roles, byte[] image, boolean enabled, boolean locked) {
-        this.userName = userName;
+    public User(String username, String firstName, String lastName, String email, String password, Collection<Role> roles, byte[] image, boolean enabled, boolean locked) {
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -92,12 +92,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {
