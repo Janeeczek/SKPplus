@@ -148,6 +148,7 @@
                         <h6 class="collapse-header">Pliki:</h6>
                         <a class="collapse-item" href="/" th:href="@{/pliki/pokazWszystkie}">Pliki</a>
                         <a class="collapse-item" href="/" th:href="@{/raport/pokazWszystkie}">Raporty</a>
+                        <a class="collapse-item" href="/" th:href="@{/item/listaItem}">Upominki</a>
 
                     </div>
                 </div>
@@ -167,7 +168,8 @@
                         <a class="collapse-item" href="/" th:href="@{/admin?tryb=createUser}">Stwórz użytkownika</a>
                         <a class="collapse-item" href="/" th:href="@{/pliki/upload}">Wgraj plik</a>
                         <a class="collapse-item" href="/" th:href="@{/admin?tryb=generateAlert}">Generuj alert</a>
-                        <a class="collapse-item" href="/" th:href="@{/dodajItem}">Dodaj nowy upominek</a>
+                        <a class="collapse-item" href="/" th:href="@{/item/dodajItem}">Dodaj nowy upominek</a>
+                        <a class="collapse-item" href="/" th:href="@{/item/wydajItem}">Wydaj upominek</a>
                     </div>
                 </div>
             </li>
@@ -454,8 +456,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${currentUser.getFirstname()}" > </span>
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${currentUser.getLastname()}" > </span>
-                            <img class="img-profile rounded-circle"
-                                 th:src="*{'data:image/png;base64,'+currentUser.getByte64Image()}">
+                            <img class="img-profile rounded-circle" th:src="*{'data:image/png;base64,'+currentUser.getByte64Image()}">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

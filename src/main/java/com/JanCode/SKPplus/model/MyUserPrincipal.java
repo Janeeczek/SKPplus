@@ -58,7 +58,6 @@ public class MyUserPrincipal implements UserDetails {
     public MultipartFile getMultiPartImage() {
         InputStream inputStream = new ByteArrayInputStream(user.getImage());
         return new MockMultipartFile("Zdjecie", user.getImage());
-        //return new MockMultipartFile("new file name","Original file name", ContentType.APPLICATION_OCTET_STREAM.toString(), inputStream);
     }
     public String getByte64Image() {
         if (user == null) {

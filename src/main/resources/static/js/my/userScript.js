@@ -39,7 +39,49 @@ $(document).ready(function() {
     window.onbeforeunload = function() {
         eventSource.close();
     }
+    window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+
+
+
+
+
+
+
+
+
 });
+function readURL(input) {
+    console.log("READURL");
+    var myImg = document.getElementById('imageResult');
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#imageResult').attr('src', e.target.result);
+            if(myImg && myImg.style) {
+                myImg.style.height = '200px';
+                myImg.style.width = '200px';
+            }
+
+        };
+
+        reader.readAsDataURL(input.files[0]);
+
+    }
+
+}
 
 
 function addBlock(title, text, date, iconTypeName, iconTypeBack, id) {

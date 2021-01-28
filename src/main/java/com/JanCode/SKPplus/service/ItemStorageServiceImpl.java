@@ -24,34 +24,38 @@ public class ItemStorageServiceImpl implements ItemStorageService {
     }
 
     @Override
+    public List<ItemStorage> getAllItemStorage() {
+        return itemStorageRepository.findAll();
+    }
+
+    @Override
     public ItemStorage addItem(Item item, int quantity) {
-        System.err.println("ZAPISUJE STORAGE");
         ItemStorage itemStorage = new ItemStorage(item,quantity);
         return itemStorageRepository.save(itemStorage);
     }
 
     @Override
-    public void removeItem(Item item) {
-        ItemStorage itemStorage = getItemStorage(item);
+    public void removeItemStorage(long itemStorageId) {
+        ItemStorage itemStorage = getItemStorage(itemStorageId);
         itemStorageRepository.delete(itemStorage);
     }
 
     @Override
-    public int getItemQuantity(Item item) {
-        ItemStorage itemStorage = getItemStorage(item);
+    public int getItemQuantity(long itemStorageId) {
+        ItemStorage itemStorage = getItemStorage(itemStorageId);
 
         return itemStorage.getQuantity();
     }
 
     @Override
-    public ItemStorage setItemQuantity(Item item, int quantity) {
-        ItemStorage itemStorage = getItemStorage(item);
+    public ItemStorage setItemQuantity(long itemStorageId, int quantity) {
+        ItemStorage itemStorage = getItemStorage(itemStorageId);
         itemStorage.setQuantity(quantity);
         return itemStorageRepository.save(itemStorage);
     }
 
     @Override
-    public ItemStorage getItemStorage(Item item) {
-        return itemStorageRepository.findItemStorageByItemId(item.getId());
+    public ItemStorage getItemStorage(long itemStorageId) {
+        return itemStorageRepository.getOne(itemStorageId);
     }
 }

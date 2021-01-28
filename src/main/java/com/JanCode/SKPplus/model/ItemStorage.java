@@ -15,6 +15,9 @@ public class ItemStorage {
     private int actualQuantity;
     private LocalDateTime timeUpdated;
 
+    public ItemStorage() {
+    }
+
     public ItemStorage(Item item, int quantity) {
         this.item = item;
         this.quantity = quantity;

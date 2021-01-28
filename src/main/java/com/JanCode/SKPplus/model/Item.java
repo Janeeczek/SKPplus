@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Base64;
 
 @Entity
 public class Item {
@@ -18,8 +19,8 @@ public class Item {
     private String tag;
     private LocalDateTime timeCreated;
     @ManyToOne
-    @JoinColumn(name="creator_username",nullable = false,referencedColumnName = "userName")
-    private User userCreator;
+    @JoinColumn(name="creator_username",nullable = false,referencedColumnName = "id")
+    private User user;
     /*
     @OneToOne
     @JoinColumn(name="item_id",nullable = false)
@@ -33,12 +34,12 @@ public class Item {
 
     }
 
-    public Item(String name, String description, String tag, LocalDateTime timeCreated, User userCreator, byte[] image) {
+    public Item(String name, String description, String tag, LocalDateTime timeCreated, User user, byte[] image) {
         this.name = name;
         this.description = description;
         this.tag = tag;
         this.timeCreated = timeCreated;
-        this.userCreator = userCreator;
+        this.user = user;
         this.image = image;
     }
 
@@ -84,12 +85,12 @@ public class Item {
         this.timeCreated = timeCreated;
     }
 
-    public User getUserCreator() {
-        return userCreator;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserCreator(User userCreator) {
-        this.userCreator = userCreator;
+    public void setUser(User user) {
+        this.user = user;
     }
     public byte[] getImage() {
         return image;
@@ -97,5 +98,8 @@ public class Item {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+    public String getByte64Image() {
+            return new String(Base64.getEncoder().encodeToString(this.getImage()));
     }
 }

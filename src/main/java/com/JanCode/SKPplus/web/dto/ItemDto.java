@@ -1,15 +1,22 @@
 package com.JanCode.SKPplus.web.dto;
 
+import com.JanCode.SKPplus.constraint.ImageType;
+import com.JanCode.SKPplus.constraint.Tag;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.NotBlank;
 
 public class ItemDto {
     @NotBlank(message = "Nazwa nie może być pusta!")
     private String name;
-    @NotBlank(message = "Opis nie może być pusta!")
+    @NotBlank(message = "Opis nie może być pusty!")
     private String description;
     @NotBlank(message = "Tag nie może być pusty!")
+    @Tag(message = "Tag nie może mieć wiecej niż 5 znaków!")
     private String tag;
-    private byte[] image;
+    private int quantity;
+    @ImageType(message = "Błedny typ zdjęcia!")
+    private MultipartFile image;
 
     public ItemDto() {
     }
@@ -38,11 +45,19 @@ public class ItemDto {
         this.tag = tag;
     }
 
-    public byte[] getImage() {
+    public MultipartFile getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(MultipartFile image) {
         this.image = image;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
