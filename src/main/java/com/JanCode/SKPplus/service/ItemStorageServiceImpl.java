@@ -12,6 +12,8 @@ import java.util.List;
 public class ItemStorageServiceImpl implements ItemStorageService {
     @Autowired
     private ItemStorageRepository itemStorageRepository;
+    @Autowired
+    private ItemService itemService;
 
 
     @Override
@@ -51,6 +53,7 @@ public class ItemStorageServiceImpl implements ItemStorageService {
     public ItemStorage setItemQuantity(long itemStorageId, int quantity) {
         ItemStorage itemStorage = getItemStorage(itemStorageId);
         itemStorage.setQuantity(quantity);
+        itemService.deleteItem(itemStorage.getItem().getId());
         return itemStorageRepository.save(itemStorage);
     }
 

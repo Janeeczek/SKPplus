@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -49,6 +50,7 @@ public class ItemController {
         if (sourcePrincipal != null) {
             AccountType mode = sourcePrincipal.getAccountType();
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
+                //ItemStorage itemStorageService
                 modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
                 modelAndView.addObject("itemDto",new ItemDto());
                 return modelAndView;
@@ -123,17 +125,23 @@ public class ItemController {
 
     }
     @GetMapping("/item/delete/{id}")
-    public ModelAndView deleteItem(Authentication authentication,@PathVariable long id) {
+    public ModelAndView deleteItem(Authentication authentication,@PathVariable long id, RedirectAttributes atts) {
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView modelAndView;
         if (sourcePrincipal != null) {
             AccountType mode = sourcePrincipal.getAccountType();
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
                 itemStorageService.removeItemStorage(id);
+
                 modelAndView = new ModelAndView("redirect:/item/listaItem");
+                atts.addFlashAttribute("SuccessMessage","Pomyślnie usunięto przedmiot o id: "+ id);
                 return modelAndView;
             }
+            modelAndView = new ModelAndView("redirect:/item/listaItem");
+            atts.addFlashAttribute("ErrorMessage","Brak uprawienień! Nie można usunąć przedmiotu o id: "+ id);
+            return modelAndView;
         }
+
         modelAndView = new ModelAndView("/error");
         return modelAndView;
     }

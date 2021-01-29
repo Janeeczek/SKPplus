@@ -2,6 +2,7 @@ package com.JanCode.SKPplus.web.dto;
 
 import com.JanCode.SKPplus.constraint.ImageType;
 import com.JanCode.SKPplus.constraint.Tag;
+import com.JanCode.SKPplus.model.ItemStorage;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
@@ -19,6 +20,11 @@ public class ItemDto {
     private MultipartFile image;
 
     public ItemDto() {
+    }
+    public ItemDto(ItemStorage itemStorage) {
+        this.name = itemStorage.getItem().getName();
+        this.description = itemStorage.getItem().getDescription();
+        this.tag = itemStorage.getItem().getTag();
     }
 
     public String getName() {
