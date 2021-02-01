@@ -16,7 +16,8 @@ public class ImageTypeValidator implements ConstraintValidator<ImageType, Multip
     @Override
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext constraintValidatorContext) {
         String format = multipartFile.getContentType().split("/")[1];
-        return format.toLowerCase().equals("jpg") || format.toLowerCase().equals("jpeg") || format.toLowerCase().equals("png");
+        System.out.println(format);
+        return format.toLowerCase().equals("jpg") || format.toLowerCase().equals("jpeg") || format.toLowerCase().equals("png") || format.toLowerCase().equals("octet-stream");
 
 
 

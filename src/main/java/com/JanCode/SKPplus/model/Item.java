@@ -29,18 +29,20 @@ public class Item {
      */
     @Lob
     private byte[] image;
+    private String contentType;
 
     public Item() {
 
     }
 
-    public Item(String name, String description, String tag, LocalDateTime timeCreated, User user, byte[] image) {
+    public Item(String name, String description, String tag, LocalDateTime timeCreated, User user, byte[] image,String contentType) {
         this.name = name;
         this.description = description;
         this.tag = tag;
         this.timeCreated = timeCreated;
         this.user = user;
         this.image = image;
+        this.contentType = contentType;
     }
 
 
@@ -99,7 +101,19 @@ public class Item {
     public void setImage(byte[] image) {
         this.image = image;
     }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
     public String getByte64Image() {
-            return new String(Base64.getEncoder().encodeToString(this.getImage()));
+        //System.out.println("ZDJECIE " + getName());
+        //System.out.println(Base64.getEncoder().encodeToString(this.getImage()));
+        //System.out.println("================================");
+            return "data:"+getContentType()+";base64,"+Base64.getEncoder().encodeToString(this.getImage());
     }
 }

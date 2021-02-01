@@ -8,4 +8,5 @@ public interface ItemService {
     Item createItem(User user, ItemDto itemDto);
     void deleteItem(long id);
     Item getItem(long id);
+    Item updateItem(long id, ItemDto itemDto);
 }

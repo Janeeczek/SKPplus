@@ -8,11 +8,12 @@ public class ItemStorage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @OneToOne()
-    @JoinColumn(name = "item_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name="item_id",nullable = false,referencedColumnName = "id")
     private Item item;
     private int quantity;
     private int actualQuantity;
+    private LocalDateTime timeCreated;
     private LocalDateTime timeUpdated;
 
     public ItemStorage() {
@@ -23,6 +24,7 @@ public class ItemStorage {
         this.quantity = quantity;
         this.actualQuantity = quantity;
         this.timeUpdated = LocalDateTime.now();
+        this.timeCreated = timeUpdated;
     }
 
     public long getId() {
@@ -63,5 +65,13 @@ public class ItemStorage {
 
     public void setTimeUpdated(LocalDateTime timeUpdated) {
         this.timeUpdated = timeUpdated;
+    }
+
+    public LocalDateTime getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(LocalDateTime timeCreated) {
+        this.timeCreated = timeCreated;
     }
 }

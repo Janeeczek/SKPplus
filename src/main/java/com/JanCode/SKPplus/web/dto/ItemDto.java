@@ -3,9 +3,11 @@ package com.JanCode.SKPplus.web.dto;
 import com.JanCode.SKPplus.constraint.ImageType;
 import com.JanCode.SKPplus.constraint.Tag;
 import com.JanCode.SKPplus.model.ItemStorage;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Base64;
 
 public class ItemDto {
     @NotBlank(message = "Nazwa nie może być pusta!")
@@ -25,6 +27,7 @@ public class ItemDto {
         this.name = itemStorage.getItem().getName();
         this.description = itemStorage.getItem().getDescription();
         this.tag = itemStorage.getItem().getTag();
+        this.image = new MockMultipartFile("image",null,itemStorage.getItem().getContentType(),itemStorage.getItem().getImage());
     }
 
     public String getName() {
