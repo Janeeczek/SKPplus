@@ -2,6 +2,14 @@ $(document).ready(function() {
     setTimeout(function() {
         $(".alert").slideUp(900);
     }, 10000);
+    $('#collapse1').hide();
+        $('#collapse2').hide();
+        $('#collapse3').hide();
+        $('#collapse1').slideToggle("slow", "linear", function() {
+            $('#collapse2').slideToggle("slow", "linear", function() {
+                $('#collapse3').slideToggle("slow", "linear");
+            });
+        });
     $('#phone-number').mask('000-000-000');
     var urlEndPoint = "http://localhost:8080/subscribe";
     var eventSource = new EventSource(urlEndPoint);
@@ -58,9 +66,15 @@ $(document).ready(function() {
         var selected = $('#select').val();
         console.log("selected :" + selected);
         $('#mybutton').attr("href", "/item/info/"+selected);
-
-
     });
+    $('#poleIlosc').on('change', function()
+        {
+            var selected = $('#poleIlosc').val();
+            console.log("poleIlosc :" + selected);
+            $('#addMoreItemBut').attr("href", "/item/info/"+selected);
+
+
+        });
 });
 function readURL(input) {
     console.log("READURL");

@@ -6,6 +6,7 @@ import com.JanCode.SKPplus.service.ItemService;
 import com.JanCode.SKPplus.service.ItemStorageService;
 import com.JanCode.SKPplus.service.UserService;
 import com.JanCode.SKPplus.web.dto.ItemDto;
+import com.JanCode.SKPplus.web.dto.QuantityDto;
 import com.JanCode.SKPplus.web.dto.WydajItemDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -82,22 +83,6 @@ public class ItemController {
         modelAndView = new ModelAndView("/error");
         return modelAndView;
     }
-    @GetMapping("/item/changeQuantity/{id}")
-    public ModelAndView showChangeQuantity(Authentication authentication,@PathVariable long id) {
-        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
-        ModelAndView modelAndView;
-        if (sourcePrincipal != null) {
-            AccountType mode = sourcePrincipal.getAccountType();
-            if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
-                //ItemStorage itemStorageService
-                modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
-                modelAndView.addObject("itemDto",new ItemDto());
-                return modelAndView;
-            }
-        }
-        modelAndView = new ModelAndView("/error");
-        return modelAndView;
-    }
 
     @GetMapping("/item/list")
     public ModelAndView showList(Authentication authentication) {
@@ -155,6 +140,7 @@ public class ItemController {
                 //User user = userService.findByUsername(sourcePrincipal.getUsername());
                 modelAndView = new ModelAndView("/user/showItem","mode",mode.name());
                 modelAndView.addObject("itemStorage",itemStorage);
+                modelAndView.addObject("qDto",new QuantityDto());
                 return modelAndView;
             }
             modelAndView = new ModelAndView("redirect:/item/list");
@@ -182,6 +168,7 @@ public class ItemController {
                 User user = userService.findByUsername(sourcePrincipal.getUsername());
                 Item item = itemService.createItem(user,itemDto);
                 ItemStorage itemStorage = itemStorageService.addItem(item,itemDto.getQuantity());
+                //TODO dodaj tutaj rejestracje zdarzenia
                 if(itemStorage == null || item == null || user == null) {
                     modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
                     modelAndView.addObject("itemDto",itemDto);
@@ -224,6 +211,7 @@ public class ItemController {
                     atts.addFlashAttribute("ErrorMessage",e.getMessage());
                     return modelAndView;
                 }
+                //TODO dodaj tutaj rejestracje zdarzenia
                 modelAndView = new ModelAndView("redirect:/item/give");
                 atts.addFlashAttribute("SuccessMessage","Pomyślnie wydano upominek! "+ itemStorage.getItem().getName());
                 return modelAndView;
@@ -252,6 +240,7 @@ public class ItemController {
                 User user = userService.findByUsername(sourcePrincipal.getUsername());
                 Item item = itemService.updateItem(itemStorage.getItem().getId(),itemDto);
                 ItemStorage newItemStorage = itemStorageService.updateItemStorage(itemStorage);
+                //TODO dodaj tutaj rejestracje zdarzenia
                 if(newItemStorage == null || item == null || user == null) {
                     modelAndView = new ModelAndView("/user/editItem","mode",mode.name());
                     modelAndView.addObject("itemDto",itemDto);
@@ -269,31 +258,29 @@ public class ItemController {
         return modelAndView;
 
     }
-    @PostMapping("/item/changeQuantity/save")
-    public ModelAndView postChangeQuantity(@ModelAttribute @Valid ItemDto itemDto, BindingResult bindingResult, Authentication authentication) {
+    @PostMapping("/item/changeQuantity/save/{id}")
+    public ModelAndView postChangeQuantity(@PathVariable long id,@ModelAttribute QuantityDto quantityDto, Authentication authentication,RedirectAttributes atts) {
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView modelAndView;
         if (sourcePrincipal != null) {
             AccountType mode = sourcePrincipal.getAccountType();
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
+                /*
                 if (bindingResult.hasErrors()) {
-                    modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
-                    modelAndView.addObject("itemDto",itemDto);
-                    modelAndView.addObject("ErrorMessage","Jest błąd!");
+                    modelAndView = new ModelAndView("redirect:/item/info/"+ quantityDto.getId());
+                    atts.addFlashAttribute("ErrorMessage","Nie wprowadzono liczby!");
                     return modelAndView;
-                }
+                }*/
                 User user = userService.findByUsername(sourcePrincipal.getUsername());
-                Item item = itemService.createItem(user,itemDto);
-                ItemStorage itemStorage = itemStorageService.addItem(item,itemDto.getQuantity());
-                if(itemStorage == null || item == null || user == null) {
-                    modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
-                    modelAndView.addObject("itemDto",itemDto);
-                    modelAndView.addObject("ErrorMessage","Jest błąd!");
+                ItemStorage itemStorage = itemStorageService.updateQuantity(id,quantityDto);
+                //TODO dodaj tutaj rejestracje zdarzenia
+                if(itemStorage == null || user == null) {
+                    modelAndView = new ModelAndView("redirect:/item/info/"+ id);
+                    atts.addFlashAttribute("ErrorMessage","Nie udało się ustawić nowej ilości!");
                     return modelAndView;
                 }
-                modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
-                modelAndView.addObject("SuccessMessage","Pomyślnie dodano nowy przedmiot");
-                modelAndView.addObject("itemDto",new ItemDto());
+                modelAndView = new ModelAndView("redirect:/item/info/"+ id);
+                atts.addFlashAttribute("SuccessMessage","Pomyślnie ustawiono nową ilość!");
                 return modelAndView;
             }
         }

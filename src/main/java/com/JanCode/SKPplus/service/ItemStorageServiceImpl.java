@@ -6,6 +6,7 @@ import com.JanCode.SKPplus.model.ItemStorage;
 import com.JanCode.SKPplus.model.User;
 import com.JanCode.SKPplus.repository.ItemStorageRepository;
 import com.JanCode.SKPplus.web.dto.ItemDto;
+import com.JanCode.SKPplus.web.dto.QuantityDto;
 import com.JanCode.SKPplus.web.dto.WydajItemDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
@@ -50,9 +51,7 @@ public class ItemStorageServiceImpl implements ItemStorageService {
     }
     @Override
     public ItemStorage updateItemStorage(ItemStorage itemStorage) {
-
-        itemStorage.setTimeUpdated(LocalDateTime.now());
-
+        itemStorage.setTimeUpdated(getTimeNow());
         return itemStorageRepository.save(itemStorage);
     }
 
@@ -78,20 +77,26 @@ public class ItemStorageServiceImpl implements ItemStorageService {
     @Override
     public int getItemQuantity(long itemStorageId) {
         ItemStorage itemStorage = getItemStorage(itemStorageId);
-
         return itemStorage.getQuantity();
     }
 
     @Override
-    public ItemStorage setItemQuantity(long itemStorageId, int quantity) {
+    public ItemStorage updateQuantity(long itemStorageId, QuantityDto quantityDto) {
         ItemStorage itemStorage = getItemStorage(itemStorageId);
-        itemStorage.setQuantity(quantity);
-        itemService.deleteItem(itemStorage.getItem().getId());
+        int quant = itemStorage.getQuantity();
+        int actual =  itemStorage.getActualQuantity();
+        itemStorage.setActualQuantity(actual + quantityDto.getQuantity());
+        itemStorage.setQuantity(quant + quantityDto.getQuantity());
+        itemStorage.setTimeUpdated(getTimeNow());
         return itemStorageRepository.save(itemStorage);
     }
 
     @Override
     public ItemStorage getItemStorage(long itemStorageId) {
         return itemStorageRepository.findItemStorageById(itemStorageId);
+    }
+
+    private LocalDateTime getTimeNow() {
+        return LocalDateTime.now();
     }
 }

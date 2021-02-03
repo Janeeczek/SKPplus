@@ -1347,21 +1347,21 @@
                     <div id="collapse1" class="card border-alert mb-3">
                         <div class="card-body">
                             <h5 class="card-title">Aktualna ilość</h5>
-                            <p class="card-text">201 szt.</p>
+                            <p th:text="${itemStorage.getActualQuantity()+ ' szt.'}" class="card-text">Aktualna ilość</p>
                         </div>
                     </div>
 
                     <div id="collapse2" class="card border-alert mb-3 ">
                         <div class="card-body">
-                            <h5 class="card-title">Od początku dodano</h5>
-                            <p class="card-text">500 szt.</p>
+                            <h5 class="card-title">Ilość od pierwszego dodania</h5>
+                            <p th:text="${itemStorage.getQuantity()+ ' szt.'}" class="card-text">500 szt.</p>
                         </div>
                     </div>
-                    <div id="collapse3" class="">
+                    <div id="collapse3" class="card border-alert mb-3 ">
 
                         <div class="card-body">
-                            <h5 class="card-title">Czas ostatniej modyfikacji</h5>
-                            <p class="card-text">15:53 01.01.2021</p>
+                            <h5 class="card-title">Data ostatniej modyfikacji</h5>
+                            <p th:text="${#temporals.format(itemStorage.getTimeUpdated(), 'HH:mm') + ' w dniu '+ #temporals.format(itemStorage.getTimeUpdated(), 'dd-MM-yyyy')}" class="card-text"></p>
                         </div>
 
                     </div>
@@ -1370,55 +1370,62 @@
 
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
-                        <div class="col-lg">
+                        <div class="col-md">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-4">Scyz</h1>
+                                    <h1 th:text="${itemStorage.getItem().getName()}" class="h1 text-gray-900 mb-4">Nazwa</h1>
                                 </div>
-
-                                <div class="form-floating mb-3">
-
-                                </div>
-
-                                <div class="form-floating mb-3">
-
-
-                                </div>
-
-                                <div class="form-floating">
-
-
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-
-
-                                    </div>
-
-                                    <div class="form-group col-md-8">
-                                        <div class="mx-auto">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>Opis</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <h2 th:text="${itemStorage.getItem().getDescription()}" class="h4 text-gray-900 "></h2>
+                                            </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <form th:action="@{/item/changeQuantity/save/{id} (id=${itemStorage.getId()})}" th:object="${qDto}" th:method="POST">
+                                            <div class="mt-5 card text-center">
+
+                                                <div class="card-header">
+                                                    Dodaj więcej przedmiotu
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item">Wpisz wartość poniżej</li>
+                                                    <div th:if="${#ctx.containsVariable('ErrorMessage')}">
+                                                        <li class=" alert-danger alert border-alert list-group-item">
+                                                            <p  th:text="${ErrorMessage}" class=""></p>
+                                                        </li>
+                                                    </div>
+                                                    <div th:if="${#ctx.containsVariable('SuccessMessage')}">
+                                                        <li class=" bg-success alert   list-group-item">
+                                                            <p  th:text="${SuccessMessage}" class="text-black"></p>
+                                                        </li>
+                                                    </div>
+                                                    <li class="list-group-item">
+                                                        <input th:field="*{quantity}" class="custom" type="number" value="0" min="1">
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Zwiększ">
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </form>
 
                                     </div>
-
-                                </div>
-                                <hr>
-                                <label >(Opcjonalne)</label>
-
-                                <div class="form-floating mb-2">
-
-                                </div>
-
-                                <div class="form-floating col-lg-6 offset-lg-3">
-                                    <div class="row justify-content-center">
-
+                                    <div class="col-sm-6">
+                                        <div class="text-center card border-0">
+                                            <div class="card-body ">
+                                                <img class="card-img-top" th:attr="src=@{${itemStorage.getItem().getByte64Image()}}">
+                                            </div>
+                                        </div>
                                     </div>
-
                                 </div>
-
-
-
                             </div>
                         </div>
                     </div>
@@ -1427,21 +1434,21 @@
                     <div id="collapse1" class="card border-alert mb-3">
                         <div class="card-body">
                             <h5 class="card-title">Dodany przez</h5>
-                            <p class="card-text">Jan Mazurek</p>
+                            <p th:text="${itemStorage.getItem().getUser().getFirstName()+ ' ' + itemStorage.getItem().getUser().getLastName()}" class="card-text">Jan Mazurek</p>
                         </div>
                     </div>
 
                     <div id="collapse2" class="card border-alert mb-3 ">
                         <div class="card-body">
-                            <h5 class="card-title">Od początku dodano</h5>
-                            <p class="card-text">500 szt.</p>
+                            <h5 class="card-title">Tag</h5>
+                            <p th:text="${itemStorage.getItem().getTag()}" class="card-text"></p>
                         </div>
                     </div>
-                    <div id="collapse3" class="">
+                    <div id="collapse3" class="card border-alert mb-3 ">
 
                         <div class="card-body">
-                            <h5 class="card-title">Czas ostatniej modyfikacji</h5>
-                            <p class="card-text">15:53 01.01.2021</p>
+                            <h5 class="card-title">Data dodania</h5>
+                            <p th:text="${#temporals.format(itemStorage.getTimeCreated(), 'HH:mm') + ' w dniu '+ #temporals.format(itemStorage.getTimeCreated(), 'dd-MM-yyyy')}" class="card-text"></p>
                         </div>
 
                     </div>
