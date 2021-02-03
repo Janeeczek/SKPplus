@@ -58,7 +58,9 @@ public class ItemStorageServiceImpl implements ItemStorageService {
 
     @Override
     public ItemStorage wydajItem( WydajItemDto wydajItemDto, User user)  throws  QuantityTooSmallException {
-        ItemStorage itemStorage = itemStorageRepository.findItemStorageById(wydajItemDto.getItemStorageId());
+        long id = Long.parseLong(wydajItemDto.getItemStorageId());
+
+        ItemStorage itemStorage = itemStorageRepository.findItemStorageById(id);
         int newQuantity = itemStorage.getActualQuantity() - wydajItemDto.getQuantity();
 
         if(newQuantity <0) throw new QuantityTooSmallException("Nie ma takiej ilości na stanie!");

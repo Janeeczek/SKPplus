@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,8 +31,8 @@ public class ItemController {
     @Autowired
     private ItemStorageService itemStorageService;
 
-    @GetMapping("/item/dodajItem")
-    public ModelAndView showDodajItem(Authentication authentication) {
+    @GetMapping("/item/add")
+    public ModelAndView showAdd(Authentication authentication) {
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView modelAndView;
         if (sourcePrincipal != null) {
@@ -45,42 +46,8 @@ public class ItemController {
         modelAndView = new ModelAndView("/error");
         return modelAndView;
     }
-    @GetMapping("/item/editItem/{id}")
-    public ModelAndView showEditItem(Authentication authentication,@PathVariable long id) {
-        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
-        ModelAndView modelAndView;
-        if (sourcePrincipal != null) {
-            AccountType mode = sourcePrincipal.getAccountType();
-            if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
-                ItemStorage itemStorage = itemStorageService.getItemStorage(id);
-                modelAndView = new ModelAndView("/user/editItem","mode",mode.name());
-                modelAndView.addObject("itemFoto",itemStorage);
-                modelAndView.addObject("idTemp",id);
-                modelAndView.addObject("itemDto",new ItemDto(itemStorage));
-                return modelAndView;
-            }
-        }
-        modelAndView = new ModelAndView("/error");
-        return modelAndView;
-    }
-    @GetMapping("/item/changeQuantityItem/{id}")
-    public ModelAndView showChangeIloscItem(Authentication authentication,@PathVariable long id) {
-        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
-        ModelAndView modelAndView;
-        if (sourcePrincipal != null) {
-            AccountType mode = sourcePrincipal.getAccountType();
-            if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
-                //ItemStorage itemStorageService
-                modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
-                modelAndView.addObject("itemDto",new ItemDto());
-                return modelAndView;
-            }
-        }
-        modelAndView = new ModelAndView("/error");
-        return modelAndView;
-    }
-    @GetMapping("/item/wydajItem")
-    public ModelAndView showWydajItem(Authentication authentication) {
+    @GetMapping("/item/give")
+    public ModelAndView showGive(Authentication authentication) {
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView modelAndView;
         if (sourcePrincipal != null) {
@@ -97,8 +64,43 @@ public class ItemController {
         modelAndView = new ModelAndView("/error");
         return modelAndView;
     }
-    @GetMapping("/item/listaItem")
-    public ModelAndView showListaItem(Authentication authentication) {
+    @GetMapping("/item/edit/{id}")
+    public ModelAndView showEdit(Authentication authentication,@PathVariable long id) {
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
+        ModelAndView modelAndView;
+        if (sourcePrincipal != null) {
+            AccountType mode = sourcePrincipal.getAccountType();
+            if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
+                ItemStorage itemStorage = itemStorageService.getItemStorage(id);
+                modelAndView = new ModelAndView("/user/editItem","mode",mode.name());
+                modelAndView.addObject("itemFoto",itemStorage);
+                modelAndView.addObject("idTemp",id);
+                modelAndView.addObject("itemDto",new ItemDto(itemStorage));
+                return modelAndView;
+            }
+        }
+        modelAndView = new ModelAndView("/error");
+        return modelAndView;
+    }
+    @GetMapping("/item/changeQuantity/{id}")
+    public ModelAndView showChangeQuantity(Authentication authentication,@PathVariable long id) {
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
+        ModelAndView modelAndView;
+        if (sourcePrincipal != null) {
+            AccountType mode = sourcePrincipal.getAccountType();
+            if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
+                //ItemStorage itemStorageService
+                modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
+                modelAndView.addObject("itemDto",new ItemDto());
+                return modelAndView;
+            }
+        }
+        modelAndView = new ModelAndView("/error");
+        return modelAndView;
+    }
+
+    @GetMapping("/item/list")
+    public ModelAndView showList(Authentication authentication) {
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView modelAndView;
         if (sourcePrincipal != null) {
@@ -108,6 +110,7 @@ public class ItemController {
                 if (itemStorageList == null) return new ModelAndView("/error");
                 modelAndView = new ModelAndView("/user/listaItem","mode",mode.name());
                 modelAndView.addObject("storageList",itemStorageList);
+
                 return modelAndView;
             }
         }
@@ -123,11 +126,11 @@ public class ItemController {
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
                 itemStorageService.removeItemStorage(id);
 
-                modelAndView = new ModelAndView("redirect:/item/listaItem");
+                modelAndView = new ModelAndView("redirect:/item/list");
                 atts.addFlashAttribute("SuccessMessage","Pomyślnie usunięto przedmiot o id: "+ id);
                 return modelAndView;
             }
-            modelAndView = new ModelAndView("redirect:/item/listaItem");
+            modelAndView = new ModelAndView("redirect:/item/list");
             atts.addFlashAttribute("ErrorMessage","Brak uprawienień! Nie można usunąć przedmiotu o id: "+ id);
             return modelAndView;
         }
@@ -135,8 +138,36 @@ public class ItemController {
         modelAndView = new ModelAndView("/error");
         return modelAndView;
     }
-    @PostMapping("/item/dodajItem/save")
-    public ModelAndView dodajItem(@ModelAttribute @Valid ItemDto itemDto, BindingResult bindingResult, Authentication authentication) {
+    @GetMapping("/item/info/{id}")
+    public ModelAndView showInfo(@PathVariable long id, Authentication authentication, RedirectAttributes atts) {
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
+        ModelAndView modelAndView;
+        if (sourcePrincipal != null) {
+            AccountType mode = sourcePrincipal.getAccountType();
+
+            if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
+                ItemStorage itemStorage = itemStorageService.getItemStorage(id);
+                if (itemStorage == null) {
+                    modelAndView = new ModelAndView("redirect:/item/list");
+                    atts.addFlashAttribute("ErrorMessage","Nie ma takiego przedmiotu w bazie danych!");
+                    return modelAndView;
+                }
+                //User user = userService.findByUsername(sourcePrincipal.getUsername());
+                modelAndView = new ModelAndView("/user/showItem","mode",mode.name());
+                modelAndView.addObject("itemStorage",itemStorage);
+                return modelAndView;
+            }
+            modelAndView = new ModelAndView("redirect:/item/list");
+            atts.addFlashAttribute("ErrorMessage","Nie masz uprawnień, aby zobaczyć ten przedmiot!");
+            return modelAndView;
+        }
+        modelAndView = new ModelAndView("/error");
+        return modelAndView;
+
+    }
+
+    @PostMapping("/item/add/save")
+    public ModelAndView postAdd(@ModelAttribute @Valid ItemDto itemDto, BindingResult bindingResult, Authentication authentication) {
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView modelAndView;
         if (sourcePrincipal != null) {
@@ -167,20 +198,21 @@ public class ItemController {
         return modelAndView;
 
     }
-    @PostMapping("/item/wydajItem/save")
-    public ModelAndView wydajItem(@ModelAttribute @Valid WydajItemDto wydajItemDto, BindingResult bindingResult, Authentication authentication,RedirectAttributes atts) {
+    @PostMapping("/item/give/save")
+    public ModelAndView postGive(@ModelAttribute @Valid WydajItemDto wydajItemDto, BindingResult bindingResult, Authentication authentication,RedirectAttributes atts) {
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView modelAndView;
         if (sourcePrincipal != null) {
             AccountType mode = sourcePrincipal.getAccountType();
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC || mode == AccountType.DIAGNOSTYKA) {
                 if (bindingResult.hasErrors()) {
+
                     List<ItemStorage> itemStorageList = itemStorageService.getAllActualItemStorage();
                     modelAndView = new ModelAndView("/user/wydajItem","mode",mode.name());
 
                     modelAndView.addObject("wydajItemDto",wydajItemDto);
                     modelAndView.addObject("itemStorageList",itemStorageList);
-                    modelAndView.addObject("ErrorMessage","Jest błąd!");
+                    modelAndView.addObject("ErrorMessage","Błędnie wprowadzone dane!");
                     return modelAndView;
                 }
                 User user = userService.findByUsername(sourcePrincipal.getUsername());
@@ -188,12 +220,12 @@ public class ItemController {
                 try {
                     itemStorage = itemStorageService.wydajItem(wydajItemDto,user);
                 } catch (QuantityTooSmallException e) {
-                    modelAndView = new ModelAndView("redirect:/item/wydajItem");
+                    modelAndView = new ModelAndView("redirect:/item/give");
                     atts.addFlashAttribute("ErrorMessage",e.getMessage());
                     return modelAndView;
                 }
-                modelAndView = new ModelAndView("redirect:/item/wydajItem");
-                atts.addFlashAttribute("SuccessMessage","Pomyślnie wydano upominek!");
+                modelAndView = new ModelAndView("redirect:/item/give");
+                atts.addFlashAttribute("SuccessMessage","Pomyślnie wydano upominek! "+ itemStorage.getItem().getName());
                 return modelAndView;
             }
         }
@@ -201,8 +233,8 @@ public class ItemController {
         return modelAndView;
 
     }
-    @PostMapping("/item/editItem/save/{id}")
-    public ModelAndView editItem(@PathVariable long id, @ModelAttribute @Valid ItemDto itemDto, BindingResult bindingResult, Authentication authentication,RedirectAttributes atts) {
+    @PostMapping("/item/edit/save/{id}")
+    public ModelAndView postEdit(@PathVariable long id, @ModelAttribute @Valid ItemDto itemDto, BindingResult bindingResult, Authentication authentication,RedirectAttributes atts) {
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView modelAndView;
         if (sourcePrincipal != null) {
@@ -214,7 +246,7 @@ public class ItemController {
                     modelAndView.addObject("itemDto",itemDto);
                     modelAndView.addObject("itemFoto",itemStorage);
                     modelAndView.addObject("idTemp",id);
-                    modelAndView.addObject("ErrorMessage","Jest błąd!");
+                    modelAndView.addObject("ErrorMessage","Błędnie wprowadzone dane!");
                     return modelAndView;
                 }
                 User user = userService.findByUsername(sourcePrincipal.getUsername());
@@ -225,10 +257,10 @@ public class ItemController {
                     modelAndView.addObject("itemDto",itemDto);
                     modelAndView.addObject("itemFoto",itemStorage);
                     modelAndView.addObject("idTemp",id);
-                    modelAndView.addObject("ErrorMessage","Jest błąd!");
+                    modelAndView.addObject("ErrorMessage","Błąd 999!");
                     return modelAndView;
                 }
-                modelAndView = new ModelAndView("redirect:/item/listaItem");
+                modelAndView = new ModelAndView("redirect:/item/list");
                 atts.addFlashAttribute("SuccessMessage","Pomyślnie edytowano przedmiot: "+ itemDto.getName());
                 return modelAndView;
             }
@@ -237,8 +269,8 @@ public class ItemController {
         return modelAndView;
 
     }
-    @PostMapping("/item/changeQuantityItem/save")
-    public ModelAndView changeQuantityItem(@ModelAttribute @Valid ItemDto itemDto, BindingResult bindingResult, Authentication authentication) {
+    @PostMapping("/item/changeQuantity/save")
+    public ModelAndView postChangeQuantity(@ModelAttribute @Valid ItemDto itemDto, BindingResult bindingResult, Authentication authentication) {
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView modelAndView;
         if (sourcePrincipal != null) {
@@ -269,5 +301,6 @@ public class ItemController {
         return modelAndView;
 
     }
+
 
 }

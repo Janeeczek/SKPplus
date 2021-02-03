@@ -4,18 +4,21 @@ import com.JanCode.SKPplus.constraint.ImageType;
 import com.JanCode.SKPplus.constraint.ItemQuantity;
 import com.JanCode.SKPplus.constraint.Tag;
 import com.JanCode.SKPplus.model.ItemStorage;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 public class WydajItemDto {
-    @NotBlank(message = "Nazwa nie może być pusta!")
+    @NotBlank(message = "Numer badania nie może być pusty!")
     private String numerBadania;
-    @NotNull(message = "Proszę wybrać przedmiot")
-    private long itemStorageId;
+    @Pattern(regexp="^(0|[1-9][0-9]*)$",message = "Proszę wybrać przedmiot")
+    private String itemStorageId;
     @ItemQuantity(message = "Proszę określić ilość!")
     private int quantity;
     public WydajItemDto() {
@@ -29,11 +32,11 @@ public class WydajItemDto {
         this.numerBadania = numerBadania;
     }
 
-    public long getItemStorageId() {
+    public String getItemStorageId() {
         return itemStorageId;
     }
 
-    public void setItemStorageId(long itemStorageId) {
+    public void setItemStorageId(String itemStorageId) {
         this.itemStorageId = itemStorageId;
     }
 

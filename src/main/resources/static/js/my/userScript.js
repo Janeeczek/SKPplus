@@ -53,15 +53,14 @@ $(document).ready(function() {
             }, false);
         });
     }, false);
+    $('#select').on('change', function()
+    {
+        var selected = $('#select').val();
+        console.log("selected :" + selected);
+        $('#mybutton').attr("href", "/item/info/"+selected);
 
 
-
-
-
-
-
-
-
+    });
 });
 function readURL(input) {
     console.log("READURL");
@@ -82,6 +81,8 @@ function readURL(input) {
     }
 
 }
+
+
 
 
 function addBlock(title, text, date, iconTypeName, iconTypeBack, id) {

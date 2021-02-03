@@ -21,7 +21,6 @@ public class ItemStorage {
 
     public ItemStorage(Item item, int quantity) {
         this.item = item;
-        this.quantity = quantity;
         this.actualQuantity = quantity;
         this.timeUpdated = LocalDateTime.now();
         this.timeCreated = timeUpdated;
@@ -29,6 +28,10 @@ public class ItemStorage {
 
     public long getId() {
         return id;
+    }
+    public String getStringId() {
+
+        return String.valueOf(id);
     }
 
     public void setId(long id) {
