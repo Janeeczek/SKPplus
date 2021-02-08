@@ -746,17 +746,34 @@
         <div th:if="${cancelMsg}">
             <div class="alert alert-info"th:text="${cancelMsg}">Anulowano wgrywanie pliku!</div>
         </div>
-        <form  th:action="@{/pliki/upload/post}" th:object="${raportDto}" th:method="POST" enctype="multipart/form-data" >
-            <div class="media-body ml-4">
-                Dodaj nowy raport
-                <label class="btn btn-outline-primary">
-                    <input type="file" th:field="*{raport}" class="account-settings-fileinput" >
+        <form  th:action="@{/pliki/upload/post}" th:object="${raportDto}" th:method="POST" enctype="multipart/form-data"  novalidate>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <input th:field="*{name}" type="text" class="form-control" id="name" placeholder="Wpisz nazwę pomocniczą" required>
+                        <label for="name">Nazwa pliku</label>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="form-group">
+                        <div class="media-body ml-4">
 
-                </label>
+                            <label class="btn btn-outline-primary">
+                                <input id="plik" type="file" th:field="*{raport}" class="account-settings-fileinput" required>
+
+                            </label>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
 
                 <button type="submit" name="action" value="cancel" class="btn btn-default md-btn-flat">Anuluj</button>
                 <button type="submit" name="action" value="save" class="btn btn-primary">Dodaj</button>&nbsp;
-            </div>
         </form>
 
     </div>
@@ -785,6 +802,8 @@
                             <th>Data Utworzenia</th>
                             <th>ID kontrahentów</th>
                             <th>ID rejestrów sprzedaży</th>
+                            <th>Suma wartości paragonów</th>
+                            <th>Suma wartości faktur vat</th>
                             <th>Akcja</th>
                         </tr>
                         </thead>
@@ -795,6 +814,8 @@
                             <th>Data Utworzenia</th>
                             <th>ID kontrahentów</th>
                             <th>ID rejestrów sprzedaży</th>
+                            <th>Suma wartości paragonów</th>
+                            <th>Suma wartości faktur vat</th>
                             <th>Akcja</th>
                         </tr>
                         </tfoot>
@@ -805,6 +826,8 @@
                             <td th:text="${rap.getDataUtworzenia()}"></td>
                             <td th:text="${rap.getKontrahenci().getId()}"></td>
                             <td th:text="${rap.getRejestrySprzedazyVat().getId()}"></td>
+                            <td th:text="${raportService.getAllParagonIncomeByRaportId(rap.getRejestrySprzedazyVat().getId()) + ' .zł'}"></td>
+                            <td th:text="${raportService.getAllFakturaIncomeByRaportId(rap.getRejestrySprzedazyVat().getId())+ ' .zł'}"></td>
                             <td>
                                 <div class="btn-group btn-block">
                                     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -939,13 +962,11 @@
                             <p class="card-text">wydawać po badaniach technicznych.</p>
                         </div>
                     </div>
-                    <div id="collapse3" class="">
-                        <!--
+                    <div id="collapse3" class="card border-alert mb-3 ">
                         <div class="card-body">
-                            <h5 class="card-title">Potwierdzenie adresu e-mail</h5>
-                            <p class="card-text">znajdzie się na jego skrzynce e-mail.</p>
+                            <h5 class="card-title">Zdjęcie upominku,</h5>
+                            <p class="card-text">nie jest wymagane.</p>
                         </div>
-                        -->
                     </div>
                 </div>
                 <div class="card col-lg-6 o-hidden border-2 shadow-lg py-1 my-5">
@@ -1045,8 +1066,8 @@
 
                 <div id="collapse2" class="card border-alert mb-3 ">
                     <div class="card-body">
-                        <h5 class="card-title">Jeśli użytkownik</h5>
-                        <p class="card-text">będzie w tym momencie zalgowany, ikona alertu w prawym górnym rogu będzie wyświetlać ilość nieprzeczytanych wiadomości.</p>
+                        <h5 class="card-title">Pamiętaj!</h5>
+                        <p class="card-text">aby wpisać poprawne dane! </p>
                     </div>
                 </div>
                 <div id="collapse3" class="">
@@ -1237,24 +1258,24 @@
                     </div>
                     <div id="collapse1" class="card border-alert mb-3">
                         <div class="card-body">
-                            <h5 class="card-title">Dodaj nowy upominek,</h5>
-                            <p class="card-text">aby można było monitorowac jego ilość.</p>
+                            <h5 class="card-title">Możesz zmienić</h5>
+                            <p class="card-text">dane upominka.</p>
                         </div>
                     </div>
 
                     <div id="collapse2" class="card border-alert mb-3 ">
                         <div class="card-body">
-                            <h5 class="card-title">Diagności będą mogli,</h5>
-                            <p class="card-text">wydawać po badaniach technicznych.</p>
+                            <h5 class="card-title">Jeśli zmienisz ilość,</h5>
+                            <p class="card-text">zostanie ona nadpisana.</p>
                         </div>
                     </div>
                     <div id="collapse3" class="">
-                        <!--
+
                         <div class="card-body">
-                            <h5 class="card-title">Potwierdzenie adresu e-mail</h5>
-                            <p class="card-text">znajdzie się na jego skrzynce e-mail.</p>
+                            <h5 class="card-title">Operacji </h5>
+                            <p class="card-text">nie można cofnąć!</p>
                         </div>
-                        -->
+
                     </div>
                 </div>
                 <div class="card col-lg-6 o-hidden border-2 shadow-lg py-1 my-5">
@@ -1389,7 +1410,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <form th:action="@{/item/changeQuantity/save/{id} (id=${itemStorage.getId()})}" th:object="${qDto}" th:method="POST">
+                                        <form th:action="@{/item/addQuantity/save/{id} (id=${itemStorage.getId()})}" th:object="${qDto}" th:method="POST">
                                             <div class="mt-5 card text-center">
 
                                                 <div class="card-header">
@@ -1402,13 +1423,27 @@
                                                             <p  th:text="${ErrorMessage}" class=""></p>
                                                         </li>
                                                     </div>
-                                                    <div th:if="${#ctx.containsVariable('SuccessMessage')}">
-                                                        <li class=" bg-success alert   list-group-item">
-                                                            <p  th:text="${SuccessMessage}" class="text-black"></p>
+                                                    <div class="alert" th:if="${#ctx.containsVariable('SuccessMessage')}" >
+                                                        <li class="list-group-item p-0">
+                                                            <div class="card alert-success border-alert">
+                                                                <div class="card-body">
+                                                                    <h5  class="card-title">Sukces!</h5>
+                                                                    <p  th:text="${SuccessMessage}" class="card-text"></p>
+                                                                </div>
+                                                            </div>
                                                         </li>
                                                     </div>
                                                     <li class="list-group-item">
-                                                        <input th:field="*{quantity}" class="custom" type="number" value="0" min="1">
+                                                        <div class="input-group number-spinner">
+				                                            <span class="input-group-btn">
+					                                            <button type="button" class="btn btn-default" data-dir="dwn"><span class="fas fa-minus-square"></span></button>
+                                                            </span>
+                                                            <input type="text" class="form-control text-center" th:field="*{quantity}" value="1" pattern="^[0-9]*[1-9][0-9]*$">
+                                                            <span class="input-group-btn">
+					                                            <button type="button" class="btn btn-default" data-dir="up"><span class="fas fa-plus-square"></span></button>
+				                                            </span>
+                                                        </div>
+
                                                     </li>
                                                     <li class="list-group-item">
                                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Zwiększ">
@@ -1423,6 +1458,23 @@
                                             <div class="card-body ">
                                                 <img class="card-img-top" th:attr="src=@{${itemStorage.getItem().getByte64Image()}}">
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div th:each="rejestr : ${rejestrItemList}" class="card w-50 mb-2 ">
+                                        <div class="card-body">
+                                            <h5 th:text="${rejestr.getType().plName}" class="card-title">Card title</h5>
+                                            <p th:text="${rejestr.getType().message}" class="card-text"></p>
+                                            <p th:text="${'Osoba: ' + rejestr.getUser().getUsername()}" class="card-text"></p>
+                                            <p th:text="${'Przedmiot: ' + rejestr.getItemStorage().getItem().getName()}" class="card-text"></p>
+                                            <p th:text="${'Ilość: '+ rejestr.getValue()}" class="card-text"></p>
+                                            <p th:if="${rejestr.getType().name()=='GIVE'}" th:text="${'Numer badania: '+ rejestr.getNumerBadania()}" class="card-text"></p>
+
+
+
+
+                                            <p class="card-text"><small th:text="${#temporals.format(rejestr.getCreateDateTime(), 'HH:mm dd-MM-yyyy')}" class="text-muted">Last updated 3 mins ago</small></p>
                                         </div>
                                     </div>
                                 </div>

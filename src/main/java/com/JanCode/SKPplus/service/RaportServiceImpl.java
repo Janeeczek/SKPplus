@@ -184,6 +184,15 @@ public class RaportServiceImpl{
         else return 0;
        // return 0;
     }
+    public double getAllParagonIncomeByRaportId(long id) {
+        return platnoscRepository.getAllIncomeParagonByRaportId(id);
+        // return 0;
+    }
+    public double getAllFakturaIncomeByRaportId(long id) {
+
+        return platnoscRepository.getAllIncomeFakturaByRaportId(id);
+        // return 0;
+    }
 
     public List<Raport> getAllRaports() {
         List<Raport> raports = raportRepository.myFindAll();

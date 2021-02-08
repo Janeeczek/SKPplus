@@ -35,6 +35,7 @@ public class RaportController {
             if (mode == AccountType.KSIEGOWOSC || mode == AccountType.ADMIN) {
                 modelAndView = new ModelAndView("/user/raporty","mode",mode.name());
                 modelAndView.addObject("raporty", reportService.getAllRaports());
+                modelAndView.addObject("raportService", reportService);
             } else {
                 modelAndView = new ModelAndView("/error","errorMsg","Brak uprawnień!");
             }

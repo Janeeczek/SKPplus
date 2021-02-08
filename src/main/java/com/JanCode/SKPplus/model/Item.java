@@ -11,11 +11,10 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    //@UniqueElements(message = "Nazwa musi być unikalna!")
+    @Column(unique = true)
     private String name;
-    //@UniqueElements(message = "Opis musi być unikalny!")
     private String description;
-    //@UniqueElements(message = "TAG musi być unikalny!")
+    @Column(unique = true)
     private String tag;
     private LocalDateTime timeCreated;
     @ManyToOne

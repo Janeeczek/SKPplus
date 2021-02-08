@@ -13,9 +13,11 @@ import java.util.List;
 public interface ItemStorageService {
     List<Item> getAllItems();
     List<ItemStorage> getAllItemStorage();
+    List<ItemStorage> getAllActiveItemStorage();
     List<ItemStorage> getAllActualItemStorage();
     ItemStorage addItem(Item item, int quantity);
-    void removeItemStorage(long itemStorageId);
+    void deleteItemStorage(long itemStorageId);
+    ItemStorage archiveItemStorage(long itemStorageId);
     int getItemQuantity(long itemStorageId);
     ItemStorage updateQuantity(long itemStorageId, QuantityDto quantityDto);
     ItemStorage getItemStorage(long itemStorageId);

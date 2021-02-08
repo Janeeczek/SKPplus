@@ -15,6 +15,7 @@ public class ItemStorage {
     private int actualQuantity;
     private LocalDateTime timeCreated;
     private LocalDateTime timeUpdated;
+    private boolean archived;
 
     public ItemStorage() {
     }
@@ -22,8 +23,10 @@ public class ItemStorage {
     public ItemStorage(Item item, int quantity) {
         this.item = item;
         this.actualQuantity = quantity;
+        this.quantity = quantity;
         this.timeUpdated = LocalDateTime.now();
         this.timeCreated = timeUpdated;
+        this.archived = false;
     }
 
     public long getId() {
@@ -76,5 +79,13 @@ public class ItemStorage {
 
     public void setTimeCreated(LocalDateTime timeCreated) {
         this.timeCreated = timeCreated;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
     }
 }

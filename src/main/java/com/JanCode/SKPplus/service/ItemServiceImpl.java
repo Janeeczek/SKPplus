@@ -83,7 +83,7 @@ public class ItemServiceImpl implements ItemService {
             try {
                 item.setImage(imageResizer(itemDto.getImage()));
                // if(itemDto.getImage().getContentType().equals("image/jpeg")) item.setContentType("image/jpg");
-                 item.setContentType(itemDto.getImage().getContentType());
+                item.setContentType(itemDto.getImage().getContentType());
 
 
             } catch (IOException e) {

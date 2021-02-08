@@ -1,8 +1,10 @@
 package com.JanCode.SKPplus.service;
 
+import com.JanCode.SKPplus.exeception.NameInUseException;
 import com.JanCode.SKPplus.exeception.QuantityTooSmallException;
 import com.JanCode.SKPplus.model.Item;
 import com.JanCode.SKPplus.model.ItemStorage;
+import com.JanCode.SKPplus.model.StorageActionType;
 import com.JanCode.SKPplus.model.User;
 import com.JanCode.SKPplus.repository.ItemStorageRepository;
 import com.JanCode.SKPplus.web.dto.ItemDto;
@@ -38,6 +40,10 @@ public class ItemStorageServiceImpl implements ItemStorageService {
     public List<ItemStorage> getAllItemStorage() {
         return itemStorageRepository.findAll();
     }
+    @Override
+    public List<ItemStorage> getAllActiveItemStorage() {
+        return itemStorageRepository.findAllNotArchived();
+    }
 
     @Override
     public List<ItemStorage> getAllActualItemStorage() {
@@ -46,6 +52,7 @@ public class ItemStorageServiceImpl implements ItemStorageService {
 
     @Override
     public ItemStorage addItem(Item item, int quantity) {
+
         ItemStorage itemStorage = new ItemStorage(item,quantity);
         return itemStorageRepository.save(itemStorage);
     }
@@ -64,14 +71,21 @@ public class ItemStorageServiceImpl implements ItemStorageService {
 
         if(newQuantity <0) throw new QuantityTooSmallException("Nie ma takiej ilości na stanie!");
         itemStorage.setActualQuantity(newQuantity);
+
         return itemStorageRepository.save(itemStorage);
     }
 
     @Override
-    public void removeItemStorage(long itemStorageId) {
+    public void deleteItemStorage(long itemStorageId) {
         ItemStorage itemStorage = getItemStorage(itemStorageId);
         itemStorageRepository.delete(itemStorage);
         itemService.deleteItem(itemStorage.getItem().getId());
+    }
+    @Override
+    public ItemStorage archiveItemStorage(long itemStorageId) {
+        ItemStorage itemStorage = getItemStorage(itemStorageId);
+        itemStorage.setArchived(true);
+        return itemStorageRepository.save(itemStorage);
     }
 
     @Override

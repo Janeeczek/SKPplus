@@ -25,9 +25,8 @@ public class FileStorageService {
     public FileDB store(RaportDto raportDto, String username) throws IOException {
 
         if(raportDto.getRaport().getContentType().equals( "text/xml")) {
-            String fileName = StringUtils.cleanPath(raportDto.getRaport().getOriginalFilename()).replace(".xml","");
             User user = userService.findByUsername(username);
-            FileDB FileDB = new FileDB(fileName, raportDto.getRaport().getContentType(), raportDto.getRaport().getBytes(),user);
+            FileDB FileDB = new FileDB(raportDto.getName(), raportDto.getRaport().getContentType(), raportDto.getRaport().getBytes(),user);
             return fileDBRepository.save(FileDB);
         }
         else throw new IOException();

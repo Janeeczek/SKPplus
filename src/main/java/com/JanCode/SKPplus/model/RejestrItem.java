@@ -16,15 +16,16 @@ public class RejestrItem {
     @JoinColumn(name="user_id", nullable=false,referencedColumnName = "id")
     private User user;
 
-    private String message;
+    private String numerBadania;
 
     private LocalDateTime createDateTime;
-
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private StorageActionType type;
 
     private int value;
 
     public RejestrItem() {
+
     }
 
     public long getId() {
@@ -51,12 +52,12 @@ public class RejestrItem {
         this.user = user;
     }
 
-    public String getMessage() {
-        return message;
+    public String getNumerBadania() {
+        return numerBadania;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setNumerBadania(String numerBadania) {
+        this.numerBadania = numerBadania;
     }
 
     public LocalDateTime getCreateDateTime() {
@@ -67,11 +68,11 @@ public class RejestrItem {
         this.createDateTime = createDateTime;
     }
 
-    public String getType() {
+    public StorageActionType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(StorageActionType type) {
         this.type = type;
     }
 
