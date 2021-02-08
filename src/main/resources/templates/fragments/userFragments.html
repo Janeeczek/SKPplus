@@ -7,7 +7,7 @@
 <body>
 <div th:fragment="wyswietlInfo">
 
-    <div class="container  flex-grow-1 container-p-y">
+    <div class="container flex-grow-1 container-p-y">
         <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
         <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center" onautocomplete=""></div>
         <div class="media align-items-center py-3 mb-3">
@@ -545,25 +545,6 @@
                                     <div class="text-light small mt-1">Dozwolone JPG, GIF or PNG. Rozmiar < 800K</div>
                                 </div>
                             </div>
-                            <script>
-                                function readURL(input) {
-                                    if (input.files && input.files[0]) {
-                                        var reader = new FileReader();
-
-                                        reader.onload = function (e) {
-                                            $('#imageResult').attr('src', e.target.result);
-                                        };
-                                        reader.readAsDataURL(input.files[0]);
-                                    }
-                                }
-
-                                (function () {
-                                    $('#upload').on('change', function () {
-                                        readURL(input);
-                                    });
-
-                                });
-                            </script>
                             <hr class="border-light m-0">
 
                             <div class="card-body">
@@ -748,26 +729,6 @@
         </div>
         </form>
     </div>
-    <script>
-
-    (function() {
-    'use strict';
-    window.addEventListener('load', function() {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.getElementsByClassName('needs-validation');
-    // Loop over them and prevent submission
-    var validation = Array.prototype.filter.call(forms, function(form) {
-    form.addEventListener('submit', function(event) {
-    if (form.checkValidity() === false) {
-    event.preventDefault();
-    event.stopPropagation();
-    }
-    form.classList.add('was-validated');
-    }, false);
-    });
-    }, false);
-    })();
-    </script>
 
 </div>
 <div th:fragment="upload">
@@ -785,17 +746,34 @@
         <div th:if="${cancelMsg}">
             <div class="alert alert-info"th:text="${cancelMsg}">Anulowano wgrywanie pliku!</div>
         </div>
-        <form  th:action="@{/pliki/upload/post}" th:object="${raportDto}" th:method="POST" enctype="multipart/form-data" >
-            <div class="media-body ml-4">
-                Dodaj nowy raport
-                <label class="btn btn-outline-primary">
-                    <input type="file" th:field="*{raport}" class="account-settings-fileinput" >
+        <form  th:action="@{/pliki/upload/post}" th:object="${raportDto}" th:method="POST" enctype="multipart/form-data"  novalidate>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <input th:field="*{name}" type="text" class="form-control" id="name" placeholder="Wpisz nazwę pomocniczą" required>
+                        <label for="name">Nazwa pliku</label>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="form-group">
+                        <div class="media-body ml-4">
 
-                </label>
+                            <label class="btn btn-outline-primary">
+                                <input id="plik" type="file" th:field="*{raport}" class="account-settings-fileinput" required>
+
+                            </label>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
 
                 <button type="submit" name="action" value="cancel" class="btn btn-default md-btn-flat">Anuluj</button>
                 <button type="submit" name="action" value="save" class="btn btn-primary">Dodaj</button>&nbsp;
-            </div>
         </form>
 
     </div>
@@ -824,6 +802,8 @@
                             <th>Data Utworzenia</th>
                             <th>ID kontrahentów</th>
                             <th>ID rejestrów sprzedaży</th>
+                            <th>Suma wartości paragonów</th>
+                            <th>Suma wartości faktur vat</th>
                             <th>Akcja</th>
                         </tr>
                         </thead>
@@ -834,6 +814,8 @@
                             <th>Data Utworzenia</th>
                             <th>ID kontrahentów</th>
                             <th>ID rejestrów sprzedaży</th>
+                            <th>Suma wartości paragonów</th>
+                            <th>Suma wartości faktur vat</th>
                             <th>Akcja</th>
                         </tr>
                         </tfoot>
@@ -844,6 +826,8 @@
                             <td th:text="${rap.getDataUtworzenia()}"></td>
                             <td th:text="${rap.getKontrahenci().getId()}"></td>
                             <td th:text="${rap.getRejestrySprzedazyVat().getId()}"></td>
+                            <td th:text="${raportService.getAllParagonIncomeByRaportId(rap.getRejestrySprzedazyVat().getId()) + ' .zł'}"></td>
+                            <td th:text="${raportService.getAllFakturaIncomeByRaportId(rap.getRejestrySprzedazyVat().getId())+ ' .zł'}"></td>
                             <td>
                                 <div class="btn-group btn-block">
                                     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -946,6 +930,584 @@
         </div>
     </div>
 
+
+</div>
+<div th:fragment="wyswietlDodajNowyItem">
+    <div class="container-flex mx-5">
+        <form  th:action="@{/item/add/save}" th:object="${itemDto}" th:method="POST" enctype="multipart/form-data" multiple="multiple" class="needs-validation" novalidate>
+            <div class="row no-gutters">
+                <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
+                    <div th:if="${#ctx.containsVariable('ErrorMessage')}"  class="alert-danger alert card border-alert mb-3">
+                        <div class="card-body">
+                            <h5  class="card-title">Błąd!</h5>
+                            <p  th:text="${ErrorMessage}" class="card-text"></p>
+                        </div>
+                    </div>
+                    <div th:if="${#ctx.containsVariable('SuccessMessage')}"  class="alert-success alert border-alert mb-3">
+                        <div class="card-body">
+                            <h5  class="card-title">Sukces!</h5>
+                            <p  th:text="${SuccessMessage}" class="card-text"></p>
+                        </div>
+                    </div>
+                    <div id="collapse1" class="card border-alert mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Dodaj nowy upominek,</h5>
+                            <p class="card-text">aby można było monitorowac jego ilość.</p>
+                        </div>
+                    </div>
+
+                    <div id="collapse2" class="card border-alert mb-3 ">
+                        <div class="card-body">
+                            <h5 class="card-title">Diagności będą mogli,</h5>
+                            <p class="card-text">wydawać po badaniach technicznych.</p>
+                        </div>
+                    </div>
+                    <div id="collapse3" class="card border-alert mb-3 ">
+                        <div class="card-body">
+                            <h5 class="card-title">Zdjęcie upominku,</h5>
+                            <p class="card-text">nie jest wymagane.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card col-lg-6 o-hidden border-2 shadow-lg py-1 my-5">
+
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="col-lg">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Dodaj nowy upominek</h1>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('name')}"
+                                         th:each="error : ${#fields.errors('name')}" th:text="${error}">
+                                    </div>
+                                    <input th:field="*{name}" class="form-control" id="name" placeholder="Wpisz nazwe produktu" required>
+                                    <label for="name">Nazwa</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('tag')}"
+                                         th:each="error : ${#fields.errors('tag')}" th:text="${error}">
+                                    </div>
+                                    <input th:field="*{tag}" class="form-control" id="tag"placeholder="Wpisz krótki skrót nazwy przedmiotu(max 4 litery)" required>
+                                    <label for="tag">Tag</label>
+                                </div>
+
+                                <div class="form-floating">
+                                    <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('description')}"
+                                         th:each="error : ${#fields.errors('description')}" th:text="${error}">
+                                    </div>
+                                    <textarea th:field="*{description}" class="form-control" rows="2" placeholder="Wpisz tutaj treść" id="description" required></textarea>
+                                    <label for="description">Opis</label>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('quantity')}"
+                                             th:each="error : ${#fields.errors('quantity')}" th:text="${error}">
+                                        </div>
+                                        <input th:field="*{quantity}" class="form-control" type="number" value="42" id="quantity">
+                                        <label for="quantity">Początkowa ilość</label>
+                                    </div>
+
+                                    <div class="form-group col-md-8">
+                                        <div class="mx-auto">
+                                            <input type="submit" class="btn btn-primary btn-user btn-block" value="Zapisz zmiany">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <hr>
+                                <label >(Opcjonalne)</label>
+
+                                <div class="form-floating mb-2">
+                                    <div class="custom-file">
+                                        <input onchange="readURL(this);" th:field="*{image}" type="file" class=" upload custom-file-input" id="upload" >
+                                        <label class="custom-file-label small" for="upload" data-browse="Wybierz">Dozwolone JPG, JPEG lub PNG. Rozmiar < 800K</label>
+                                        <label for="upload">Dodaj zdjęcie</label>
+                                    </div>
+                                    <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('image')}"
+                                         th:each="error : ${#fields.errors('image')}" th:text="${error}">
+                                    </div>
+                                </div>
+
+                                <div class="form-floating col-lg-6 offset-lg-3">
+                                    <div class="row justify-content-center">
+                                        <img id="imageResult" src="#" alt="" class="d-block ui-w-80 rounded-circle">
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<div th:fragment="wyswietlWydajItem">
+    <div class="container-flex mx-5">
+        <form  th:action="@{/item/give/save}" th:object="${wydajItemDto}" th:method="POST" class="needs-validation" novalidate >
+            <div class="row no-gutters">
+                <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
+                <div id="collapse1" class="card border-alert mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Wydaj przedmiot</h5>
+                        <p class="card-text">po badaniu technicznym.</p>
+                    </div>
+                </div>
+
+                <div id="collapse2" class="card border-alert mb-3 ">
+                    <div class="card-body">
+                        <h5 class="card-title">Pamiętaj!</h5>
+                        <p class="card-text">aby wpisać poprawne dane! </p>
+                    </div>
+                </div>
+                <div id="collapse3" class="">
+                    <!--
+                    <div class="card-body">
+                        <h5 class="card-title">Potwierdzenie adresu e-mail</h5>
+                        <p class="card-text">znajdzie się na jego skrzynce e-mail.</p>
+                    </div>
+                    -->
+                </div>
+            </div>
+                <div class="card col-lg-6 o-hidden border-2 shadow-lg py-1 my-5">
+                <div  class="card-body p-0">
+                    <div class="col-lg">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Wybierz przedmiot do wydania</h1>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('numerBadania')}"
+                                     th:each="error : ${#fields.errors('numerBadania')}" th:text="${error}">
+                                </div>
+                                <input th:field="*{numerBadania}" type="text" class="form-control" id="numerBadania" placeholder="Wpisz numer dokumentu..." required>
+                                <label for="numerBadania">Numer Badania</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <div style="overflow:hidden;" >
+                                            <select data-size="5" data-container="body" th:field="*{itemStorageId}" data-width="90%" id="itemStorageId" class="selectpicker" data-live-search="true" title="Wybierz przedmiot..." required>
+                                                <option th:each="item : ${itemStorageList}" th:value="${item.getStringId()}" th:text="${item.getItem().getName()}">
+                                            </select>
+                                        </div>
+                                        <label for="itemStorageId">Nazwa przedmiotu</label>
+                                        <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('itemStorageId')}"
+                                             th:each="error : ${#fields.errors('itemStorageId')}" th:text="${error}">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group " >
+                                        <input th:field="*{quantity}" class="custom form-control" type="number" value="1" min="1" id="quantity" required>
+                                        <label for="quantity">Wydawana ilość</label>
+
+                                        <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('quantity')}"
+                                             th:each="error : ${#fields.errors('quantity')}" th:text="${error}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="mx-auto">
+                                    <input type="submit" class="btn btn-primary btn-user btn-block" value="Wydaj upominek">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
+                    <div th:if="${#ctx.containsVariable('ErrorMessage')}"  class="alert-danger alert card border-alert mb-3">
+                        <div class="card-body">
+                            <h5  class="card-title">Błąd!</h5>
+                            <p  th:text="${ErrorMessage}" class="card-text"></p>
+                        </div>
+                    </div>
+                    <div th:if="${#ctx.containsVariable('SuccessMessage')}"  class="alert-success alert border-alert mb-3">
+                        <div class="card-body">
+                            <h5  class="card-title">Sukces!</h5>
+                            <p  th:text="${SuccessMessage}" class="card-text"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<div th:fragment="wyswietlListeItem">
+    <div class="card shadow mb-4">
+
+        <div class="card-header d-sm-flex align-items-center justify-content-between py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Lista upominków</h6>
+            <div class=" d-flex flex-md-row justify-content-around ">
+                <h6 class="px-2 my-3 font-weight-bold text-primary">Wyszukaj przedmiot</h6>
+                <div class="rounded bg-primary d-flex flex-md-row justify-content-between ">
+
+                    <div class="p-2" style=" overflow:hidden;" >
+                        <select data-size="5" id="select" data-container="body" data-width="100%"  class="selectpicker" data-live-search="true" title="Wyszukaj przedmiot..." required>
+                            <option th:each="item : ${storageList}" th:value="${item.getStringId()}" th:text="${item.getItem().getName()}">
+                        </select>
+                    </div>
+                    <div class="p-2">
+                        <a id="mybutton" href="#"  class="btn btn-warning btn-user btn-block"><i
+                                class="fas fa-search fa-sm text-white-50"></i> Szukaj</a>
+                        <!--<input type="submit" id="mybutton" class="btn btn-primary btn-user btn-block" value="Pokaż">-->
+                    </div>
+                </div>
+            </div>
+            <a href="#" th:href="@{/item/add}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Dodaj nowy upominek</a>
+        </div>
+        <div class="card-body">
+            <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center" onautocomplete=""></div>
+
+            <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nazwa</th>
+                        <th>Tag</th>
+                        <th>Aktualna ilość</th>
+                        <th>Ilość początkowa</th>
+                        <th>Data dodania</th>
+                        <th>Data modyfikacji</th>
+                        <th>Dodany przez</th>
+                        <th>Zdjęcie</th>
+                        <th>Akcja</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nazwa</th>
+                        <th>Tag</th>
+                        <th>Aktualna ilość</th>
+                        <th>Ilość początkowa</th>
+                        <th>Data dodania</th>
+                        <th>Data modyfikacji</th>
+                        <th>Dodany przez</th>
+                        <th>Zdjęcie</th>
+                        <th>Akcja</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr th:each="item, iterStat: ${storageList}">
+                        <td th:text="${item.getId()}"></td>
+                        <td th:text="${item.getItem().getName()}"></td>
+                        <td th:text="${item.getItem().getTag()}"></td>
+                        <td th:text="${item.getActualQuantity()}"></td>
+                        <td th:text="${item.getQuantity()}"></td>
+                        <td th:text="${#temporals.format(item.getTimeCreated(), 'HH:mm dd-MM-yyyy')}"></td>
+                        <td th:text="${#temporals.format(item.getTimeUpdated(), 'HH:mm dd-MM-yyyy')}"></td>
+                        <td th:text="${item.getItem().getUser().getUsername()}"></td>
+                        <td><img width="30" height="30" class="img-profile rounded-circle" th:attr="src=@{${item.getItem().getByte64Image()}}"></td>
+                        <td>
+                            <div class="btn-group btn-block">
+                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Akcja
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/" th:href="@{/item/info/{id} (id=${item.getId()})}">Pokaż więcej</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/" th:href="@{/item/delete/{id} (id=${item.getId()})}">Usuń</a>
+                                    <a class="dropdown-item" href="/" th:href="@{/item/edit/{id} (id=${item.getId()})}">Edytuj</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div th:fragment="wyswietlEditItem">
+    <div class="container-flex mx-5">
+        <form  th:action="@{/item/edit/save/{id} (id=${idTemp})} " th:object="${itemDto}" th:method="POST" enctype="multipart/form-data" multiple="multiple" class="needs-validation" novalidate>
+            <div class="row no-gutters">
+                <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
+                    <div th:if="${#ctx.containsVariable('ErrorMessage')}"  class="alert-danger alert card border-alert mb-3">
+                        <div class="card-body">
+                            <h5  class="card-title">Błąd!</h5>
+                            <p  th:text="${ErrorMessage}" class="card-text"></p>
+                        </div>
+                    </div>
+                    <div th:if="${#ctx.containsVariable('SuccessMessage')}"  class="card alert border-alert mb-3">
+                        <div class="card-body">
+                            <h5  class="card-title">Sukces!</h5>
+                            <p  th:text="${SuccessMessage}" class="card-text"></p>
+                        </div>
+                    </div>
+                    <div id="collapse1" class="card border-alert mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Możesz zmienić</h5>
+                            <p class="card-text">dane upominka.</p>
+                        </div>
+                    </div>
+
+                    <div id="collapse2" class="card border-alert mb-3 ">
+                        <div class="card-body">
+                            <h5 class="card-title">Jeśli zmienisz ilość,</h5>
+                            <p class="card-text">zostanie ona nadpisana.</p>
+                        </div>
+                    </div>
+                    <div id="collapse3" class="">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Operacji </h5>
+                            <p class="card-text">nie można cofnąć!</p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card col-lg-6 o-hidden border-2 shadow-lg py-1 my-5">
+
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="col-lg">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Edytuj upominek</h1>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('name')}"
+                                         th:each="error : ${#fields.errors('name')}" th:text="${error}">
+                                    </div>
+                                    <input th:field="*{name}" class="form-control" id="name" placeholder="Wpisz nazwe produktu" required>
+                                    <label for="name">Nazwa</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('tag')}"
+                                         th:each="error : ${#fields.errors('tag')}" th:text="${error}">
+                                    </div>
+                                    <input th:field="*{tag}" class="form-control" id="tag"placeholder="Wpisz krótki skrót nazwy przedmiotu(max 4 litery)" required>
+                                    <label for="tag">Tag</label>
+                                </div>
+
+                                <div class="form-floating">
+                                    <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('description')}"
+                                         th:each="error : ${#fields.errors('description')}" th:text="${error}">
+                                    </div>
+                                    <textarea th:field="*{description}" class="form-control" rows="2" placeholder="Wpisz tutaj treść" id="description" required></textarea>
+                                    <label for="description">Opis</label>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('quantity')}"
+                                             th:each="error : ${#fields.errors('quantity')}" th:text="${error}">
+                                        </div>
+                                        <input th:field="*{quantity}" class="form-control" type="number" value="42" id="quantity" readonly>
+                                        <label for="quantity">Początkowa ilość</label>
+                                    </div>
+
+                                    <div class="form-group col-md-8">
+                                        <div class="mx-auto">
+                                            <input type="submit" class="btn btn-primary btn-user btn-block" value="Zapisz zmiany">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <hr>
+                                <label >(Opcjonalne)</label>
+
+                                <div class="form-floating mb-2">
+                                    <div class="custom-file">
+                                        <input onchange="readURL(this);" th:field="*{image}" type="file" class=" upload custom-file-input" id="upload " >
+                                        <label class="custom-file-label small" for="upload " data-browse="Wybierz">Dozwolone JPG, JPEG lub PNG. Rozmiar < 800K</label>
+                                        <label for="upload ">Dodaj zdjęcie</label>
+                                    </div>
+                                    <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('image')}"
+                                         th:each="error : ${#fields.errors('image')}" th:text="${error}">
+                                    </div>
+                                </div>
+
+                                <div class="form-floating col-lg-6 offset-lg-3">
+                                    <div class="row justify-content-center">
+                                        <img id="imageResult" th:attr="src=@{${itemFoto.getItem().getByte64Image()}}" alt="" class="d-block ui-w-80 rounded-circle">
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<div th:fragment="wyswietlShowItem">
+    <div class="container-flex mx-5">
+            <div class="row no-gutters">
+                <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
+                    <div id="collapse1" class="card border-alert mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Aktualna ilość</h5>
+                            <p th:text="${itemStorage.getActualQuantity()+ ' szt.'}" class="card-text">Aktualna ilość</p>
+                        </div>
+                    </div>
+
+                    <div id="collapse2" class="card border-alert mb-3 ">
+                        <div class="card-body">
+                            <h5 class="card-title">Ilość od pierwszego dodania</h5>
+                            <p th:text="${itemStorage.getQuantity()+ ' szt.'}" class="card-text">500 szt.</p>
+                        </div>
+                    </div>
+                    <div id="collapse3" class="card border-alert mb-3 ">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Data ostatniej modyfikacji</h5>
+                            <p th:text="${#temporals.format(itemStorage.getTimeUpdated(), 'HH:mm') + ' w dniu '+ #temporals.format(itemStorage.getTimeUpdated(), 'dd-MM-yyyy')}" class="card-text"></p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card col-lg-6 o-hidden border-2 shadow-lg py-1 my-5">
+
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="col-md">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 th:text="${itemStorage.getItem().getName()}" class="h1 text-gray-900 mb-4">Nazwa</h1>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>Opis</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <h2 th:text="${itemStorage.getItem().getDescription()}" class="h4 text-gray-900 "></h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <form th:action="@{/item/addQuantity/save/{id} (id=${itemStorage.getId()})}" th:object="${qDto}" th:method="POST">
+                                            <div class="mt-5 card text-center">
+
+                                                <div class="card-header">
+                                                    Dodaj więcej przedmiotu
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item">Wpisz wartość poniżej</li>
+                                                    <div th:if="${#ctx.containsVariable('ErrorMessage')}">
+                                                        <li class=" alert-danger alert border-alert list-group-item">
+                                                            <p  th:text="${ErrorMessage}" class=""></p>
+                                                        </li>
+                                                    </div>
+                                                    <div class="alert" th:if="${#ctx.containsVariable('SuccessMessage')}" >
+                                                        <li class="list-group-item p-0">
+                                                            <div class="card alert-success border-alert">
+                                                                <div class="card-body">
+                                                                    <h5  class="card-title">Sukces!</h5>
+                                                                    <p  th:text="${SuccessMessage}" class="card-text"></p>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </div>
+                                                    <li class="list-group-item">
+                                                        <div class="input-group number-spinner">
+				                                            <span class="input-group-btn">
+					                                            <button type="button" class="btn btn-default" data-dir="dwn"><span class="fas fa-minus-square"></span></button>
+                                                            </span>
+                                                            <input type="text" class="form-control text-center" th:field="*{quantity}" value="1" pattern="^[0-9]*[1-9][0-9]*$">
+                                                            <span class="input-group-btn">
+					                                            <button type="button" class="btn btn-default" data-dir="up"><span class="fas fa-plus-square"></span></button>
+				                                            </span>
+                                                        </div>
+
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Zwiększ">
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="text-center card border-0">
+                                            <div class="card-body ">
+                                                <img class="card-img-top" th:attr="src=@{${itemStorage.getItem().getByte64Image()}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div th:each="rejestr : ${rejestrItemList}" class="card w-50 mb-2 ">
+                                        <div class="card-body">
+                                            <h5 th:text="${rejestr.getType().plName}" class="card-title">Card title</h5>
+                                            <p th:text="${rejestr.getType().message}" class="card-text"></p>
+                                            <p th:text="${'Osoba: ' + rejestr.getUser().getUsername()}" class="card-text"></p>
+                                            <p th:text="${'Przedmiot: ' + rejestr.getItemStorage().getItem().getName()}" class="card-text"></p>
+                                            <p th:text="${'Ilość: '+ rejestr.getValue()}" class="card-text"></p>
+                                            <p th:if="${rejestr.getType().name()=='GIVE'}" th:text="${'Numer badania: '+ rejestr.getNumerBadania()}" class="card-text"></p>
+
+
+
+
+                                            <p class="card-text"><small th:text="${#temporals.format(rejestr.getCreateDateTime(), 'HH:mm dd-MM-yyyy')}" class="text-muted">Last updated 3 mins ago</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
+                    <div id="collapse1" class="card border-alert mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Dodany przez</h5>
+                            <p th:text="${itemStorage.getItem().getUser().getFirstName()+ ' ' + itemStorage.getItem().getUser().getLastName()}" class="card-text">Jan Mazurek</p>
+                        </div>
+                    </div>
+
+                    <div id="collapse2" class="card border-alert mb-3 ">
+                        <div class="card-body">
+                            <h5 class="card-title">Tag</h5>
+                            <p th:text="${itemStorage.getItem().getTag()}" class="card-text"></p>
+                        </div>
+                    </div>
+                    <div id="collapse3" class="card border-alert mb-3 ">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Data dodania</h5>
+                            <p th:text="${#temporals.format(itemStorage.getTimeCreated(), 'HH:mm') + ' w dniu '+ #temporals.format(itemStorage.getTimeCreated(), 'dd-MM-yyyy')}" class="card-text"></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+    </div>
 
 </div>
 </body>

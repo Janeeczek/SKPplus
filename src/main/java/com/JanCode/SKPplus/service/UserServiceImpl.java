@@ -84,7 +84,6 @@ public class UserServiceImpl implements UserService {
         user.setRoles(Arrays.asList(new Role("ROLE_USER")));
         try{
             Resource resource = new ClassPathResource("avatar1.png");
-            InputStream input = resource.getInputStream();
             File file = resource.getFile();
             user.setImage(Files.readAllBytes(file.toPath()));
         } catch (IOException e) {

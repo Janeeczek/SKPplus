@@ -64,7 +64,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .expiredUrl("/login?expired");
                 //.invalidSessionUrl("/invalidSession.html");
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/login*","/reset","/register*","/registrationConfirm","/css/**","/demo/**","/fonts/**", "/img/**", "/js/**", "/vendor/**", "/scss/**","/layouts/**","/fragments/**")
+                .antMatchers("/login*","/css/**","/demo/**","/fonts/**", "/img/**", "/js/**", "/vendor/**", "/scss/**","/layouts/**","/fragments/**")
                 .permitAll();
 
         http.authorizeRequests()
