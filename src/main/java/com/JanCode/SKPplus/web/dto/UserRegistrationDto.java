@@ -1,6 +1,7 @@
 package com.JanCode.SKPplus.web.dto;
 import com.JanCode.SKPplus.constraint.FieldMatch;
 import com.JanCode.SKPplus.constraint.MyNotNull;
+import com.JanCode.SKPplus.constraint.Password;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
@@ -23,8 +24,7 @@ public class UserRegistrationDto {
 
     @NotEmpty(message = "Nazwisko jest wymagane!")
     private String lastName;
-
-    @NotEmpty(message = "Hasło jest wymagane!")
+    @Password(message = "Hasło musi zawierać minimum jeden znak specjalny oraz jedną małą i duzą litere oraz cyfrę. Długość od 8 do 15 znaków!")
     private String password;
 
     @NotEmpty(message = "Wpisz ponownie hasło!")
