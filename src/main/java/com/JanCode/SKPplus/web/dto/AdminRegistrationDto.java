@@ -2,6 +2,7 @@ package com.JanCode.SKPplus.web.dto;
 import com.JanCode.SKPplus.constraint.FieldMatch;
 import com.JanCode.SKPplus.constraint.MyNotNull;
 import com.JanCode.SKPplus.constraint.OnlyLatin;
+import com.JanCode.SKPplus.constraint.Password;
 import com.JanCode.SKPplus.model.AccountType;
 
 import javax.validation.constraints.AssertTrue;
@@ -26,8 +27,7 @@ public class AdminRegistrationDto {
 
     @NotEmpty(message = "Nazwisko jest wymagane!")
     private String lastName;
-    @OnlyLatin(message = "Hasło nie może zawierać polskich znaków!")
-    @NotEmpty(message = "Hasło jest wymagane!")
+    @Password(message = "Hasło musi zawierać minimum jeden znak specjalny oraz jedną małą i duzą litere oraz cyfrę. Długość od 8 do 15 znaków!")
     private String password;
 
     @NotEmpty(message = "Wpisz ponownie hasło!")

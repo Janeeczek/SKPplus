@@ -208,11 +208,11 @@
                                     <hr>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="password" th:field="*{password}"  class="form-control form-control-user" id="password" placeholder="Hasło"required>
+                                            <input type="password" th:field="*{password}"  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$" class="form-control form-control-user" id="password" placeholder="Hasło"required>
 
                                         </div>
                                         <div class="col-sm-6" >
-                                            <input type="password" th:field="*{confirmPassword}"  class="form-control form-control-user" id="confirmPassword" placeholder="Powtórz hasło" required>
+                                            <input type="password" th:field="*{confirmPassword}"  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$" class="form-control form-control-user" id="confirmPassword" placeholder="Powtórz hasło" required>
 
                                         </div>
                                     </div>

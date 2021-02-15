@@ -3,6 +3,7 @@ package com.JanCode.SKPplus.web.dto;
 import com.JanCode.SKPplus.constraint.FieldMatch;
 import com.JanCode.SKPplus.constraint.ImageSize;
 import com.JanCode.SKPplus.constraint.MyNotNull;
+import com.JanCode.SKPplus.constraint.Password;
 import com.JanCode.SKPplus.model.MyUserPrincipal;
 import com.JanCode.SKPplus.model.User;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,6 +31,7 @@ public class UserUpdateProfileDto {
     @Email(message = "Nieprawidłowy e-mail!")
     private String email;
     private String currentPassword;
+    @Password(message = "Hasło musi zawierać minimum jeden znak specjalny oraz jedną małą i duzą litere oraz cyfrę. Długość od 8 do 15 znaków!")
     private String newPassword;
     private String repeatNewPassword;
     @ImageSize(message = "Nieprawidłowy rozmiar zdjęcia!")
