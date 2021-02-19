@@ -4,7 +4,7 @@ public enum StorageActionType {
     CREATE("Stworzono","Dodano przedmiot do bazy danych."),
     EDIT("Edytowano","Zmodyfikowano przedmiot."),
     ARCHIVE("Zarchiwizowano","Zarchiwizowano przedmiot."),
-    ADDQUANTITY("Dodano ilość","Dodano więcej przedmiotu."),
+    ADDQUANTITY("Ustawiono ilość","Ustawiono ilość przedmiotu."),
     GIVE("Wydano","Wydano przedmiot");
 
 

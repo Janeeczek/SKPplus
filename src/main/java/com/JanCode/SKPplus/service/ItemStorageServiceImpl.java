@@ -98,8 +98,7 @@ public class ItemStorageServiceImpl implements ItemStorageService {
     public ItemStorage updateQuantity(long itemStorageId, QuantityDto quantityDto) {
         ItemStorage itemStorage = getItemStorage(itemStorageId);
         int quant = itemStorage.getQuantity();
-        int actual =  itemStorage.getActualQuantity();
-        itemStorage.setActualQuantity(actual + quantityDto.getQuantity());
+        itemStorage.setActualQuantity(quantityDto.getQuantity());
         itemStorage.setQuantity(quant + quantityDto.getQuantity());
         itemStorage.setTimeUpdated(getTimeNow());
         return itemStorageRepository.save(itemStorage);

@@ -134,6 +134,7 @@ public class ItemController {
     public ModelAndView deleteItem(Authentication authentication,@PathVariable long id, RedirectAttributes atts) {
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView modelAndView;
+        /*
         if (sourcePrincipal != null) {
             AccountType mode = sourcePrincipal.getAccountType();
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
@@ -148,6 +149,11 @@ public class ItemController {
         }
 
         modelAndView = new ModelAndView("/error");
+        return modelAndView;
+
+         */
+        modelAndView = new ModelAndView("redirect:/item/list");
+        atts.addFlashAttribute("ErrorMessage","Usuwanie jest zablokowane! ");
         return modelAndView;
     }
     @GetMapping("/item/info/{id}")
