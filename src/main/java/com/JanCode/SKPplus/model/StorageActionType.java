@@ -5,7 +5,8 @@ public enum StorageActionType {
     EDIT("Edytowano","Zmodyfikowano przedmiot."),
     ARCHIVE("Zarchiwizowano","Zarchiwizowano przedmiot."),
     ADDQUANTITY("Ustawiono ilość","Ustawiono ilość przedmiotu."),
-    GIVE("Wydano","Wydano przedmiot");
+    GIVE("Wydano","Wydano przedmiot."),
+    GIVEINTERN("Wydano dla PTHW","Przedmiot wydano dla pracownika lub właścieiela.");
 
 
     public final String message;

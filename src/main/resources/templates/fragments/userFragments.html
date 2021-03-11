@@ -388,10 +388,10 @@
             <div class="card border-left-primary shadow h-20 py-2">
                 <div class="card-body">
                     <div class="card-body">
-                        <h5 class="card-title">Załaduj nowy plik</h5>
-                        <p class="card-text">Możesz wgrać nowy plik .xml, który następnie wgrasz do bazy danych.</p>
+                        <h5 class="card-title">Dodaj nowy upominek</h5>
+                        <p class="card-text">Możesz szybko dodać nowy upominek klikając w poniższy przycik</p>
 
-                        <a href="#" th:href="@{/pliki/upload}" class="btn btn-primary">Wgraj plik</a>
+                        <a href="#" th:href="@{/item/add}" class="btn btn-primary">Dodaj upominek</a>
                     </div>
                 </div>
             </div>
@@ -404,7 +404,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="card-body">
                             <h5 class="card-title">Przeglądaj raporty</h5>
-                            <p class="card-text">W każdej chwili możesz przejrzeć aktualnie zgrane raporty. Są gotowe do pobrania a ich zawartość do wyświetlenia.</p>
+                            <p class="card-text">W każdej chwili możesz przejrzeć aktualnie zgrane raporty gotowe do pobrania. Widnieje przy nich suma wartości paragonów i faktur.</p>
                             <a href="#" th:href="@{/raport/pokazWszystkie}" class="btn btn-success">Sprawdź raporty</a>
                         </div>
                     </div>
@@ -418,10 +418,10 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="card-body">
-                            <h5 class="card-title">Zbiór wszystkich plików</h5>
-                            <p class="card-text">Możesz przeglądać wszystkie dostępne pliki oraz je pobierać. Przy każdym pliku jest dostępna funkcja wygenerowania raportu z danych z pliku.</p>
-                            <p class="card-text">Aplikacja przetworzy informacje, które potem możesz dowolnie wybrać i pobrać.</p>
-                            <a href="#" th:href="@{/pliki/pokazWszystkie}" class="btn btn-info">Sprawdź pliki</a>
+                            <h5 class="card-title">Stan upominków</h5>
+                            <p class="card-text">Konto księgowość umożliwa zarządzanie stanem magazynowym upomików wydawanych podczas kontroli pojazdów.</p>
+                            <p class="card-text">Możliwe jest dodawanie nowych upomików oraz korekta ich aktualnego stanu.</p>
+                            <a href="#" th:href="@{/item/list}" class="btn btn-info">Sprawdź upominki</a>
                         </div>
                     </div>
                 </div>
@@ -458,10 +458,10 @@
             <div class="card border-left-primary shadow h-20 py-2">
                 <div class="card-body">
                     <div class="card-body">
-                        <h5 class="card-title">Załaduj nowy plik</h5>
-                        <p class="card-text">Możesz wgrać nowy plik .xml(raport z programu zewnętrznego. Plik zostanie zapisany na serwerze.</p>
+                        <h5 class="card-title">Załaduj nowy raport</h5>
+                        <p class="card-text">Możesz wgrać nowy raport .xml(raport z programu zewnętrznego. Raport zostanie zapisany na serwerze.</p>
 
-                        <a href="#" th:href="@{/pliki/upload}" class="btn btn-primary">Wgraj plik</a>
+                        <a href="#" th:href="@{/pliki/upload}" class="btn btn-primary">Dodaj raport</a>
                     </div>
                 </div>
             </div>
@@ -473,8 +473,9 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="card-body">
-                            <h5 class="card-title">Możesz usuwać tylko swoje pliki!</h5>
-                            <p class="card-text">W każdej chwili możesz przejrzeć aktualnie wgrane pliki. Są gotowe do pobrania.</p>
+                            <h5 class="card-title">Upominki</h5>
+                            <p class="card-text">Możesz wydać tylko te upominki, które są na stanie w systemie. </p>
+                            <a href="#" th:href="@{/item/give}" class="btn btn-success">Wydaj upominek</a>
                         </div>
                     </div>
                 </div>
@@ -487,9 +488,9 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="card-body">
-                            <h5 class="card-title">Zbiór wszystkich plików</h5>
-                            <p class="card-text">Możesz przeglądać wszystkie dostępne pliki oraz je pobierać</p>
-                            <a href="#" th:href="@{/pliki/pokazWszystkie}" class="btn btn-info">Sprawdź pliki</a>
+                            <h5 class="card-title">Zbiór wszystkich raportów</h5>
+                            <p class="card-text">Możesz przeglądać wszystkie dostępne raporty;</p>
+                            <a href="#" th:href="@{/pliki/pokazWszystkie}" class="btn btn-info">Sprawdź raporty</a>
                         </div>
                     </div>
                 </div>
@@ -784,8 +785,12 @@
 </div>
 <div th:fragment="wyswietlTabliceRap">
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
+
+
+            <div class="card-header d-sm-flex align-items-center justify-content-between py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Lista raportów</h6>
+                <a href="#" th:href="@{/pliki/upload}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        class="fas fa-download fa-sm text-white-50"></i> Dodaj nowy raport</a>
             </div>
             <div th:if="${successMsg}">
                 <div class="alert alert-success"th:text="${successMsg}"></div>
@@ -801,49 +806,48 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Nazwa</th>
-                            <th>Data Utworzenia</th>
-                            <th>ID kontrahentów</th>
-                            <th>ID rejestrów sprzedaży</th>
+                            <th>Data przesłania</th>
+                            <th>Przesłany przez</th>
                             <th>Suma wartości paragonów</th>
                             <th>Suma wartości faktur vat</th>
+                            <th>ID</th>
                             <th>Akcja</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
-                            <th>ID</th>
                             <th>Nazwa</th>
-                            <th>Data Utworzenia</th>
-                            <th>ID kontrahentów</th>
-                            <th>ID rejestrów sprzedaży</th>
+                            <th>Data przesłania</th>
+                            <th>Przesłany przez</th>
                             <th>Suma wartości paragonów</th>
                             <th>Suma wartości faktur vat</th>
+                            <th>ID</th>
                             <th>Akcja</th>
                         </tr>
                         </tfoot>
                         <tbody>
                         <tr th:each="rap, iterStat: ${raporty}">
-                            <td th:text="${rap.getId()}"></td>
                             <td th:text="${rap.getNazwa()}"></td>
-                            <td th:text="${rap.getDataUtworzenia()}"></td>
-                            <td th:text="${rap.getKontrahenci().getId()}"></td>
-                            <td th:text="${rap.getRejestrySprzedazyVat().getId()}"></td>
+                            <td th:text="${#temporals.format(rap.getDataUtworzenia(), 'HH:mm dd-MM-yyyy')}"></td>
+                            <td th:text="${rap.getUser().getFirstName() + ' ' +  rap.getUser().getLastName()}"></td>
                             <td th:text="${raportService.getAllParagonIncomeByRaportId(rap.getRejestrySprzedazyVat().getId()) + ' .zł'}"></td>
                             <td th:text="${raportService.getAllFakturaIncomeByRaportId(rap.getRejestrySprzedazyVat().getId())+ ' .zł'}"></td>
+                            <td th:text="${rap.getId()}"></td>
                             <td>
                                 <div class="btn-group btn-block">
                                     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Akcja
+                                        Wybierz
                                     </button>
                                     <div class="dropdown-menu">
+
+                                        <a class="dropdown-item" href="/" th:href="@{/raport/downloadFileFromRaport/{id} (id=${rap.getId()})}">Pobierz orginał</a>
+                                        <a class="dropdown-item" href="/" th:href="@{/raport/downloadFileFromRaportExtra/{id} (id=${rap.getId()})}">Pobierz orginał(STACJ)</a>
                                         <a class="dropdown-item" href="/" th:href="@{/raport/usunRaport/{id} (id=${rap.getId()})}">Usuń</a>
-                                        <a class="dropdown-item" href="/" th:href="@{/raport/createFileFromRaport/{id} (id=${rap.getId()})}">Utwórz plik z tego</a>
-                                        <a class="dropdown-item" href="/" th:href="@{/raport/createFileFromRaportExtra/{id} (id=${rap.getId()})}">Utwórz plik STACJ z tego</a>
-                                        <a class="dropdown-item" href="#">Pokaż więcej info</a>
+                                        <!--<a class="dropdown-item" href="#">Pokaż więcej info</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="/" th:href="@{/raport/pokaz/{id} (id=${rap.getId()})}"></a>
+                                        <a class="dropdown-item" href="/" th:href="@{/raport/pokaz/{id} (id=${rap.getId()})}"></a>-->
+
                                     </div>
                                 </div>
                             </td>
@@ -1063,8 +1067,8 @@
                 <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
                 <div id="collapse1" class="card border-alert mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Wydaj przedmiot</h5>
-                        <p class="card-text">po badaniu technicznym.</p>
+                        <h5 class="card-title">Jeśli nie możesz znależć upominku</h5>
+                        <p class="card-text"> oznacza to, że nie ma go na stanie w bazie danych!</p>
                     </div>
                 </div>
 
@@ -1074,13 +1078,12 @@
                         <p class="card-text">aby wpisać poprawne dane! </p>
                     </div>
                 </div>
-                <div id="collapse3" class="">
-                    <!--
+                <div id="collapse3" class="card border-alert mb-3 ">
                     <div class="card-body">
-                        <h5 class="card-title">Potwierdzenie adresu e-mail</h5>
-                        <p class="card-text">znajdzie się na jego skrzynce e-mail.</p>
+                        <h5 class="card-title">Transakcja wewnętrzna</h5>
+                        <p class="card-text">zaznacz tę opcje, jeśli wydajesz upominek dla osoby z PTHW.<br> W tym przypadku pole "Numer badania" zostaw puste.</p>
+
                     </div>
-                    -->
                 </div>
             </div>
                 <div class="card col-lg-6 o-hidden border-2 shadow-lg py-1 my-5">
@@ -1088,16 +1091,37 @@
                     <div class="col-lg">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Wybierz przedmiot do wydania</h1>
+                                <h1 class="h4 text-gray-900 mb-4">Wydawanie upominku do badania</h1>
                             </div>
-                            <div class="form-floating mb-3">
-                                <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('numerBadania')}"
-                                     th:each="error : ${#fields.errors('numerBadania')}" th:text="${error}">
-                                </div>
-                                <input th:field="*{numerBadania}" type="text" class="form-control" id="numerBadania" placeholder="Wpisz numer dokumentu..." required>
-                                <label for="numerBadania">Numer Badania</label>
+                            <div class="row my-5">
+
+                                    <div class="col-lg-5">
+                                        <div class="form-floating mb-3">
+                                        <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('numerBadania')}"
+                                             th:each="error : ${#fields.errors('numerBadania')}" th:text="${error}">
+                                        </div>
+                                        <input th:field="*{numerBadania}" type="text" class="form-control" id="numerBadania" placeholder="Wpisz numer dokumentu...">
+                                        <label for="numerBadania">Numer Badania</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="m-2">
+                                            <span>lub</span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-lg-5">
+                                        <div class="  m-2  custom-control custom-checkbox">
+
+                                            <input id="internal" class="custom-control-input" type="checkbox" th:field="*{internal}"/>
+                                            <label class="custom-control-label" for="internal">Transakcja wewnętrzna</label>
+                                        </div>
+                                    </div>
+
                             </div>
-                            <div class="row">
+
+                            <div class="row my-5">
                                 <div class="col-lg-8">
                                     <div class="form-group">
                                         <div style="overflow:hidden;" >
@@ -1114,7 +1138,7 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group " >
-                                        <input th:field="*{quantity}" class="custom form-control" type="number" value="1" min="1" id="quantity" required>
+                                        <input th:field="*{quantity}" class="custom form-control" type="number" value="2" min="1" id="quantity" required>
                                         <label for="quantity">Wydawana ilość</label>
 
                                         <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('quantity')}"

@@ -254,9 +254,12 @@ public class ItemController {
                     atts.addFlashAttribute("ErrorMessage",e.getMessage());
                     return modelAndView;
                 }
-                rejestrItemService.addGiveLog(itemStorage,user,wydajItemDto.getQuantity(), wydajItemDto.getNumerBadania());
+                if(wydajItemDto.isInternal())
+                    rejestrItemService.addGiveInternLog(itemStorage,user,wydajItemDto.getQuantity(), wydajItemDto.getNumerBadania());
+                else
+                    rejestrItemService.addGiveLog(itemStorage,user,wydajItemDto.getQuantity(), wydajItemDto.getNumerBadania());
                 modelAndView = new ModelAndView("redirect:/item/give");
-                atts.addFlashAttribute("SuccessMessage","Pomyślnie wydano upominek! "+ itemStorage.getItem().getName());
+                atts.addFlashAttribute("SuccessMessage","Pomyślnie wydano upominek! "+ itemStorage.getItem().getName()+" sztuk: "+wydajItemDto.getQuantity());
                 return modelAndView;
             }
         }

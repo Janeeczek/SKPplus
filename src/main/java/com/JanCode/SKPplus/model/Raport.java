@@ -8,6 +8,7 @@ import com.JanCode.SKPplus.web.dto.DaneRaportuDto;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -27,7 +28,7 @@ public class Raport {
     @JoinColumn(name = "rejestrySprzedazyVat_id")
     private RejestrySprzedazyVat rejestrySprzedazyVat;
 
-    private LocalDate dataUtworzenia;
+    private LocalDateTime dataUtworzenia;
     @ManyToOne
     @JoinColumn(name="source_file_id", nullable=false)
     private FileDB files;
@@ -43,7 +44,7 @@ public class Raport {
         //this.xmlns = daneRaportuDto.getXmlns();
         this.kontrahenci =  new Kontrahenci(daneRaportuDto.getKONTRAHENCI());
         this.rejestrySprzedazyVat = new RejestrySprzedazyVat(daneRaportuDto.getREJESTRY_SPRZEDAZY_VAT());
-        this.dataUtworzenia =  LocalDate.now();
+        this.dataUtworzenia =  LocalDateTime.now();
         this.user = user;
         this.files = files;
         this.nazwa = nazwa;
@@ -74,11 +75,11 @@ public class Raport {
         this.rejestrySprzedazyVat = rejestrySprzedazyVat;
     }
 
-    public LocalDate getDataUtworzenia() {
+    public LocalDateTime getDataUtworzenia() {
         return dataUtworzenia;
     }
 
-    public void setDataUtworzenia(LocalDate dataUtworzenia) {
+    public void setDataUtworzenia(LocalDateTime dataUtworzenia) {
         this.dataUtworzenia = dataUtworzenia;
     }
 

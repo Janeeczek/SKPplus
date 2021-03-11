@@ -31,6 +31,17 @@ public class RejestrItemServiceImpl implements RejestrItemService {
         rejestrItem.setNumerBadania(numerbadania);
         return rejestrItemRepository.save(rejestrItem);
     }
+    @Override
+    public RejestrItem addGiveInternLog(ItemStorage itemStorage, User user, int value, String numerbadania) {
+        RejestrItem rejestrItem = new RejestrItem();
+        rejestrItem.setItemStorage(itemStorage);
+        rejestrItem.setUser(user);
+        rejestrItem.setCreateDateTime(LocalDateTime.now());
+        rejestrItem.setType(StorageActionType.GIVEINTERN);
+        rejestrItem.setValue(value);
+        rejestrItem.setNumerBadania(numerbadania);
+        return rejestrItemRepository.save(rejestrItem);
+    }
 
     @Override
     public RejestrItem addCreateLog(ItemStorage itemStorage, User user) {

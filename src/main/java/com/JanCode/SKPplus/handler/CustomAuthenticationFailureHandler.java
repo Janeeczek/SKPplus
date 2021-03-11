@@ -28,7 +28,7 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
 
 
-        String errorMessage = "Niepoprawna nazwa użytkownika!";
+        String errorMessage = "Błędne dane logowania!";
 
         if (exception.getMessage().equalsIgnoreCase("User is disabled")) {
             errorMessage = "Konto nie zostało aktywowane! Proszę aktywować link podany w opisie!";

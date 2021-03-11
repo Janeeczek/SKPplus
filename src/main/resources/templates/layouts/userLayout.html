@@ -69,7 +69,7 @@
                     <div id="collapseUtilities" class="collapse text-dark" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner text-dark rounded">
                             <h6 class="collapse-header text-dark">Domyślne:</h6>
-                            <a class="collapse-item text-dark" href="/" th:href="@{/pliki/upload}">Dodaj plik</a>
+                            <a class="collapse-item text-dark" href="/" th:href="@{/pliki/upload}">Dodaj raport</a>
                         </div>
                     </div>
                 </div>
@@ -89,11 +89,11 @@
                         <i class="fas text-dark fa-fw fa-file-word"></i>
                         <span>Raporty</span></a>
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link text-dark" href="/" th:href="@{/pliki/pokazWszystkie}">
                         <i class="fas text-dark fa-fw fa-file"></i>
                         <span>Pliki</span></a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link text-dark collapsed" href="#" data-toggle="collapse" data-target="#upominki" aria-expanded="true" aria-controls="collapseUtilities">
                         <i class="fas text-dark fa-fw fa-wrench"></i>
@@ -233,10 +233,10 @@
 
                 <a class="nav-link" href="/" th:href="@{/pliki/upload}">
                     <i class="fas fa-fw fa-upload"></i>
-                    <span>Dodaj plik</span></a>
-                <a class="nav-link" href="/" th:href="@{/pliki/pokazWszystkie}">
+                    <span>Dodaj Raport</span></a>
+                <a class="nav-link" href="/" th:href="@{/raport/pokazWszystkie}">
                     <i class="fas fa-fw fa-file"></i>
-                    <span>Pokaż pliki</span></a>
+                    <span>Pokaż raporty</span></a>
 
             </li>
 
