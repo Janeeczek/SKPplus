@@ -134,27 +134,33 @@ public class ItemController {
     public ModelAndView deleteItem(Authentication authentication,@PathVariable long id, RedirectAttributes atts) {
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         ModelAndView modelAndView;
-        /*
+
         if (sourcePrincipal != null) {
+            ItemStorage itemStorage = itemStorageService.getItemStorage(id);
             AccountType mode = sourcePrincipal.getAccountType();
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
+                //ItemStorage itemStorage = itemStorageService.getItemStorage(id);
+                rejestrItemService.deleteRejestrItem(itemStorage);
                 itemStorageService.deleteItemStorage(id);
                 modelAndView = new ModelAndView("redirect:/item/list");
-                atts.addFlashAttribute("SuccessMessage","Pomyślnie zarchiwizowano przedmiot o id: "+ id);
+                atts.addFlashAttribute("SuccessMessage","Pomyślnie usunięto przedmiot o nazwie: "+ itemStorage.getItem().getName());
                 return modelAndView;
             }
             modelAndView = new ModelAndView("redirect:/item/list");
-            atts.addFlashAttribute("ErrorMessage","Brak uprawienień! Nie można zarchiwizować przedmiotu o id: "+ id);
+            atts.addFlashAttribute("ErrorMessage","Brak uprawienień! Nie można usunąć przedmiotu o nazwie: "+ itemStorage.getItem().getName());
             return modelAndView;
         }
 
         modelAndView = new ModelAndView("/error");
         return modelAndView;
-
-         */
+        /*
         modelAndView = new ModelAndView("redirect:/item/list");
         atts.addFlashAttribute("ErrorMessage","Usuwanie jest zablokowane! ");
+
+
         return modelAndView;
+
+         */
     }
     @GetMapping("/item/info/{id}")
     public ModelAndView showInfo(@PathVariable long id, Authentication authentication, RedirectAttributes atts) {
@@ -196,7 +202,7 @@ public class ItemController {
                 if (bindingResult.hasErrors()) {
                     modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
                     modelAndView.addObject("itemDto",itemDto);
-                    modelAndView.addObject("ErrorMessage","Jest błąd!");
+                    modelAndView.addObject("ErrorMessage","Wypełnij wymagane pola!");
                     return modelAndView;
                 }
                 Item item = null;
@@ -206,7 +212,7 @@ public class ItemController {
                 }catch (DataIntegrityViolationException e) {
                     modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
                     modelAndView.addObject("itemDto",itemDto);
-                    modelAndView.addObject("ErrorMessage","Nazwa lub tag jest już w użyciu! Sprawdź bazę wszystkich upominków.");
+                    modelAndView.addObject("ErrorMessage","Nazwa jest już w użyciu! Sprawdź bazę wszystkich upominków.");
                     return modelAndView;
                 }
 
@@ -215,7 +221,7 @@ public class ItemController {
                 if(itemStorage == null || item == null || user == null) {
                     modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
                     modelAndView.addObject("itemDto",itemDto);
-                    modelAndView.addObject("ErrorMessage","Jest błąd!");
+                    modelAndView.addObject("ErrorMessage","Błąd zapisu danych!");
                     return modelAndView;
                 }
                 modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());

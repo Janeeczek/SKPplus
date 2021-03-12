@@ -14,8 +14,6 @@ public class Item {
     @Column(unique = true)
     private String name;
     private String description;
-    @Column(unique = true)
-    private String tag;
     private LocalDateTime timeCreated;
     @ManyToOne
     @JoinColumn(name="creator_username",nullable = false,referencedColumnName = "id")
@@ -34,10 +32,9 @@ public class Item {
 
     }
 
-    public Item(String name, String description, String tag, LocalDateTime timeCreated, User user, byte[] image,String contentType) {
+    public Item(String name, String description,  LocalDateTime timeCreated, User user, byte[] image,String contentType) {
         this.name = name;
         this.description = description;
-        this.tag = tag;
         this.timeCreated = timeCreated;
         this.user = user;
         this.image = image;
@@ -70,13 +67,6 @@ public class Item {
         this.description = description;
     }
 
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
 
     public LocalDateTime getTimeCreated() {
         return timeCreated;

@@ -1,9 +1,6 @@
 package com.JanCode.SKPplus.service;
 
-import com.JanCode.SKPplus.model.ItemStorage;
-import com.JanCode.SKPplus.model.RejestrItem;
-import com.JanCode.SKPplus.model.StorageActionType;
-import com.JanCode.SKPplus.model.User;
+import com.JanCode.SKPplus.model.*;
 
 import java.util.List;
 
@@ -15,6 +12,7 @@ public interface RejestrItemService {
     RejestrItem addEditLog(ItemStorage itemStorage, User user);
     RejestrItem addAddQuantityLog(ItemStorage itemStorage, User user, int value);
     RejestrItem addArchiveLog(ItemStorage itemStorage, User user);
+    void deleteRejestrItem(ItemStorage itemStorage);
 
     List<RejestrItem> getAllByItemStorage(ItemStorage itemStorage);
 }

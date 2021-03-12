@@ -945,18 +945,6 @@
         <form  th:action="@{/item/add/save}" th:object="${itemDto}" th:method="POST" enctype="multipart/form-data" multiple="multiple" class="needs-validation" novalidate>
             <div class="row no-gutters">
                 <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
-                    <div th:if="${#ctx.containsVariable('ErrorMessage')}"  class="alert-danger alert card border-alert mb-3">
-                        <div class="card-body">
-                            <h5  class="card-title">Błąd!</h5>
-                            <p  th:text="${ErrorMessage}" class="card-text"></p>
-                        </div>
-                    </div>
-                    <div th:if="${#ctx.containsVariable('SuccessMessage')}"  class="alert-success alert border-alert mb-3">
-                        <div class="card-body">
-                            <h5  class="card-title">Sukces!</h5>
-                            <p  th:text="${SuccessMessage}" class="card-text"></p>
-                        </div>
-                    </div>
                     <div id="collapse1" class="card border-alert mb-3">
                         <div class="card-body">
                             <h5 class="card-title">Dodaj nowy upominek,</h5>
@@ -967,7 +955,7 @@
                     <div id="collapse2" class="card border-alert mb-3 ">
                         <div class="card-body">
                             <h5 class="card-title">Diagności będą mogli,</h5>
-                            <p class="card-text">wydawać po badaniach technicznych.</p>
+                            <p class="card-text">wydawać go po badaniach technicznych.</p>
                         </div>
                     </div>
                     <div id="collapse3" class="card border-alert mb-3 ">
@@ -995,19 +983,11 @@
                                     <label for="name">Nazwa</label>
                                 </div>
 
-                                <div class="form-floating mb-3">
-                                    <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('tag')}"
-                                         th:each="error : ${#fields.errors('tag')}" th:text="${error}">
-                                    </div>
-                                    <input th:field="*{tag}" class="form-control" id="tag"placeholder="Wpisz krótki skrót nazwy przedmiotu(max 4 litery)" required>
-                                    <label for="tag">Tag</label>
-                                </div>
-
                                 <div class="form-floating">
                                     <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('description')}"
                                          th:each="error : ${#fields.errors('description')}" th:text="${error}">
                                     </div>
-                                    <textarea th:field="*{description}" class="form-control" rows="2" placeholder="Wpisz tutaj treść" id="description" required></textarea>
+                                    <textarea th:field="*{description}" class="form-control" rows="2" placeholder="Wpisz tutaj opis przedmiotu" id="description" required></textarea>
                                     <label for="description">Opis</label>
                                 </div>
 
@@ -1052,6 +1032,20 @@
 
 
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
+                    <div th:if="${#ctx.containsVariable('ErrorMessage')}"  class="alert-danger alert card border-alert mb-3">
+                        <div class="card-body">
+                            <h5  class="card-title">Błąd!</h5>
+                            <p  th:text="${ErrorMessage}" class="card-text"></p>
+                        </div>
+                    </div>
+                    <div th:if="${#ctx.containsVariable('SuccessMessage')}"  class="alert-success alert border-alert mb-3">
+                        <div class="card-body">
+                            <h5  class="card-title">Sukces!</h5>
+                            <p  th:text="${SuccessMessage}" class="card-text"></p>
                         </div>
                     </div>
                 </div>
@@ -1209,50 +1203,50 @@
                 <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
                     <thead>
                     <tr>
-                        <th>ID</th>
+
                         <th>Nazwa</th>
-                        <th>Tag</th>
                         <th>Aktualna ilość</th>
                         <th>Ilość początkowa</th>
                         <th>Data dodania</th>
                         <th>Data modyfikacji</th>
                         <th>Dodany przez</th>
                         <th>Zdjęcie</th>
+                        <th>ID</th>
                         <th>Akcja</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>ID</th>
+
                         <th>Nazwa</th>
-                        <th>Tag</th>
                         <th>Aktualna ilość</th>
                         <th>Ilość początkowa</th>
                         <th>Data dodania</th>
                         <th>Data modyfikacji</th>
                         <th>Dodany przez</th>
                         <th>Zdjęcie</th>
+                        <th>ID</th>
                         <th>Akcja</th>
                     </tr>
                     </tfoot>
                     <tbody>
                     <tr th:each="item, iterStat: ${storageList}">
-                        <td th:text="${item.getId()}"></td>
+
                         <td th:text="${item.getItem().getName()}"></td>
-                        <td th:text="${item.getItem().getTag()}"></td>
                         <td th:text="${item.getActualQuantity()}"></td>
                         <td th:text="${item.getQuantity()}"></td>
                         <td th:text="${#temporals.format(item.getTimeCreated(), 'HH:mm dd-MM-yyyy')}"></td>
                         <td th:text="${#temporals.format(item.getTimeUpdated(), 'HH:mm dd-MM-yyyy')}"></td>
                         <td th:text="${item.getItem().getUser().getUsername()}"></td>
                         <td><img width="30" height="30" class="img-profile rounded-circle" th:attr="src=@{${item.getItem().getByte64Image()}}"></td>
+                        <td th:text="${item.getId()}"></td>
                         <td>
                             <div class="btn-group btn-block">
                                 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Akcja
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="/" th:href="@{/item/info/{id} (id=${item.getId()})}">Pokaż więcej</a>
+                                    <a class="dropdown-item"  th:href="@{/item/info/{id} (id=${item.getId()})}">Pokaż więcej</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="/" th:href="@{/item/delete/{id} (id=${item.getId()})}">Usuń</a>
                                     <a class="dropdown-item" href="/" th:href="@{/item/edit/{id} (id=${item.getId()})}">Edytuj</a>
@@ -1324,13 +1318,7 @@
                                     <label for="name">Nazwa</label>
                                 </div>
 
-                                <div class="form-floating mb-3">
-                                    <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('tag')}"
-                                         th:each="error : ${#fields.errors('tag')}" th:text="${error}">
-                                    </div>
-                                    <input th:field="*{tag}" class="form-control" id="tag"placeholder="Wpisz krótki skrót nazwy przedmiotu(max 4 litery)" required>
-                                    <label for="tag">Tag</label>
-                                </div>
+
 
                                 <div class="form-floating">
                                     <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('description')}"
@@ -1517,14 +1505,14 @@
                             <p th:text="${itemStorage.getItem().getUser().getFirstName()+ ' ' + itemStorage.getItem().getUser().getLastName()}" class="card-text">Jan Mazurek</p>
                         </div>
                     </div>
-
+                    <!--
                     <div id="collapse2" class="card border-alert mb-3 ">
                         <div class="card-body">
-                            <h5 class="card-title">Tag</h5>
+                            <h5 class="card-title">Ilość alert</h5>
                             <p th:text="${itemStorage.getItem().getTag()}" class="card-text"></p>
                         </div>
-                    </div>
-                    <div id="collapse3" class="card border-alert mb-3 ">
+                    </div>-->
+                    <div id="collapse2" class="card border-alert mb-3 ">
 
                         <div class="card-body">
                             <h5 class="card-title">Data dodania</h5>

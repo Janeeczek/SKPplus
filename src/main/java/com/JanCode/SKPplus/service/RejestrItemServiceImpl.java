@@ -98,6 +98,13 @@ public class RejestrItemServiceImpl implements RejestrItemService {
     }
 
     @Override
+    public void deleteRejestrItem(ItemStorage itemStorage) {
+        List<RejestrItem> rejestrItemList = getAllByItemStorage(itemStorage);
+        for(RejestrItem rejestrItem : rejestrItemList) rejestrItemRepository.delete(rejestrItem);
+
+    }
+
+    @Override
     public List<RejestrItem> getAllByItemStorage(ItemStorage itemStorage) {
         return rejestrItemRepository.getRejestrByItemStorageId(itemStorage.getId());
     }

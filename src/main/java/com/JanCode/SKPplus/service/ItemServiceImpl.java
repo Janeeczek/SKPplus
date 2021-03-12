@@ -25,7 +25,6 @@ public class ItemServiceImpl implements ItemService {
     public Item createItem(User user, ItemDto itemDto) {
         Item item = new Item();
         item.setName(itemDto.getName());
-        item.setTag(itemDto.getTag());
         item.setDescription(itemDto.getDescription());
         if(!itemDto.getImage().getContentType().equals("application/octet-stream")) {
             try {
@@ -62,7 +61,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void deleteItem(long id) {
-        itemRepository.delete(getItem(id));
+        Item item = itemRepository.findItemById(id);
+        itemRepository.delete(item);
     }
 
     @Override
@@ -75,8 +75,6 @@ public class ItemServiceImpl implements ItemService {
     public Item updateItem(long id, ItemDto itemDto) {
         Item item = getItem(id);
         if(!item.getName().equals(itemDto.getName())) item.setName(itemDto.getName());
-
-        if(!item.getTag().equals(itemDto.getTag())) item.setTag(itemDto.getTag());
 
         if(!item.getDescription().equals(itemDto.getDescription())) item.setDescription(itemDto.getDescription());
         if(!itemDto.getImage().getContentType().equals("application/octet-stream")) {

@@ -78,8 +78,12 @@ public class ItemStorageServiceImpl implements ItemStorageService {
     @Override
     public void deleteItemStorage(long itemStorageId) {
         ItemStorage itemStorage = getItemStorage(itemStorageId);
+        System.err.println("1");
         itemStorageRepository.delete(itemStorage);
+        System.err.println("2");
         itemService.deleteItem(itemStorage.getItem().getId());
+        System.err.println("3");
+
     }
     @Override
     public ItemStorage archiveItemStorage(long itemStorageId) {
