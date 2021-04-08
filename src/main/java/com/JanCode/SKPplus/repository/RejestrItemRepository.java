@@ -14,5 +14,6 @@ import java.util.List;
 public interface RejestrItemRepository extends JpaRepository<RejestrItem, Long> {
     @Query(value = "SELECT * FROM rejestr_item where itemstorage_id = :id",nativeQuery = true)
     List<RejestrItem> getRejestrByItemStorageId(long id);
-
+    @Query(value = "SELECT * FROM rejestr_item WHERE DATE(`create_date_time`) = CURDATE() AND type = 'give' or type = 'giveintern'",nativeQuery = true)
+    List<RejestrItem> getAllFromToday();
 }

@@ -1261,6 +1261,56 @@
     </div>
 
 </div>
+<div th:fragment="wyswietlListeItemDzisiaj">
+    <div class="card shadow mb-4">
+
+        <div class="card-header d-sm-flex align-items-center justify-content-between py-3">
+            <h6 th:text="${'Upominki wydane dzisiaj: ' + iloscWydanych}" class="m-0 font-weight-bold text-primary">Upominki wydane dzisiaj</h6>
+            <a href="#" th:href="@{/item/add}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Wydaj upominek</a>
+        </div>
+        <div class="card-body">
+            <div th:if="${#ctx.containsVariable('ErrorMessage')}" th:text="${ErrorMessage}" class="alert alert-danger text-center" onautocomplete=""></div>
+
+            <div th:if="${#ctx.containsVariable('SuccessMessage')}" th:text="${SuccessMessage}" class="alert alert-info text-center"></div>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+
+                        <th>Nazwa</th>
+                        <th>Numer dokumentu</th>
+                        <th>Wydana ilość</th>
+                        <th>Data wydania</th>
+                        <th>Osoba wydająca</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Numer dokumentu</th>
+                        <th>Wydana ilość</th>
+                        <th>Data wydania</th>
+                        <th>Osoba wydająca</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr th:each="rejItem, iterStat: ${rejestrItemList}">
+
+                        <td th:text="${rejItem.getItemStorage().getItem().getName()}"></td>
+                        <td th:if="${rejItem.getNumerBadania() == ''}" th:text="'Wydanie wewnętrzne'"></td>
+                        <td th:unless="${rejItem.getNumerBadania() == ''}" th:text="${rejItem.getNumerBadania()}"></td>
+                        <td th:text="${rejItem.getValue()}"></td>
+                        <td th:text="${#temporals.format(rejItem.getCreateDateTime(), 'HH:mm dd-MM-yyyy')}"></td>
+                        <td th:text="${rejItem.getUser().getFirstName() + ' ' +  rejItem.getUser().getLastName()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
 <div th:fragment="wyswietlEditItem">
     <div class="container-flex mx-5">
         <form  th:action="@{/item/edit/save/{id} (id=${idTemp})} " th:object="${itemDto}" th:method="POST" enctype="multipart/form-data" multiple="multiple" class="needs-validation" novalidate>

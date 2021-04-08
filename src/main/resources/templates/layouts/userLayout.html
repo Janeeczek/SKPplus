@@ -58,56 +58,43 @@
 
             <!-- Heading -->
             <div class="sidebar-heading text-dark">
-                Interfejs
+                Raporty
             </div>
-            <li class="nav-item ">
-                <div th:if="${mode == 'KSIEGOWOSC'}">
-                    <a class="nav-link text-dark collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-                        <i class="fas text-dark fa-fw fa-wrench"></i>
-                        <span>Narzędzia</span>
-                    </a>
-                    <div id="collapseUtilities" class="collapse text-dark" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner text-dark rounded">
-                            <h6 class="collapse-header text-dark">Domyślne:</h6>
-                            <a class="collapse-item text-dark" href="/" th:href="@{/pliki/upload}">Dodaj raport</a>
-                        </div>
-                    </div>
-                </div>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="/" th:href="@{/pliki/upload}">
+                    <i class="text-dark fas fa-fw fa-upload"></i>
+                    <span>Dodaj raport</span></a>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="/" th:href="@{/raport/pokazWszystkie}">
+                    <i class="text-dark fas fa-fw fa-file"></i>
+                    <span>Wszystkie raporty</span></a>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider text-dark">
-            <div th:if="${mode == 'KSIEGOWOSC'}">
-                <!-- Heading -->
-                <div class="sidebar-heading text-dark">
-                    Dodatki
-                </div>
 
-                <!-- Nav Item - Tables -->
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="/" th:href="@{/raport/pokazWszystkie}">
-                        <i class="fas text-dark fa-fw fa-file-word"></i>
-                        <span>Raporty</span></a>
-                </li>
-                <!--<li class="nav-item">
-                    <a class="nav-link text-dark" href="/" th:href="@{/pliki/pokazWszystkie}">
-                        <i class="fas text-dark fa-fw fa-file"></i>
-                        <span>Pliki</span></a>
-                </li> -->
-                <li class="nav-item">
-                    <a class="nav-link text-dark collapsed" href="#" data-toggle="collapse" data-target="#upominki" aria-expanded="true" aria-controls="collapseUtilities">
-                        <i class="fas text-dark fa-fw fa-wrench"></i>
-                        <span>Upominki</span>
-                    </a>
-                    <div id="upominki" class="collapse text-dark" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner text-dark rounded">
-                            <h6 class="collapse-header text-dark">Akcje:</h6>
-                            <a class="collapse-item text-dark" href="/" th:href="@{/item/add}">Dodaj upominek</a>
-                            <a class="collapse-item text-dark" href="/" th:href="@{/item/list}">Wszystkie upominki</a>
-                        </div>
-                    </div>
-                </li>
+            <!-- Heading -->
+            <div class="sidebar-heading text-dark">
+                Upominki
             </div>
+
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="/" th:href="@{/item/add}">
+                    <i class="text-dark fas fa-fw fa-gift"></i>
+                    <span>Dodaj upominek</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="/" th:href="@{/item/list}">
+                    <i class="text-dark fas fa-boxes"></i>
+                    <span>Wszystkie upominki</span></a>
+            </li>
+            <!--<li class="nav-item">
+                <a class="nav-link text-dark" href="/" th:href="@{/pliki/pokazWszystkie}">
+                    <i class="fas text-dark fa-fw fa-file"></i>
+                    <span>Pliki</span></a>
+            </li> -->
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -250,10 +237,14 @@
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-
                 <a class="nav-link" href="/" th:href="@{/item/give}">
                     <i class="fas fa-fw fa-gift"></i>
                     <span>Wydaj upominek</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/" th:href="@{/item/listToday}">
+                    <i class="far fa-fw fa-calendar-alt"></i>
+                    <span>Historia wydań dzisiaj</span></a>
             </li>
 
 

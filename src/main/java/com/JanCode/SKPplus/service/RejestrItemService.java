@@ -15,4 +15,5 @@ public interface RejestrItemService {
     void deleteRejestrItem(ItemStorage itemStorage);
 
     List<RejestrItem> getAllByItemStorage(ItemStorage itemStorage);
+    List<RejestrItem> getAllFromToday();
 }

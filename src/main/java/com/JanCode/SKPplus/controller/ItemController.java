@@ -107,6 +107,24 @@ public class ItemController {
         modelAndView = new ModelAndView("/error");
         return modelAndView;
     }
+    @GetMapping("/item/listToday")
+    public ModelAndView showListToday(Authentication authentication) {
+        MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
+        ModelAndView modelAndView;
+        if (sourcePrincipal != null) {
+            AccountType mode = sourcePrincipal.getAccountType();
+            if (mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC || mode == AccountType.DIAGNOSTYKA) {
+                List<RejestrItem> rejestrItemList = rejestrItemService.getAllFromToday();
+                if (rejestrItemList == null) return new ModelAndView("/error");
+                modelAndView = new ModelAndView("/user/listaItemToday","mode",mode.name());
+                modelAndView.addObject("rejestrItemList",rejestrItemList);
+                modelAndView.addObject("iloscWydanych",rejestrItemList.size());
+                return modelAndView;
+            }
+        }
+        modelAndView = new ModelAndView("/error");
+        return modelAndView;
+    }
     @GetMapping("/item/archive/{id}")
     public ModelAndView archiveItem(Authentication authentication,@PathVariable long id, RedirectAttributes atts) {
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();

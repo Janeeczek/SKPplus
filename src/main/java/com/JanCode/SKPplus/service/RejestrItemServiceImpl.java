@@ -108,4 +108,9 @@ public class RejestrItemServiceImpl implements RejestrItemService {
     public List<RejestrItem> getAllByItemStorage(ItemStorage itemStorage) {
         return rejestrItemRepository.getRejestrByItemStorageId(itemStorage.getId());
     }
+
+    @Override
+    public List<RejestrItem> getAllFromToday() {
+        return rejestrItemRepository.getAllFromToday();
+    }
 }
