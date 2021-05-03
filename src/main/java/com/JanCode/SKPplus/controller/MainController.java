@@ -37,7 +37,7 @@ public class MainController  {
                 modelAndView = new ModelAndView("redirect:/admin?tryb=showMain");
                 return modelAndView;
             }
-            modelAndView = new ModelAndView("/user/user","mode",mode.name());
+            modelAndView = new ModelAndView("user/user","mode",mode.name());
             if( mode == AccountType.USER) {
                 modelAndView.addObject("allIncome",raportService.getAllIncomeString());
                 modelAndView.addObject("activeEmp",activeUserService.findAllEmployees());
@@ -45,7 +45,7 @@ public class MainController  {
 
 
         } else {
-            modelAndView = new ModelAndView("/error");
+            modelAndView = new ModelAndView("error");
         }
         return modelAndView;
 
@@ -58,14 +58,14 @@ public class MainController  {
             AccountType mode = sourcePrincipal.getAccountType();
 
             if( mode == AccountType.USER) {
-                modelAndView = new ModelAndView("/user/wykresy","mode",mode.name());
+                modelAndView = new ModelAndView("user/wykresy","mode",mode.name());
                 return modelAndView;
             }
-            modelAndView = new ModelAndView("/user/user","mode",mode.name());
+            modelAndView = new ModelAndView("user/user","mode",mode.name());
 
 
         } else {
-            modelAndView = new ModelAndView("/error");
+            modelAndView = new ModelAndView("error");
         }
         return modelAndView;
     }

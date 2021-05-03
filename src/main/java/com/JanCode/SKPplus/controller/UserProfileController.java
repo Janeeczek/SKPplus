@@ -42,7 +42,7 @@ public class UserProfileController {
     public ModelAndView showProfile(@RequestParam Map<String,String> allParams, Authentication authentication) {
         MyUserPrincipal requestPrincipal = null;
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
-        ModelAndView model = new ModelAndView("/user/profile");
+        ModelAndView model = new ModelAndView("user/profile");
         if(sourcePrincipal.getUser() != null) { //Jeśli użytkownik zleceniający jest uwierzytelniony
             AccountType mode = sourcePrincipal.getAccountType();
             model.addObject("mode",mode.name());
@@ -78,7 +78,7 @@ public class UserProfileController {
 
     @GetMapping("/profile/edit")
     public ModelAndView showProfileEdit(@RequestParam Map<String,String> allParams, Authentication authentication) {
-        ModelAndView model = new ModelAndView("/user/editProfile");
+        ModelAndView model = new ModelAndView("user/editProfile");
         MyUserPrincipal requestPrincipal = null;
         MyUserPrincipal sourcePrincipal = (MyUserPrincipal) authentication.getPrincipal();
         if(sourcePrincipal.getUser() != null) { //Jeśli użytkownik zleceniający jest uwierzytelniony

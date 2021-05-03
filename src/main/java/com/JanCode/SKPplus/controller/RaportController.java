@@ -41,15 +41,15 @@ public class RaportController {
         if (sourcePrincipal != null) {
             AccountType mode = sourcePrincipal.getAccountType();
             if (mode == AccountType.KSIEGOWOSC || mode == AccountType.DIAGNOSTYKA || mode == AccountType.ADMIN) {
-                modelAndView = new ModelAndView("/user/raporty","mode",mode.name());
+                modelAndView = new ModelAndView("user/raporty","mode",mode.name());
                 modelAndView.addObject("raporty", reportService.getAllRaports());
                 modelAndView.addObject("raportService", reportService);
             } else {
-                modelAndView = new ModelAndView("/error","errorMsg","Brak uprawnień!");
+                modelAndView = new ModelAndView("error","errorMsg","Brak uprawnień!");
             }
 
         } else {
-            modelAndView = new ModelAndView("/error","errorMsg","Brak uprawnień!");
+            modelAndView = new ModelAndView("error","errorMsg","Brak uprawnień!");
         }
         return modelAndView;
     }

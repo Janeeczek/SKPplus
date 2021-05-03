@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -45,9 +46,11 @@ public class ItemServiceImpl implements ItemService {
         else {
             System.out.println("Nie znalazłem zdjecia, daje awaryjne!");
             try{
-                Resource resource = new ClassPathResource("static/img/image-solid.png");
-                File file = resource.getFile();
-                item.setImage(Files.readAllBytes(file.toPath()));
+                ClassPathResource  resource = new ClassPathResource("static/img/image-solid.png");
+
+                byte[] bdata = FileCopyUtils.copyToByteArray(resource.getInputStream());
+
+                item.setImage(bdata);
                 item.setContentType("image/png");
             } catch (IOException e) {
                 System.out.println("Blad przy przetwarzaniu zdjecia awaryjnego upominka" + e);

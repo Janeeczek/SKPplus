@@ -40,7 +40,7 @@ public class FileController {
             AccountType mode = sourcePrincipal.getAccountType();
             System.err.println(mode);
             if (mode == AccountType.KSIEGOWOSC || mode == AccountType.DIAGNOSTYKA || mode == AccountType.ADMIN) {
-                modelAndView = new ModelAndView("/user/uploadXML","mode",mode.name());
+                modelAndView = new ModelAndView("user/uploadXML","mode",mode.name());
                 modelAndView.addObject("raportDto", new RaportDto());
             } else {
                 modelAndView = new ModelAndView("/error","errorMsg","Brak uprawnień!");
@@ -99,7 +99,7 @@ public class FileController {
             AccountType mode = sourcePrincipal.getAccountType();
             System.err.println(mode);
             if (mode == AccountType.KSIEGOWOSC ||mode == AccountType.ADMIN|| mode == AccountType.DIAGNOSTYKA) {
-                modelAndView = new ModelAndView("/user/pliki","mode",mode.name());
+                modelAndView = new ModelAndView("user/pliki","mode",mode.name());
                 List<FileDB> files = storageService.getAllFiles();
                 modelAndView.addObject("pliki", files);
             } else {
@@ -111,7 +111,7 @@ public class FileController {
     //nie używane
     @GetMapping("/pliki/pokaz/{id}")
     public ModelAndView showPlikTable(ModelAndView modelAndView, @PathVariable String id) {
-        modelAndView.setViewName("/user/plik");
+        modelAndView.setViewName("user/plik");
         FileDB file = storageService.getFile(id);
         modelAndView.addObject("plik", file);
         return modelAndView;

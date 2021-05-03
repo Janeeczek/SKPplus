@@ -11,7 +11,7 @@ $(document).ready(function() {
         $(".alert").slideUp(900);
     }, 10000);
 
-    var urlEndPoint = "http://83.31.180.30:8080/subscribe";
+    var urlEndPoint = "http://192.168.0.48:8080/subscribe";
     var eventSource = new EventSource(urlEndPoint);
     console.log("Działa subskrybcja");
     eventSource.addEventListener("newAlert", function(event) {

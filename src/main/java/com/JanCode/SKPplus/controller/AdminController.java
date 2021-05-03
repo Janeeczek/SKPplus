@@ -50,7 +50,7 @@ public class AdminController extends MainController{
 
     @GetMapping
     public ModelAndView showAdmin(@RequestParam String tryb) {
-        ModelAndView modelAndView = new ModelAndView("/admin/admin","tryb",tryb);
+        ModelAndView modelAndView = new ModelAndView("admin/admin","tryb",tryb);
         if (tryb.equals("showMain")) {
             if(userService.findAllUsers() == null) modelAndView.addObject("countUsers", 0);
             else modelAndView.addObject("countUsers", userService.findAllUsers().size());
@@ -128,7 +128,7 @@ public class AdminController extends MainController{
         ModelAndView modelAndView;
         System.out.println("Role = " + userDto.getRole());
         if (bindingResult.hasErrors()) {
-            modelAndView = new ModelAndView("/admin/admin","tryb","createUser");
+            modelAndView = new ModelAndView("admin/admin","tryb","createUser");
             modelAndView.addObject("userDto",userDto);
             return modelAndView;
         }
@@ -140,17 +140,17 @@ public class AdminController extends MainController{
             }
 
         } catch (UserAlreadyExistException uaeEx) {
-            modelAndView = new ModelAndView("/admin/admin","tryb","createUser");
+            modelAndView = new ModelAndView("admin/admin","tryb","createUser");
             modelAndView.addObject("userDto",userDto);
             modelAndView.addObject("ErrorMessage", "Konto o podanej nazwie użytkownika lub adresie email już istnieje!");
             return modelAndView;
         } catch (RuntimeException ex) {
             System.out.println(ex);
-            modelAndView = new ModelAndView("/admin/admin","tryb","createUser");
+            modelAndView = new ModelAndView("admin/admin","tryb","createUser");
             modelAndView.addObject("userDto",userDto);
             return modelAndView;
         }
-        modelAndView = new ModelAndView("/admin/admin","tryb","createUser");
+        modelAndView = new ModelAndView("admin/admin","tryb","createUser");
         modelAndView.addObject("userDto",userDto);
         if (!userDto.isActive()) modelAndView.addObject("SuccessMessage", "Konto zostało utworzone i czeka na aktywacje!");
         else modelAndView.addObject("SuccessMessage", "Konto zostało utworzone i aktywowane!");

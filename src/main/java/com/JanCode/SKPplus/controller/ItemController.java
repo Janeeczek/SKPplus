@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ItemController {
@@ -44,12 +45,12 @@ public class ItemController {
         if (sourcePrincipal != null) {
             AccountType mode = sourcePrincipal.getAccountType();
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
-                modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
+                modelAndView = new ModelAndView("user/dodajNowyItem","mode",mode.name());
                 modelAndView.addObject("itemDto",new ItemDto());
                 return modelAndView;
             }
         }
-        modelAndView = new ModelAndView("/error");
+        modelAndView = new ModelAndView("error");
         return modelAndView;
     }
     @GetMapping("/item/give")
@@ -59,15 +60,16 @@ public class ItemController {
         if (sourcePrincipal != null) {
             AccountType mode = sourcePrincipal.getAccountType();
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC || mode == AccountType.DIAGNOSTYKA) {
-                List<ItemStorage> itemStorageList = itemStorageService.getAllActualItemStorage();
-                modelAndView = new ModelAndView("/user/wydajItem","mode",mode.name());
+                List<ItemStorage> itemStorageList = itemStorageService.getAllActiveItemStorage();
+
+                modelAndView = new ModelAndView("user/wydajItem","mode",mode.name());
 
                 modelAndView.addObject("wydajItemDto",new WydajItemDto());
                 modelAndView.addObject("itemStorageList",itemStorageList);
                 return modelAndView;
             }
         }
-        modelAndView = new ModelAndView("/error");
+        modelAndView = new ModelAndView("error");
         return modelAndView;
     }
     @GetMapping("/item/edit/{id}")
@@ -78,14 +80,14 @@ public class ItemController {
             AccountType mode = sourcePrincipal.getAccountType();
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
                 ItemStorage itemStorage = itemStorageService.getItemStorage(id);
-                modelAndView = new ModelAndView("/user/editItem","mode",mode.name());
+                modelAndView = new ModelAndView("user/editItem","mode",mode.name());
                 modelAndView.addObject("itemFoto",itemStorage);
                 modelAndView.addObject("idTemp",id);
                 modelAndView.addObject("itemDto",new ItemDto(itemStorage));
                 return modelAndView;
             }
         }
-        modelAndView = new ModelAndView("/error");
+        modelAndView = new ModelAndView("error");
         return modelAndView;
     }
 
@@ -96,15 +98,17 @@ public class ItemController {
         if (sourcePrincipal != null) {
             AccountType mode = sourcePrincipal.getAccountType();
             if (mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC || mode == AccountType.DIAGNOSTYKA) {
+                //itemStorageService.updateZetony();
                 List<ItemStorage> itemStorageList = itemStorageService.getAllActiveItemStorage();
-                if (itemStorageList == null) return new ModelAndView("/error");
-                modelAndView = new ModelAndView("/user/listaItem","mode",mode.name());
+
+                if (itemStorageList == null) return new ModelAndView("error");
+                modelAndView = new ModelAndView("user/listaItem","mode",mode.name());
                 modelAndView.addObject("storageList",itemStorageList);
 
                 return modelAndView;
             }
         }
-        modelAndView = new ModelAndView("/error");
+        modelAndView = new ModelAndView("error");
         return modelAndView;
     }
     @GetMapping("/item/listToday")
@@ -115,14 +119,15 @@ public class ItemController {
             AccountType mode = sourcePrincipal.getAccountType();
             if (mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC || mode == AccountType.DIAGNOSTYKA) {
                 List<RejestrItem> rejestrItemList = rejestrItemService.getAllFromToday();
-                if (rejestrItemList == null) return new ModelAndView("/error");
-                modelAndView = new ModelAndView("/user/listaItemToday","mode",mode.name());
+
+                if (rejestrItemList == null) return new ModelAndView("error");
+                modelAndView = new ModelAndView("user/listaItemToday","mode",mode.name());
                 modelAndView.addObject("rejestrItemList",rejestrItemList);
                 modelAndView.addObject("iloscWydanych",rejestrItemList.size());
                 return modelAndView;
             }
         }
-        modelAndView = new ModelAndView("/error");
+        modelAndView = new ModelAndView("error");
         return modelAndView;
     }
     @GetMapping("/item/archive/{id}")
@@ -145,7 +150,7 @@ public class ItemController {
             return modelAndView;
         }
 
-        modelAndView = new ModelAndView("/error");
+        modelAndView = new ModelAndView("error");
         return modelAndView;
     }
     @GetMapping("/item/delete/{id}")
@@ -169,7 +174,7 @@ public class ItemController {
             return modelAndView;
         }
 
-        modelAndView = new ModelAndView("/error");
+        modelAndView = new ModelAndView("error");
         return modelAndView;
         /*
         modelAndView = new ModelAndView("redirect:/item/list");
@@ -189,13 +194,14 @@ public class ItemController {
 
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
                 ItemStorage itemStorage = itemStorageService.getItemStorage(id);
+
                 if (itemStorage == null) {
                     modelAndView = new ModelAndView("redirect:/item/list");
                     atts.addFlashAttribute("ErrorMessage","Nie ma takiego przedmiotu w bazie danych!");
                     return modelAndView;
                 }
                 List<RejestrItem> rejestrItemList = rejestrItemService.getAllByItemStorage(itemStorage);
-                modelAndView = new ModelAndView("/user/showItem","mode",mode.name());
+                modelAndView = new ModelAndView("user/showItem","mode",mode.name());
                 modelAndView.addObject("itemStorage",itemStorage);
                 modelAndView.addObject("rejestrItemList",rejestrItemList);
                 modelAndView.addObject("qDto",new QuantityDto());
@@ -205,7 +211,7 @@ public class ItemController {
             atts.addFlashAttribute("ErrorMessage","Nie masz uprawnień, aby zobaczyć ten przedmiot!");
             return modelAndView;
         }
-        modelAndView = new ModelAndView("/error");
+        modelAndView = new ModelAndView("error");
         return modelAndView;
 
     }
@@ -218,7 +224,7 @@ public class ItemController {
             AccountType mode = sourcePrincipal.getAccountType();
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
                 if (bindingResult.hasErrors()) {
-                    modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
+                    modelAndView = new ModelAndView("user/dodajNowyItem","mode",mode.name());
                     modelAndView.addObject("itemDto",itemDto);
                     modelAndView.addObject("ErrorMessage","Wypełnij wymagane pola!");
                     return modelAndView;
@@ -228,27 +234,28 @@ public class ItemController {
                 try{
                     item = itemService.createItem(user,itemDto);
                 }catch (DataIntegrityViolationException e) {
-                    modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
+                    modelAndView = new ModelAndView("user/dodajNowyItem","mode",mode.name());
                     modelAndView.addObject("itemDto",itemDto);
                     modelAndView.addObject("ErrorMessage","Nazwa jest już w użyciu! Sprawdź bazę wszystkich upominków.");
                     return modelAndView;
                 }
 
                 ItemStorage itemStorage = itemStorageService.addItem(item,itemDto.getQuantity());
+                itemStorageService.updateZetony();
                 rejestrItemService.addCreateLog(itemStorage,user);
                 if(itemStorage == null || item == null || user == null) {
-                    modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
+                    modelAndView = new ModelAndView("user/dodajNowyItem","mode",mode.name());
                     modelAndView.addObject("itemDto",itemDto);
                     modelAndView.addObject("ErrorMessage","Błąd zapisu danych!");
                     return modelAndView;
                 }
-                modelAndView = new ModelAndView("/user/dodajNowyItem","mode",mode.name());
+                modelAndView = new ModelAndView("user/dodajNowyItem","mode",mode.name());
                 modelAndView.addObject("SuccessMessage","Pomyślnie dodano nowy przedmiot");
                 modelAndView.addObject("itemDto",new ItemDto());
                 return modelAndView;
             }
         }
-        modelAndView = new ModelAndView("/error");
+        modelAndView = new ModelAndView("error");
         return modelAndView;
 
     }
@@ -262,7 +269,8 @@ public class ItemController {
                 if (bindingResult.hasErrors()) {
 
                     List<ItemStorage> itemStorageList = itemStorageService.getAllActualItemStorage();
-                    modelAndView = new ModelAndView("/user/wydajItem","mode",mode.name());
+
+                    modelAndView = new ModelAndView("user/wydajItem","mode",mode.name());
 
                     modelAndView.addObject("wydajItemDto",wydajItemDto);
                     modelAndView.addObject("itemStorageList",itemStorageList);
@@ -271,8 +279,20 @@ public class ItemController {
                 }
                 User user = userService.findByUsername(sourcePrincipal.getUsername());
                 ItemStorage itemStorage = null;
+                if(wydajItemDto.isInternal() == true && !wydajItemDto.getNumerBadania().isEmpty() )
+                {
+                    List<ItemStorage> itemStorageList = itemStorageService.getAllActualItemStorage();
+
+                    modelAndView = new ModelAndView("user/wydajItem","mode",mode.name());
+
+                    modelAndView.addObject("wydajItemDto",wydajItemDto);
+                    modelAndView.addObject("itemStorageList",itemStorageList);
+                    modelAndView.addObject("ErrorMessage","Opcja 'Wewnętrzne' nie może być kojarzona z numerem badania! Pole to musi być puste przy transakcjach wewnętrznych!");
+                    return modelAndView;
+                }
                 try {
                     itemStorage = itemStorageService.wydajItem(wydajItemDto,user);
+                    itemStorageService.updateZetony();
                 } catch (QuantityTooSmallException e) {
                     modelAndView = new ModelAndView("redirect:/item/give");
                     atts.addFlashAttribute("ErrorMessage",e.getMessage());
@@ -287,7 +307,7 @@ public class ItemController {
                 return modelAndView;
             }
         }
-        modelAndView = new ModelAndView("/error");
+        modelAndView = new ModelAndView("error");
         return modelAndView;
 
     }
@@ -300,7 +320,7 @@ public class ItemController {
             if(mode == AccountType.ADMIN || mode == AccountType.KSIEGOWOSC) {
                 ItemStorage itemStorage = itemStorageService.getItemStorage(id);
                 if (bindingResult.hasErrors()) {
-                    modelAndView = new ModelAndView("/user/editItem","mode",mode.name());
+                    modelAndView = new ModelAndView("user/editItem","mode",mode.name());
                     modelAndView.addObject("itemDto",itemDto);
                     modelAndView.addObject("itemFoto",itemStorage);
                     modelAndView.addObject("idTemp",id);
@@ -312,7 +332,7 @@ public class ItemController {
                 try{
                     item = itemService.updateItem(itemStorage.getItem().getId(),itemDto);
                 } catch (DataIntegrityViolationException e) {
-                    modelAndView = new ModelAndView("/user/editItem","mode",mode.name());
+                    modelAndView = new ModelAndView("user/editItem","mode",mode.name());
                     modelAndView.addObject("itemDto",itemDto);
                     modelAndView.addObject("itemFoto",itemStorage);
                     modelAndView.addObject("idTemp",id);
@@ -322,7 +342,7 @@ public class ItemController {
                 ItemStorage newItemStorage = itemStorageService.updateItemStorage(itemStorage);
                 rejestrItemService.addEditLog(itemStorage,user);
                 if(newItemStorage == null || item == null || user == null) {
-                    modelAndView = new ModelAndView("/user/editItem","mode",mode.name());
+                    modelAndView = new ModelAndView("user/editItem","mode",mode.name());
                     modelAndView.addObject("itemDto",itemDto);
                     modelAndView.addObject("itemFoto",itemStorage);
                     modelAndView.addObject("idTemp",id);
@@ -334,7 +354,7 @@ public class ItemController {
                 return modelAndView;
             }
         }
-        modelAndView = new ModelAndView("/error");
+        modelAndView = new ModelAndView("error");
         return modelAndView;
 
     }
@@ -353,6 +373,7 @@ public class ItemController {
                 }
                 User user = userService.findByUsername(sourcePrincipal.getUsername());
                 ItemStorage itemStorage = itemStorageService.updateQuantity(id,quantityDto);
+                itemStorageService.updateZetony();
                 rejestrItemService.addAddQuantityLog(itemStorage,user,quantityDto.getQuantity());
                 if(itemStorage == null || user == null) {
                     modelAndView = new ModelAndView("redirect:/item/info/"+ id);
@@ -364,7 +385,7 @@ public class ItemController {
                 return modelAndView;
             }
         }
-        modelAndView = new ModelAndView("/error");
+        modelAndView = new ModelAndView("error");
         return modelAndView;
 
     }

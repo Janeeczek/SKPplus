@@ -88,4 +88,9 @@ public class ItemStorage {
     public void setArchived(boolean archived) {
         this.archived = archived;
     }
+    public String getItemName() {
+        return item.getName();
+    }
+
+
 }
