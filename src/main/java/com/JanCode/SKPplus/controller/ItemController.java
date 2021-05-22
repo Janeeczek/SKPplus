@@ -241,7 +241,7 @@ public class ItemController {
                 }
 
                 ItemStorage itemStorage = itemStorageService.addItem(item,itemDto.getQuantity());
-                itemStorageService.updateZetony();
+                //itemStorageService.updateZetony();
                 rejestrItemService.addCreateLog(itemStorage,user);
                 if(itemStorage == null || item == null || user == null) {
                     modelAndView = new ModelAndView("user/dodajNowyItem","mode",mode.name());
@@ -292,7 +292,7 @@ public class ItemController {
                 }
                 try {
                     itemStorage = itemStorageService.wydajItem(wydajItemDto,user);
-                    itemStorageService.updateZetony();
+                    //itemStorageService.updateZetony();
                 } catch (QuantityTooSmallException e) {
                     modelAndView = new ModelAndView("redirect:/item/give");
                     atts.addFlashAttribute("ErrorMessage",e.getMessage());
@@ -373,7 +373,7 @@ public class ItemController {
                 }
                 User user = userService.findByUsername(sourcePrincipal.getUsername());
                 ItemStorage itemStorage = itemStorageService.updateQuantity(id,quantityDto);
-                itemStorageService.updateZetony();
+               // itemStorageService.updateZetony();
                 rejestrItemService.addAddQuantityLog(itemStorage,user,quantityDto.getQuantity());
                 if(itemStorage == null || user == null) {
                     modelAndView = new ModelAndView("redirect:/item/info/"+ id);

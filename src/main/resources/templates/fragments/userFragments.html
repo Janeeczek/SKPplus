@@ -1055,40 +1055,38 @@
 
 </div>
 <div th:fragment="wyswietlWydajItem">
-    <div class="container-flex mx-5">
+    <div class="container-flex ">
         <form  th:action="@{/item/give/save}" th:object="${wydajItemDto}" th:method="POST" class="needs-validation" novalidate >
             <div class="row no-gutters">
                 <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
-                <div id="collapse1" class="card border-alert mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Jeśli nie możesz znależć upominku</h5>
-                        <p class="card-text"> oznacza to, że nie ma go na stanie w bazie danych!</p>
+                    <div id="collapse1" class="card border-alert mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Jeśli nie możesz znależć upominku</h5>
+                            <p class="card-text"> oznacza to, że nie ma go na stanie w bazie danych!</p>
+                        </div>
                     </div>
-                </div>
+                    <div id="collapse2" class="card border-alert mb-3 ">
+                        <div class="card-body">
+                            <h5 class="card-title">Pamiętaj!</h5>
+                            <p class="card-text">aby wpisać poprawne dane! </p>
+                        </div>
+                    </div>
+                    <div id="collapse3" class="card border-alert mb-3 ">
+                        <div class="card-body">
+                            <h5 class="card-title">Transakcja wewnętrzna</h5>
+                            <p class="card-text">zaznacz tę opcje, jeśli wydajesz upominek dla osoby z PTHW.<br> W tym przypadku pole "Numer badania" zostaw puste.</p>
 
-                <div id="collapse2" class="card border-alert mb-3 ">
-                    <div class="card-body">
-                        <h5 class="card-title">Pamiętaj!</h5>
-                        <p class="card-text">aby wpisać poprawne dane! </p>
+                        </div>
                     </div>
                 </div>
-                <div id="collapse3" class="card border-alert mb-3 ">
-                    <div class="card-body">
-                        <h5 class="card-title">Transakcja wewnętrzna</h5>
-                        <p class="card-text">zaznacz tę opcje, jeśli wydajesz upominek dla osoby z PTHW.<br> W tym przypadku pole "Numer badania" zostaw puste.</p>
-
-                    </div>
-                </div>
-            </div>
                 <div class="card col-lg-6 o-hidden border-2 shadow-lg py-1 my-5">
-                <div  class="card-body p-0">
-                    <div class="col-lg">
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Wydawanie upominku do badania</h1>
-                            </div>
-                            <div class="row my-5">
-
+                    <div class="card-body p-0">
+                        <div class="col-lg">
+                            <div class="py-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Wydawanie upominku do badania</h1>
+                                </div>
+                                <div class="row my-5">
                                     <div class="col-lg-5">
                                         <div class="form-floating mb-3">
                                         <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('numerBadania')}"
@@ -1102,9 +1100,7 @@
                                         <div class="m-2">
                                             <span>lub</span>
                                         </div>
-
                                     </div>
-
                                     <div class="col-lg-5">
                                         <div class="  m-2  custom-control custom-checkbox">
 
@@ -1112,46 +1108,43 @@
                                             <label class="custom-control-label" for="internal">Transakcja wewnętrzna</label>
                                         </div>
                                     </div>
-
-                            </div>
-
-                            <div class="row my-5">
-                                <div class="col-lg-8">
-                                    <div class="form-group">
-                                        <div style="overflow:hidden;" >
-                                            <select data-size="5" data-container="body" th:field="*{itemStorageId}" data-width="90%" id="itemStorageId" class="selectpicker" data-live-search="true" title="Wybierz przedmiot..." required>
-                                                <option th:each="item : ${itemStorageList}" th:value="${item.getStringId()}" th:text="${item.getItem().getName()}">
-                                            </select>
-                                        </div>
-                                        <label for="itemStorageId">Nazwa przedmiotu</label>
-                                        <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('itemStorageId')}"
-                                             th:each="error : ${#fields.errors('itemStorageId')}" th:text="${error}">
-                                        </div>
-
-                                    </div>
                                 </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group " >
-                                        <input th:field="*{quantity}" class="custom form-control" type="number" value="2" min="1" id="quantity" required>
-                                        <label for="quantity">Wydawana ilość</label>
+                                <div class="row my-5 mx-1 ">
+                                    <div class="col-lg-9">
+                                        <div class="form-group">
+                                            <div style="overflow:hidden;" >
+                                                <select data-size="10" data-container="body" th:field="*{itemStorageId}" data-width="90%" id="itemStorageId" class="selectpicker" data-live-search="true" title="Wybierz przedmiot..." required>
+                                                    <option style="font-size: 30px;" th:each="item : ${itemStorageList}" th:value="${item.getStringId()+ ' {'+ item.get }" th:text="${item.getItem().getName()}">
+                                                </select>
+                                            </div>
+                                            <label for="itemStorageId">Nazwa przedmiotu</label>
+                                            <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('itemStorageId')}"
+                                                 th:each="error : ${#fields.errors('itemStorageId')}" th:text="${error}">
+                                            </div>
 
-                                        <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('quantity')}"
-                                             th:each="error : ${#fields.errors('quantity')}" th:text="${error}">
                                         </div>
                                     </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group" >
+                                            <input th:field="*{quantity}" class="custom form-control" type="number" value="2" min="1" id="quantity" required>
+                                            <label for="quantity">Wydawana ilość</label>
+
+                                            <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('quantity')}"
+                                                 th:each="error : ${#fields.errors('quantity')}" th:text="${error}">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="mx-auto">
-                                    <input type="submit" class="btn btn-primary btn-user btn-block" value="Wydaj upominek">
+                                <div class="row my-5">
+                                    <div class="mx-auto">
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Wydaj upominek">
+                                    </div>
                                 </div>
 
                             </div>
-
                         </div>
                     </div>
                 </div>
-            </div>
                 <div class="card col-lg-3 bg-transparent border-0  my-5 py-4 px-5 ">
                     <div th:if="${#ctx.containsVariable('ErrorMessage')}"  class="alert-danger alert card border-alert mb-3">
                         <div class="card-body">

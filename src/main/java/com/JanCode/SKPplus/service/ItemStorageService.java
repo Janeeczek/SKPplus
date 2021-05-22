@@ -23,6 +23,5 @@ public interface ItemStorageService {
     ItemStorage getItemStorage(long itemStorageId);
     ItemStorage updateItemStorage( ItemStorage itemStorage);
     ItemStorage wydajItem( WydajItemDto wydajItemDto, User user) throws QuantityTooSmallException;
-    ItemStorage updateZetony();
 
 }

@@ -73,6 +73,7 @@ public class ItemStorageServiceImpl implements ItemStorageService {
 
         long id = Long.parseLong(wydajItemDto.getItemStorageId());
         ItemStorage itemStorage = itemStorageRepository.findItemStorageById(id);
+        /*
         if( id== 176){
             ItemStorage zeton2Storage = itemStorageRepository.findItemStorageById(21);
             ItemStorage zeton5Storage = itemStorageRepository.findItemStorageById(98);
@@ -92,6 +93,11 @@ public class ItemStorageServiceImpl implements ItemStorageService {
             itemStorageRepository.save(zeton5Storage);
 
         }
+
+         */
+        if (itemStorage == null) {
+            throw new QuantityTooSmallException("Bład! Nie ma takiego przedmiotu w bazie!");
+        }
         else {
             int newQuantity = itemStorage.getActualQuantity() - wydajItemDto.getQuantity();
 
@@ -101,7 +107,7 @@ public class ItemStorageServiceImpl implements ItemStorageService {
         return itemStorageRepository.save(itemStorage);
 
     }
-
+    /*
     @Override
     public ItemStorage updateZetony() {
         //zeton 2 to itemstorageid = 21
@@ -128,6 +134,8 @@ public class ItemStorageServiceImpl implements ItemStorageService {
         zeton7Storage.setActualQuantity(quantity7);
         return itemStorageRepository.save(zeton7Storage);
     }
+
+     */
 
     @Override
     public void deleteItemStorage(long itemStorageId) {
