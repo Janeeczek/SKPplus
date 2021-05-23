@@ -290,6 +290,17 @@ public class ItemController {
                     modelAndView.addObject("ErrorMessage","Opcja 'Wewnętrzne' nie może być kojarzona z numerem badania! Pole to musi być puste przy transakcjach wewnętrznych!");
                     return modelAndView;
                 }
+                if(!wydajItemDto.isInternal() && wydajItemDto.getNumerBadania().isEmpty() )
+                {
+                    List<ItemStorage> itemStorageList = itemStorageService.getAllActualItemStorage();
+
+                    modelAndView = new ModelAndView("user/wydajItem","mode",mode.name());
+
+                    modelAndView.addObject("wydajItemDto",wydajItemDto);
+                    modelAndView.addObject("itemStorageList",itemStorageList);
+                    modelAndView.addObject("ErrorMessage","Nie wpisano numeru badania ani nie wybrano opcji 'Wewnętrzne'! Musisz wybrać jedną z tych opcji!");
+                    return modelAndView;
+                }
                 try {
                     itemStorage = itemStorageService.wydajItem(wydajItemDto,user);
                     //itemStorageService.updateZetony();

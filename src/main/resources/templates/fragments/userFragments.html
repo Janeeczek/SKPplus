@@ -1110,14 +1110,14 @@
                                     </div>
                                 </div>
                                 <div class="row my-5 mx-1 ">
-                                    <div class="col-lg-9">
+                                    <div class="col-lg-8">
                                         <div class="form-group">
                                             <div style="overflow:hidden;" >
                                                 <select data-size="10" data-container="body" th:field="*{itemStorageId}" data-width="90%" id="itemStorageId" class="selectpicker" data-live-search="true" title="Wybierz przedmiot..." required>
-                                                    <option style="font-size: 30px;" th:each="item : ${itemStorageList}" th:value="${item.getStringId()+ ' {'+ item.get }" th:text="${item.getItem().getName()}">
+                                                    <option style="font-size: 30px;" th:each="item : ${itemStorageList}" th:value="${item.getStringId()}" th:text="${item.getItem().getName() + ' (sztuk: '+ item.getActualQuantity() +')' }">
                                                 </select>
                                             </div>
-                                            <label for="itemStorageId">Nazwa przedmiotu</label>
+                                            <label for="itemStorageId">Nazwa przedmiotu (aktualna ilość)</label>
                                             <div class="error-message alert alert-danger" th:if="${#fields.hasErrors('itemStorageId')}"
                                                  th:each="error : ${#fields.errors('itemStorageId')}" th:text="${error}">
                                             </div>
@@ -1199,7 +1199,6 @@
 
                         <th>Nazwa</th>
                         <th>Aktualna ilość</th>
-                        <th>Ilość początkowa</th>
                         <th>Data dodania</th>
                         <th>Data modyfikacji</th>
                         <th>Dodany przez</th>
@@ -1213,7 +1212,6 @@
 
                         <th>Nazwa</th>
                         <th>Aktualna ilość</th>
-                        <th>Ilość początkowa</th>
                         <th>Data dodania</th>
                         <th>Data modyfikacji</th>
                         <th>Dodany przez</th>
@@ -1227,7 +1225,6 @@
 
                         <td th:text="${item.getItem().getName()}"></td>
                         <td th:text="${item.getActualQuantity()}"></td>
-                        <td th:text="${item.getQuantity()}"></td>
                         <td th:text="${#temporals.format(item.getTimeCreated(), 'HH:mm dd-MM-yyyy')}"></td>
                         <td th:text="${#temporals.format(item.getTimeUpdated(), 'HH:mm dd-MM-yyyy')}"></td>
                         <td th:text="${item.getItem().getUser().getUsername()}"></td>
